@@ -14,6 +14,7 @@ const robots=read("app/robots.ts");
 const proxy=read("proxy.ts");
 const blogPage=read("app/blog/[slug]/page.tsx");
 const leads=read("lib/leads.ts");
+const publicIntake=read("lib/public-intake.ts");
 const contactRoute=read("app/api/contacto/route.ts");
 const sitemap=read("app/sitemap.ts");
 const capabilities=read("lib/capabilities.ts");
@@ -31,6 +32,8 @@ check(blogPage.includes('process.env.RINON_ENABLE_BLOG_REDIRECTS === "true"'),"l
 check(contactRoute.includes("isLeadWriteConfigured()"),"public contact writes require lead-write configuration");
 check(leads.includes('process.env.RINON_LEAD_WRITE_ENABLED === "true"'),"lead persistence has an explicit write gate");
 check(leads.includes('process.env.RINON_INDEXABLE === "true"'),"normal lead persistence is tied to production release state");
+check(publicIntake.includes(".supabase.co/functions/v1/rinon-public-intake"),"public intake targets the dedicated Supabase edge endpoint");
+check(publicIntake.includes("isPublicIntakeConfigured"),"public intake has a runtime configuration validator");
 check(sitemap.includes('"/mallas-3d"') && sitemap.includes('"/mallas-separadoras"'),"new malla intent owners are present in the production sitemap contract");
 check(sitemap.includes("legacyCommercialSlugs") && sitemap.includes("migrationResourceArticles"),"preserved commercial URLs and migration resources remain in sitemap generation");
 check(capabilities.includes('"/pintura-electrostatica": "powder_coating"'),"unvalidated powder-coating service remains capability-gated");
@@ -53,9 +56,9 @@ if(!cutoverAuthorized){
     check(envTrue(name),`${name}=true for authorized production cutover`);
   }
   check(envTrue("RINON_LEGAL_APPROVED"),"legal identity/content approved for production");
-  check(Boolean(process.env.SUPABASE_URL),"SUPABASE_URL is present for production lead persistence");
-  check(Boolean(process.env.SUPABASE_SERVICE_ROLE_KEY),"SUPABASE_SERVICE_ROLE_KEY is present for production lead persistence");
-  check(Boolean(process.env.RINON_PUBLIC_INTAKE_SECRET || process.env.RINON_PUBLIC_INTAKE_URL),"public intake configuration is present for production lead persistence");
+  check(Boolean(process.env.SUPABASE_URL),"SUPABASE_URL is present for production administration/read access");
+  check(Boolean(process.env.SUPABASE_SERVICE_ROLE_KEY),"SUPABASE_SERVICE_ROLE_KEY is present for production administration/read access");
+  check(publicIntake.includes(".supabase.co/functions/v1/rinon-public-intake"),"production public intake endpoint remains configured");
 }
 
 if(failures.length){
