@@ -6,7 +6,7 @@ import { isSolutionLaunchEnabled } from "@/lib/capabilities";
 export const metadata = routeMetadata(
   "/soluciones",
   "Soluciones metálicas en Santiago",
-  "Explora las principales líneas de fabricación de RINON: camarotes, cierres, rejas, portones, estructuras, equipamiento y trabajos a medida.",
+  "Explora las principales líneas de fabricación de RINON: camarotes, cierres, rejas, portones, mallas, estructuras, equipamiento y trabajos a medida.",
 );
 
 const groups = [
@@ -21,12 +21,14 @@ const groups = [
   },
   {
     kicker: "PERÍMETRO / ACCESO",
-    title: "Cierres, rejas y portones",
-    body: "Soluciones para delimitar, proteger y ordenar accesos según medidas, terreno y contexto de uso.",
+    title: "Cierres, rejas, mallas y portones",
+    body: "Soluciones para delimitar, proteger, dividir espacios y ordenar accesos según medidas, terreno y contexto de uso.",
     links: [
       ["Cierres perimetrales", "/cierres-perimetrales"],
+      ["Malla 3D / panel electrosoldado", "/mallas-3d"],
+      ["Mallas separadoras", "/mallas-separadoras"],
       ["Rejas metálicas", "/rejas-metalicas"],
-      ["Portones metálicos", "/portones-metalicos"],
+      ["Portones metálicos", "/portones-metallicos"],
     ],
   },
   {
