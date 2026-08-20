@@ -138,3 +138,33 @@ jobs:
           git branch -M static-preview
           git remote add origin "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
           git push --force origin static-preview
+
+      - name: Smoke-test public Supabase preview
+        shell: bash
+        run: |
+          set -euo pipefail
+          ORIGIN="https://wbinwroidinsretcgsox.supabase.co"
+          BASE="${ORIGIN}/functions/v1/rinon-preview"
+          CURL=(curl --fail --silent --show-error --location --retry 8 --retry-all-errors --retry-delay 2)
+
+          "${CURL[@]}" "${BASE}/" -o /tmp/home.html
+          "${CURL[@]}" "${BASE}/camarotes/" -o /tmp/camarotes.html
+          "${CURL[@]}" "${BASE}/cotizar/" -o /tmp/cotizar.html
+          "${CURL[@]}" "${BASE}/brand/logo-rinon-horizontal-white.png" -o /tmp/logo.png
+
+          grep -q '<title>Fabricación metálica a medida en Santiago</title>' /tmp/home.html
+          grep -q 'Lo necesitas' /tmp/home.html
+          grep -qi 'camarote' /tmp/camarotes.html
+          grep -qi 'cotizar' /tmp/cotizar.html
+          grep -q 'noindex, nofollow' /tmp/home.html
+          test "$(wc -c < /tmp/home.html)" -gt 10000
+          test "$(wc -c < /tmp/camarotes.html)" -gt 5000
+          test "$(wc -c < /tmp/cotizar.html)" -gt 5000
+          test "$(wc -c < /tmp/logo.png)" -gt 1000
+
+          CSS_PATH=$(grep -o 'href="[^"]*_next/static[^"]*\.css"' /tmp/home.html | head -1 | cut -d'"' -f2)
+          test -n "${CSS_PATH}"
+          "${CURL[@]}" "${ORIGIN}${CSS_PATH}" -o /tmp/app.css
+          test "$(wc -c < /tmp/app.css)" -gt 1000
+
+          echo "External preview smoke test passed"
