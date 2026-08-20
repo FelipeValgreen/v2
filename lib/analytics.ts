@@ -1,4 +1,6 @@
 import "server-only";
+import { sendPublicIntake } from "@/lib/public-intake";
+
 export const ANALYTICS_EVENTS = ["page_view", "contact_whatsapp", "contact_phone", "generate_lead"] as const;
 export type AnalyticsEventName = (typeof ANALYTICS_EVENTS)[number];
 
@@ -25,15 +27,8 @@ function getSupabaseConfig() {
 }
 function getHeaders(key: string) { return { apikey: key, Authorization: `Bearer ${key}`, "Content-Type": "application/json" }; }
 export function isAnalyticsConfigured() { return Boolean(process.env.SUPABASE_URL && process.env.SUPABASE_SERVICE_ROLE_KEY); }
-export async function createAnalyticsEvent(event: AnalyticsEvent) {
-  const config = getSupabaseConfig();
-  const response = await fetch(`${config.url}/rest/v1/analytics_events`, {
-    method: "POST",
-    headers: { ...getHeaders(config.key), Prefer: "return=minimal" },
-    body: JSON.stringify(event),
-    cache: "no-store",
-  });
-  if (!response.ok) throw new Error(`No fue posible registrar el evento (${response.status})`);
+export async function createAnalyticsEvent(event: AnalyticsEvent, clientIp = "unknown") {
+  await sendPublicIntake("analytics", event, clientIp);
 }
 
 export async function getAnalyticsSummary(days: number, bucket: "hour" | "day" | "month") {
