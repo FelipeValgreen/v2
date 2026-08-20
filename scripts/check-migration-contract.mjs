@@ -67,7 +67,7 @@ for(const slug of prohibitedBlogRedirects){
 }
 
 check(includes(blogPage,'process.env.RINON_ENABLE_BLOG_REDIRECTS === "true"'),"blog redirects require explicit production flag");
-check(includes(proxy,'process.env.RINON_ENABLE_MIGRATION_REDIRECTS === "true"'),"commercial migration redirects require explicit production flag");
+check(/RINON_ENABLE_MIGRATION_REDIRECTS\s*!==\s*["']true["']/.test(proxy),"commercial migration redirects fail closed unless explicitly enabled");
 check(includes(sitemap,"migrationResourceArticles"),"migration-safe resources are included in sitemap source");
 check(/RINON_ENABLE_MIGRATION_REDIRECTS=false/.test(envExample),"default environment keeps migration redirects disabled");
 check(/RINON_ENABLE_BLOG_REDIRECTS=false/.test(envExample),"default environment keeps blog redirects disabled");
