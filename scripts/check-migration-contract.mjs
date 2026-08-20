@@ -79,6 +79,19 @@ check(includes(migration,'"/mallas-3d", "/mallas-separadoras"'),"malla intent ow
 check(includes(migration,'path.startsWith("/mallas-separadoras-")'),"legacy mallas separadoras aliases have an explicit resolver");
 check(includes(migration,'destination: "/mallas-separadoras"'),"legacy mallas separadoras aliases consolidate to dedicated owner");
 
+// Representative URLs confirmed on the current public site in the 2026-08-20 migration audit.
+// These assertions prevent future refactors from silently dropping an entire legacy URL family.
+check(includes(migration,'path.startsWith("/camarotes-")'),"current camarotes sector/geo aliases remain covered (mineria, salmoneras, militares, hospitales, internados, por-mayor)");
+check(includes(migration,'"/literas"'),"current /literas alias remains covered by /camarotes");
+check(includes(migration,'path.startsWith("/cercos-perimetrales-")'),"current regional cercos aliases remain covered (Concepcion, Antofagasta and other regions)");
+check(includes(migration,'path.startsWith("/cercos-para-")'),"current sector cercos aliases remain covered (including /cercos-para-empresas)");
+check(includes(migration,'"/cierre-perimetral-industrial"'),"current /cierre-perimetral-industrial remains covered by /cierres-perimetrales");
+check(includes(migration,'path.startsWith("/rejas-metalicas-")'),"current rejas-by-comuna aliases remain covered");
+check(includes(migration,'"/reja-metalica-santiago"'),"current /reja-metalica-santiago remains covered by /rejas-metalicas");
+check(includes(migration,'path.startsWith("/portones-")'),"current /portones-industriales and model aliases remain covered by /portones-metalicos");
+check(includes(migration,'"/soldadura-metalica-santiago"'),"current /soldadura-metalica-santiago remains covered by /fabricacion-metalica");
+check(includes(migration,'path.startsWith("/pintura-electrostatica-")'),"current geographic pintura aliases remain covered by the pintura owner, subject to launch capability gate");
+
 check(includes(blogPage,'process.env.RINON_ENABLE_BLOG_REDIRECTS === "true"'),"blog redirects require explicit production flag");
 check(/RINON_ENABLE_MIGRATION_REDIRECTS\s*!==\s*["']true["']/.test(proxy),"commercial migration redirects fail closed unless explicitly enabled");
 check(includes(sitemap,"migrationResourceArticles"),"migration-safe resources are included in sitemap source");
@@ -91,4 +104,4 @@ if(failures.length){
   console.error(`\nRINON MIGRATION CONTRACT FAILED (${failures.length} issue${failures.length===1?"":"s"}).`);
   process.exit(1);
 }
-console.log(`\nRINON MIGRATION CONTRACT PASSED: ${preservedCommercial.length} preserved commercial URLs, 2 dedicated malla intent owners and ${Object.keys(approvedBlogRedirects).length} explicitly approved editorial redirects.`);
+console.log(`\nRINON MIGRATION CONTRACT PASSED: ${preservedCommercial.length} preserved commercial URLs, 2 dedicated malla intent owners, current public legacy URL families and ${Object.keys(approvedBlogRedirects).length} explicitly approved editorial redirects.`);
