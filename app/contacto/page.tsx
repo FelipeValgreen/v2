@@ -5,7 +5,7 @@ import {whatsappUrl} from "@/lib/whatsapp";
 import {TechnicalVisual} from "@/components/TechnicalVisual";
 import {MapPanel} from "@/components/MapPanel";
 
-export const metadata=routeMetadata("/contacto","Contacto y cotizaciones | RINON","Contacta a RINON para evaluar fabricación metálica, estructuras, cierres, camarotes, mobiliario y proyectos a medida desde San Bernardo.");
+export const metadata=routeMetadata("/contacto","Contacto y cotizaciones","Contacta a RINON para evaluar fabricación metálica, estructuras, cierres, camarotes, mobiliario y proyectos a medida desde San Bernardo.");
 
 export default function Page(){
  const whatsapp=whatsappUrl(); const phone=publicPhoneHref();
