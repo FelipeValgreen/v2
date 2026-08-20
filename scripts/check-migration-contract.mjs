@@ -11,6 +11,9 @@ const blogMigration=read("lib/blog-migration.ts");
 const migrationResources=read("lib/migration-resources.ts");
 const blogPage=read("app/blog/[slug]/page.tsx");
 const sitemap=read("app/sitemap.ts");
+const solutions=read("app/soluciones/page.tsx");
+const malla3d=read("app/mallas-3d/page.tsx");
+const mallasSeparadoras=read("app/mallas-separadoras/page.tsx");
 const proxy=read("proxy.ts");
 const envExample=read(".env.example");
 const envPreview=read(".env.preview.example");
@@ -66,6 +69,16 @@ for(const slug of prohibitedBlogRedirects){
   check(!includes(blogMigration,`"${slug}":`),`high-risk blog slug is not approved for redirect: ${slug}`);
 }
 
+check(includes(malla3d,'routeMetadata(\n  "/mallas-3d"'),"/mallas-3d has dedicated metadata and page owner");
+check(includes(mallasSeparadoras,'routeMetadata(\n  "/mallas-separadoras"'),"/mallas-separadoras has dedicated metadata and page owner");
+check(includes(solutions,'["Malla 3D / panel electrosoldado", "/mallas-3d"]'),"solutions hub links to /mallas-3d");
+check(includes(solutions,'["Mallas separadoras", "/mallas-separadoras"]'),"solutions hub links to /mallas-separadoras");
+check(includes(sitemap,'"/mallas-3d"'),"sitemap includes /mallas-3d");
+check(includes(sitemap,'"/mallas-separadoras"'),"sitemap includes /mallas-separadoras");
+check(includes(migration,'"/mallas-3d", "/mallas-separadoras"'),"malla intent owners are durable in migration resolver");
+check(includes(migration,'path.startsWith("/mallas-separadoras-")'),"legacy mallas separadoras aliases have an explicit resolver");
+check(includes(migration,'destination: "/mallas-separadoras"'),"legacy mallas separadoras aliases consolidate to dedicated owner");
+
 check(includes(blogPage,'process.env.RINON_ENABLE_BLOG_REDIRECTS === "true"'),"blog redirects require explicit production flag");
 check(/RINON_ENABLE_MIGRATION_REDIRECTS\s*!==\s*["']true["']/.test(proxy),"commercial migration redirects fail closed unless explicitly enabled");
 check(includes(sitemap,"migrationResourceArticles"),"migration-safe resources are included in sitemap source");
@@ -78,4 +91,4 @@ if(failures.length){
   console.error(`\nRINON MIGRATION CONTRACT FAILED (${failures.length} issue${failures.length===1?"":"s"}).`);
   process.exit(1);
 }
-console.log(`\nRINON MIGRATION CONTRACT PASSED: ${preservedCommercial.length} preserved commercial URLs and ${Object.keys(approvedBlogRedirects).length} explicitly approved editorial redirects.`);
+console.log(`\nRINON MIGRATION CONTRACT PASSED: ${preservedCommercial.length} preserved commercial URLs, 2 dedicated malla intent owners and ${Object.keys(approvedBlogRedirects).length} explicitly approved editorial redirects.`);
