@@ -85,6 +85,39 @@ jobs:
           NEXT_PUBLIC_RINON_LEGAL_TAX_ID: "77.795.508-K"
         run: npm run build
 
+      - name: Prefix public assets for Supabase preview
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          prefix = '/functions/v1/rinon-preview'
+          text_exts = {'.html','.txt','.js','.css','.json','.xml','.map'}
+          replacements = {
+            '"/brand/': f'"{prefix}/brand/',
+            "'/brand/": f"'{prefix}/brand/",
+            'url(/brand/': f'url({prefix}/brand/',
+            '"/visuals/': f'"{prefix}/visuals/',
+            "'/visuals/": f"'{prefix}/visuals/",
+            'url(/visuals/': f'url({prefix}/visuals/',
+          }
+          changed = 0
+          for p in Path('out').rglob('*'):
+            if not p.is_file() or p.suffix.lower() not in text_exts:
+              continue
+            try:
+              text = p.read_text(encoding='utf-8')
+            except UnicodeDecodeError:
+              continue
+            updated = text
+            for old, new in replacements.items():
+              updated = updated.replace(old, new)
+            if updated != text:
+              p.write_text(updated, encoding='utf-8')
+              changed += 1
+          print(f'Prefixed public assets in {changed} exported text files')
+          PY
+
       - name: Publish static files to static-preview branch
         shell: bash
         env:
