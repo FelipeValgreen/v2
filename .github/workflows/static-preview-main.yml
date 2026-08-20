@@ -164,4 +164,23 @@ jobs:
           "${CURL[@]}" "${ORIGIN}${CSS_PATH}" -o /tmp/app.css
           test "$(wc -c < /tmp/app.css)" -gt 1000
 
+          CONTACT_STATUS=$(curl --silent --show-error --output /tmp/contact-invalid.json --write-out '%{http_code}' \
+            -H 'Content-Type: application/json' -X POST \
+            --data '{"nombre":"","telefono":"","ubicacion":"","categoria":""}' \
+            "${BASE}/api/contacto")
+          test "${CONTACT_STATUS}" = "400"
+          grep -qi 'completa' /tmp/contact-invalid.json
+
+          PRIVACY_STATUS=$(curl --silent --show-error --output /tmp/privacy-invalid.json --write-out '%{http_code}' \
+            -H 'Content-Type: application/json' -X POST \
+            --data '{"acepta_tratamiento":false}' \
+            "${BASE}/api/privacidad")
+          test "${PRIVACY_STATUS}" = "400"
+          grep -qi 'autorizar' /tmp/privacy-invalid.json
+
+          NOT_FOUND_STATUS=$(curl --silent --show-error --output /tmp/not-found.html --write-out '%{http_code}' \
+            "${BASE}/qa-ruta-inexistente-rinon/")
+          test "${NOT_FOUND_STATUS}" = "404"
+          grep -qi '<html' /tmp/not-found.html
+
           echo "External Supabase preview smoke test passed"
