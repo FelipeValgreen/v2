@@ -1,0 +1,99 @@
+name: Build static review preview
+
+on:
+  push:
+    branches: [preview-static-build]
+    paths:
+      - ".github/workflows/build-static-preview.yml"
+
+permissions:
+  contents: write
+
+jobs:
+  build-static-preview:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Prepare static-only review source
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf app/api app/admin
+          rm -f proxy.ts app/opengraph-image.tsx app/opengraph-image.ts app/opengraph-image.js
+
+          python3 - <<'PY'
+          from pathlib import Path
+          patches = {
+            Path('components/QuoteForm.tsx'): [
+              ('fetch("/api/contacto"', 'fetch("/functions/v1/rinon-preview/api/contacto"'),
+            ],
+            Path('components/PrivacyRequestForm.tsx'): [
+              ('fetch("/api/privacidad"', 'fetch("/functions/v1/rinon-preview/api/privacidad"'),
+            ],
+            Path('components/ProductionTracking.tsx'): [
+              ('fetch("/api/analytics"', 'fetch("/functions/v1/rinon-preview/api/analytics"'),
+            ],
+          }
+          for p, reps in patches.items():
+            if not p.exists():
+              continue
+            text = p.read_text()
+            for a,b in reps:
+              text = text.replace(a,b)
+            p.write_text(text)
+          PY
+
+          cat > next.config.ts <<'EOF'
+          import type { NextConfig } from "next";
+          const nextConfig: NextConfig = {
+            output: "export",
+            trailingSlash: true,
+            basePath: "/functions/v1/rinon-preview",
+            assetPrefix: "/functions/v1/rinon-preview",
+            images: { unoptimized: true },
+            poweredByHeader: false,
+            reactStrictMode: true,
+          };
+          export default nextConfig;
+          EOF
+
+      - name: Install dependencies
+        run: npm install --no-audit --no-fund
+
+      - name: Build static review
+        env:
+          RINON_INDEXABLE: "false"
+          RINON_ENABLE_MIGRATION_REDIRECTS: "false"
+          RINON_ENABLE_BLOG_REDIRECTS: "false"
+          RINON_ALLOW_LEGACY_REFERENCE_IMAGES: "false"
+          RINON_POWDER_COATING_LAUNCH_ENABLED: "false"
+          RINON_GRANALLADO_LAUNCH_ENABLED: "false"
+          NEXT_PUBLIC_RINON_WHATSAPP_NUMBER: "56975893742"
+          NEXT_PUBLIC_RINON_PHONE_DISPLAY: "+56 9 7589 3742"
+          NEXT_PUBLIC_RINON_PUBLIC_ADDRESS: "Portezuelo 1506"
+          NEXT_PUBLIC_RINON_PUBLIC_LOCALITY: "San Bernardo"
+          NEXT_PUBLIC_RINON_LEGAL_ENTITY: "Tolipoli SpA"
+          NEXT_PUBLIC_RINON_LEGAL_TAX_ID: "77.795.508-K"
+        run: npm run build
+
+      - name: Publish static files to static-preview branch
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -f out/index.html
+          cp -a out /tmp/rinon-static-out
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout --orphan static-preview-worktree
+          git rm -rf .
+          cp -a /tmp/rinon-static-out/. .
+          touch .nojekyll
+          git add -A
+          git commit -m "Static review snapshot from ${GITHUB_SHA}"
+          git push origin HEAD:static-preview --force
