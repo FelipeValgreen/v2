@@ -86,7 +86,6 @@ jobs:
         run: npm run build
 
       - name: Publish static files to static-preview branch
-        if: github.event_name == 'push'
         shell: bash
         run: |
           set -euo pipefail
