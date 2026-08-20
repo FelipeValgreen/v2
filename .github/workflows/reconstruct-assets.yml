@@ -1,0 +1,43 @@
+name: Reconstruct RINON V5.6 final visual assets
+
+on:
+  push:
+    branches: [release/v5-6-complete]
+    paths:
+      - ".asset-chunks/READY"
+
+permissions:
+  contents: write
+
+jobs:
+  reconstruct:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Reconstruct and verify visual assets
+        shell: bash
+        run: |
+          set -euo pipefail
+          make_asset() {
+            name="$1"
+            dest="$2"
+            expected="$3"
+            mkdir -p "$(dirname "$dest")"
+            cat ".asset-chunks/$name/"*.b64 | base64 -d > "$dest"
+            echo "$expected  $dest" | sha256sum -c -
+          }
+          make_asset "home-hero-conceptual-welding.webp" "public/visuals/home-hero-conceptual-welding.webp" "c14dd53da895d149af15851233b17bb41b27077eb5a03fd3f36729ec5146725f"
+          make_asset "camarote-conceptual.webp" "public/visuals/product-theatre/camarote-conceptual.webp" "825fe1d9b8a558c8a59ea2353f9e2997af34405682c56d44f1d5cb0eb03495a7"
+          make_asset "cierre-conceptual.webp" "public/visuals/product-theatre/cierre-conceptual.webp" "dfa552cb761fb338f35ace495858b4f6a63bc4fc9a212a18004c7a3e88680192"
+          make_asset "estructura-conceptual.webp" "public/visuals/product-theatre/estructura-conceptual.webp" "1a01f879434868e45b5d4b603900ebe81cfb5b6f19cec23af322fad3be1df19f"
+          rm -rf .asset-chunks
+          rm -f .github/workflows/reconstruct-assets.yml
+      - name: Commit verified assets
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add public/visuals .asset-chunks .github/workflows/reconstruct-assets.yml
+          git commit -m "assets: finalize verified RINON V5.6 visuals"
+          git push origin HEAD:${GITHUB_REF_NAME}
