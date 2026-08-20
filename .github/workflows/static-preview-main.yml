@@ -68,11 +68,14 @@ jobs:
         run: |
           set -euo pipefail
           test -f out/index.html
+          rm -rf /tmp/rinon-out
           cp -a out /tmp/rinon-out
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git checkout --orphan static-preview-worktree
           git rm -rf .
+          # Remove build/install leftovers before .gitignore disappears from the orphan tree.
+          git clean -fdx
           cp -a /tmp/rinon-out/. .
           touch .nojekyll
           git add -A
