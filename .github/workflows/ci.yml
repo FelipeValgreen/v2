@@ -39,6 +39,9 @@ jobs:
       - name: Install dependencies
         run: npm install --no-audit --no-fund
 
+      - name: Static type and migration contract
+        run: npm run qa:static
+
       - name: Build real Next.js application
         run: npm run build
 
@@ -66,4 +69,4 @@ jobs:
         if: success()
         run: |
           echo "RINON deployment gate passed."
-          echo "Validated: real Next.js server, critical routes, CSS, JS, images, fonts, UTF-8, robots, 404 behavior and Chromium-rendered layout."
+          echo "Validated: types, migration allowlists, real Next.js server, critical routes, CSS, JS, images, fonts, UTF-8, robots, 404 behavior and Chromium-rendered layout."
