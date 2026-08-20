@@ -2,9 +2,7 @@
 
 Current release candidate: `1.0.0-rc.3` / Engineered Simplicity V5.5 remediation.
 
-This repository is intentionally public for collaboration. Public source does **not** authorize production release. Never commit real environment files, credentials, service-role keys, admin passwords, Vercel tokens or other secrets.
-
-This is the current product source inside the Growth OS workspace. It is not connected to the current `rinon.cl` production site and must not replace production without release approval.
+This is the current product source inside the Growth OS workspace. It is not connected to production and must not be deployed to `main` without release approval.
 
 ## Runtime safety defaults
 - indexation OFF unless `RINON_INDEXABLE=true`;
@@ -32,6 +30,3 @@ npm run build
 ```
 
 `qa:static` and `check:release` must both pass source-level checks. A successful `next build` is still required in a dependency-complete preview/CI environment before release.
-
-## Collaboration
-Public access allows anyone to view/clone/fork the repository. Direct `push` access still requires the repository owner to add the contributor as a GitHub collaborator; otherwise use fork + pull request.
