@@ -5,6 +5,7 @@ on:
     branches: [main]
     paths:
       - ".github/workflows/static-preview-main.yml"
+  workflow_dispatch:
 
 permissions:
   contents: write
@@ -14,24 +15,37 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
       - uses: actions/setup-node@v4
         with:
           node-version: 24
+
       - name: Prepare review-only static source
         shell: bash
         run: |
           set -euo pipefail
           rm -rf app/api app/admin
-          rm -f proxy.ts app/opengraph-image.tsx app/opengraph-image.ts app/opengraph-image.js
+          rm -f proxy.ts app/opengraph-image.tsx app/opengraph-image.ts app/opengraph-image.js app/sitemap.ts app/robots.ts
           python3 - <<'PY'
           from pathlib import Path
-          for file, old, new in [
-            ('components/QuoteForm.tsx','fetch("/api/contacto"','fetch("/functions/v1/rinon-preview/api/contacto"'),
-            ('components/PrivacyRequestForm.tsx','fetch("/api/privacidad"','fetch("/functions/v1/rinon-preview/api/privacidad"'),
-            ('components/ProductionTracking.tsx','fetch("/api/analytics"','fetch("/functions/v1/rinon-preview/api/analytics"'),
-          ]:
-            p=Path(file)
-            if p.exists(): p.write_text(p.read_text().replace(old,new))
+          patches = {
+            Path('components/QuoteForm.tsx'): [
+              ('fetch("/api/contacto"', 'fetch("/functions/v1/rinon-preview/api/contacto"'),
+            ],
+            Path('components/PrivacyRequestForm.tsx'): [
+              ('fetch("/api/privacidad"', 'fetch("/functions/v1/rinon-preview/api/privacidad"'),
+            ],
+            Path('components/ProductionTracking.tsx'): [
+              ('fetch("/api/analytics"', 'fetch("/functions/v1/rinon-preview/api/analytics"'),
+            ],
+          }
+          for p, reps in patches.items():
+            if not p.exists():
+              continue
+            text = p.read_text()
+            for old, new in reps:
+              text = text.replace(old, new)
+            p.write_text(text)
           PY
           cat > next.config.ts <<'EOF'
           import type { NextConfig } from "next";
@@ -46,9 +60,11 @@ jobs:
           };
           export default nextConfig;
           EOF
-      - name: Install
+
+      - name: Install dependencies
         run: npm install --no-audit --no-fund
-      - name: Export
+
+      - name: Build static review
         env:
           RINON_INDEXABLE: "false"
           RINON_ENABLE_MIGRATION_REDIRECTS: "false"
@@ -63,49 +79,88 @@ jobs:
           NEXT_PUBLIC_RINON_LEGAL_ENTITY: "Tolipoli SpA"
           NEXT_PUBLIC_RINON_LEGAL_TAX_ID: "77.795.508-K"
         run: npm run build
+
+      - name: Prefix public assets for Supabase preview
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          prefix = '/functions/v1/rinon-preview'
+          text_exts = {'.html','.txt','.js','.css','.json','.xml','.map'}
+          replacements = {
+            '"/brand/': f'"{prefix}/brand/',
+            "'/brand/": f"'{prefix}/brand/",
+            'url(/brand/': f'url({prefix}/brand/',
+            '"/visuals/': f'"{prefix}/visuals/',
+            "'/visuals/": f"'{prefix}/visuals/",
+            'url(/visuals/': f'url({prefix}/visuals/',
+          }
+          changed = 0
+          for p in Path('out').rglob('*'):
+            if not p.is_file() or p.suffix.lower() not in text_exts:
+              continue
+            try:
+              text = p.read_text(encoding='utf-8')
+            except UnicodeDecodeError:
+              continue
+            updated = text
+            for old, new in replacements.items():
+              updated = updated.replace(old, new)
+            if updated != text:
+              p.write_text(updated, encoding='utf-8')
+              changed += 1
+          print(f'Prefixed public assets in {changed} exported text files')
+          PY
+
       - name: Publish static-preview branch
         shell: bash
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           set -euo pipefail
           test -f out/index.html
-          rm -rf /tmp/rinon-out
-          cp -a out /tmp/rinon-out
+          rm -rf /tmp/rinon-static-out
+          mkdir -p /tmp/rinon-static-out
+          cp -a out/. /tmp/rinon-static-out/
+          cd /tmp/rinon-static-out
+          touch .nojekyll
+          git init
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git checkout --orphan static-preview-worktree
-          git rm -rf .
-          # Remove build/install leftovers before .gitignore disappears from the orphan tree.
-          git clean -fdx
-          cp -a /tmp/rinon-out/. .
-          touch .nojekyll
           git add -A
           git commit -m "Static RINON preview from ${GITHUB_SHA}"
-          git push origin HEAD:static-preview --force
-      - name: Verify external Supabase preview
+          git branch -M static-preview
+          git remote add origin "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+          git push --force origin static-preview
+
+      - name: Smoke-test public Supabase preview
         shell: bash
         run: |
           set -euo pipefail
-          BASE="https://wbinwroidinsretcgsox.supabase.co/functions/v1/rinon-preview"
-          check_json() {
-            local url="$1"
-            echo "Checking $url"
-            curl --fail --silent --show-error --location \
-              --retry 8 --retry-all-errors --retry-delay 2 \
-              "$url" | grep -q '"ok":true'
-          }
-          check_html() {
-            local url="$1"
-            local tmp
-            tmp="$(mktemp)"
-            echo "Checking $url"
-            curl --fail --silent --show-error --location \
-              --retry 8 --retry-all-errors --retry-delay 2 \
-              "$url" -o "$tmp"
-            grep -qi '<html' "$tmp"
-            grep -qi 'RINON' "$tmp"
-            rm -f "$tmp"
-          }
-          check_json "$BASE/__health"
-          check_html "$BASE/"
-          check_html "$BASE/camarotes/"
-          check_html "$BASE/cotizar/"
+          ORIGIN="https://wbinwroidinsretcgsox.supabase.co"
+          BASE="${ORIGIN}/functions/v1/rinon-preview"
+          CURL=(curl --fail --silent --show-error --location --retry 8 --retry-all-errors --retry-delay 2)
+
+          "${CURL[@]}" "${BASE}/__health" -o /tmp/health.json
+          "${CURL[@]}" "${BASE}/" -o /tmp/home.html
+          "${CURL[@]}" "${BASE}/camarotes/" -o /tmp/camarotes.html
+          "${CURL[@]}" "${BASE}/cotizar/" -o /tmp/cotizar.html
+          "${CURL[@]}" "${BASE}/brand/logo-rinon-horizontal-white.png" -o /tmp/logo.png
+
+          grep -q '"ok":true' /tmp/health.json
+          grep -qi '<html' /tmp/home.html
+          grep -qi 'RINON' /tmp/home.html
+          grep -qi 'camarote' /tmp/camarotes.html
+          grep -qi 'cotizar' /tmp/cotizar.html
+          test "$(wc -c < /tmp/home.html)" -gt 10000
+          test "$(wc -c < /tmp/camarotes.html)" -gt 5000
+          test "$(wc -c < /tmp/cotizar.html)" -gt 5000
+          test "$(wc -c < /tmp/logo.png)" -gt 1000
+
+          CSS_PATH=$(grep -o 'href="[^"]*_next/static[^"]*\.css"' /tmp/home.html | head -1 | cut -d'"' -f2)
+          test -n "${CSS_PATH}"
+          "${CURL[@]}" "${ORIGIN}${CSS_PATH}" -o /tmp/app.css
+          test "$(wc -c < /tmp/app.css)" -gt 1000
+
+          echo "External Supabase preview smoke test passed"
