@@ -81,3 +81,31 @@ jobs:
           git add -A
           git commit -m "Static RINON preview from ${GITHUB_SHA}"
           git push origin HEAD:static-preview --force
+      - name: Verify external Supabase preview
+        shell: bash
+        run: |
+          set -euo pipefail
+          BASE="https://wbinwroidinsretcgsox.supabase.co/functions/v1/rinon-preview"
+          check_json() {
+            local url="$1"
+            echo "Checking $url"
+            curl --fail --silent --show-error --location \
+              --retry 8 --retry-all-errors --retry-delay 2 \
+              "$url" | grep -q '"ok":true'
+          }
+          check_html() {
+            local url="$1"
+            local tmp
+            tmp="$(mktemp)"
+            echo "Checking $url"
+            curl --fail --silent --show-error --location \
+              --retry 8 --retry-all-errors --retry-delay 2 \
+              "$url" -o "$tmp"
+            grep -qi '<html' "$tmp"
+            grep -qi 'RINON' "$tmp"
+            rm -f "$tmp"
+          }
+          check_json "$BASE/__health"
+          check_html "$BASE/"
+          check_html "$BASE/camarotes/"
+          check_html "$BASE/cotizar/"
