@@ -8,6 +8,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
+    "qa:served": "node scripts/check-served-build.mjs",
+    "qa:remote": "node scripts/check-served-build.mjs",
     "check:links": "node scripts/check-links.mjs",
     "check:migration": "node scripts/check-migration.mjs",
     "check:seo": "node scripts/check-seo.mjs",
