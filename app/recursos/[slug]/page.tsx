@@ -2,22 +2,26 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getResource, resourceArticles, isResourceLaunchEnabled, quoteCategoryForOwner, resourceQuickAnswer, getRelatedResources } from "@/lib/resources";
+import { migrationResourceArticles } from "@/lib/migration-resources";
 import { JsonLd } from "@/components/JsonLd";
 import { SEO_BASE_URL, canonicalUrl, routeMetadata } from "@/lib/seo";
 import { TechnicalVisual, technicalKindForSlug } from "@/components/TechnicalVisual";
 
-export function generateStaticParams(){return resourceArticles.map(({slug})=>({slug}))}
+const allResources=[...resourceArticles,...migrationResourceArticles];
+function findResource(slug:string){return getResource(slug)??migrationResourceArticles.find((article)=>article.slug===slug)}
+
+export function generateStaticParams(){return allResources.map(({slug})=>({slug}))}
 
 export async function generateMetadata({params}:{params:Promise<{slug:string}>}):Promise<Metadata>{
   const {slug}=await params;
-  const article=getResource(slug);
+  const article=findResource(slug);
   if(!article)return {};
   return routeMetadata(`/recursos/${article.slug}`, article.title, article.description, { indexable: isResourceLaunchEnabled(article) });
 }
 
 export default async function Page({params}:{params:Promise<{slug:string}>}){
   const {slug}=await params;
-  const article=getResource(slug);
+  const article=findResource(slug);
   if(!article)notFound();
   const launchEnabled=isResourceLaunchEnabled(article);
   const articleUrl=canonicalUrl(`/recursos/${article.slug}`);
