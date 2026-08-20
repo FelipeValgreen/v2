@@ -6,7 +6,7 @@ import { KeyboardEvent as ReactKeyboardEvent, useEffect, useRef, useState } from
 import { usePathname } from "next/navigation";
 
 const primaryNav = [
-  ["Productos", "/#soluciones"],
+  ["Soluciones", "/soluciones"],
   ["A medida", "/fabricacion-metalica"],
   ["Empresas", "/empresas"],
   ["Proyectos", "/proyectos"],
