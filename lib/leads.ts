@@ -31,7 +31,10 @@ export async function createLegacyLead(data: Omit<LegacyLead, "id" | "created_at
 }
 
 export function isLeadWriteConfigured() {
-  return isPublicIntakeConfigured();
+  const writeEnabled = process.env.RINON_LEAD_WRITE_ENABLED === "true";
+  const productionRelease = process.env.RINON_INDEXABLE === "true";
+  const controlledPreviewWrite = process.env.RINON_ALLOW_PREVIEW_WRITES === "true";
+  return writeEnabled && (productionRelease || controlledPreviewWrite) && isPublicIntakeConfigured();
 }
 
 export async function listLeads(): Promise<LegacyLead[]> {
@@ -74,7 +77,7 @@ export async function updateLeadStatus(id: string, estado: LeadStatus) {
   const config = getSupabaseConfig();
   const response = await fetch(`${config.url}/rest/v1/leads?id=eq.${encodeURIComponent(id)}`, {
     method: "PATCH",
-    headers: { ...getHeaders(config.key), Prefer: "return=minimal" },
+    headers: { ...getHeaders(key), Prefer: "return=minimal" },
     body: JSON.stringify({ estado }),
     cache: "no-store",
   });
