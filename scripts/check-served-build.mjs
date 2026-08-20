@@ -12,6 +12,8 @@ const criticalRoutes = [
   "/camarotes",
   "/camarote-nido",
   "/cierres-perimetrales",
+  "/mallas-3d",
+  "/mallas-separadoras",
   "/estructuras-metalicas",
   "/fabricacion-metalica",
   "/mobiliario-institucional",
@@ -119,6 +121,8 @@ async function checkPage(route) {
   }
   if (route === "/soluciones" && !html.includes("ARQUITECTURA DE SOLUCIONES")) fail("/soluciones: expected SILO hub marker");
   if (route === "/camarote-nido" && !html.includes("CAMAROTE NIDO")) fail("/camarote-nido: expected preserved commercial landing");
+  if (route === "/mallas-3d" && !html.includes("MALLA 3D")) fail("/mallas-3d: expected dedicated panel landing");
+  if (route === "/mallas-separadoras" && !html.includes("MALLAS SEPARADORAS")) fail("/mallas-separadoras: expected dedicated interior division landing");
   if (route === "/mobiliario-institucional" && !html.includes("EMPRESAS E INSTITUCIONES")) fail("/mobiliario-institucional: expected preserved B2B landing");
 
   const assets = localAssetUrls(html);
