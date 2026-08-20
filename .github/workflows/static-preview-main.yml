@@ -1,4 +1,5 @@
 name: Generate RINON static preview
+# QA rerun against rinon-preview edge v3
 
 on:
   push:
