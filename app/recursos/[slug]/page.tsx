@@ -1,13 +1,15 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getResource, resourceArticles, isResourceLaunchEnabled, quoteCategoryForOwner, resourceQuickAnswer, getRelatedResources } from "@/lib/resources";
+import { getResource, resourceArticles, isResourceLaunchEnabled, quoteCategoryForOwner, resourceQuickAnswer } from "@/lib/resources";
 import { migrationResourceArticles } from "@/lib/migration-resources";
+import { getRelatedResourcesFromPool } from "@/lib/resource-related";
 import { JsonLd } from "@/components/JsonLd";
 import { SEO_BASE_URL, canonicalUrl, routeMetadata } from "@/lib/seo";
 import { TechnicalVisual, technicalKindForSlug } from "@/components/TechnicalVisual";
 
 const allResources=[...resourceArticles,...migrationResourceArticles];
+const allPublicResources=allResources.filter(isResourceLaunchEnabled);
 function findResource(slug:string){return getResource(slug)??migrationResourceArticles.find((article)=>article.slug===slug)}
 
 export function generateStaticParams(){return allResources.map(({slug})=>({slug}))}
@@ -27,7 +29,7 @@ export default async function Page({params}:{params:Promise<{slug:string}>}){
   const articleUrl=canonicalUrl(`/recursos/${article.slug}`);
   const quoteCategory=quoteCategoryForOwner(article.ownerHref);
   const quickAnswer=resourceQuickAnswer(article);
-  const related=getRelatedResources(article);
+  const related=getRelatedResourcesFromPool(article,allPublicResources);
   const schema=[{
     "@context":"https://schema.org",
     "@type":"Article",
