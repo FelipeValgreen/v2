@@ -87,16 +87,21 @@ jobs:
 
       - name: Publish static files to static-preview branch
         shell: bash
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           set -euo pipefail
           test -f out/index.html
-          cp -a out /tmp/rinon-static-out
+          rm -rf /tmp/rinon-static-out
+          mkdir -p /tmp/rinon-static-out
+          cp -a out/. /tmp/rinon-static-out/
+          cd /tmp/rinon-static-out
+          touch .nojekyll
+          git init
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git checkout --orphan static-preview-worktree
-          git rm -rf .
-          cp -a /tmp/rinon-static-out/. .
-          touch .nojekyll
           git add -A
           git commit -m "Static review snapshot from ${GITHUB_SHA}"
-          git push origin HEAD:static-preview --force
+          git branch -M static-preview
+          git remote add origin "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+          git push --force origin static-preview
