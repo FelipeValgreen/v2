@@ -50,7 +50,7 @@ test("home renders the approved visual system, not raw HTML", async ({ page }) =
 });
 
 test("critical commercial and migration pages render with CSS and navigation", async ({ page }) => {
-  for (const route of ["/soluciones", "/camarotes", "/camarote-nido", "/estructuras-metalicas", "/cierres-perimetrales", "/mobiliario-institucional", "/recursos/como-cotizar-rejas-metalicas", "/cotizar"]) {
+  for (const route of ["/soluciones", "/camarotes", "/camarote-nido", "/estructuras-metalicas", "/cierres-perimetrales", "/mallas-3d", "/mallas-separadoras", "/mobiliario-institucional", "/recursos/como-cotizar-rejas-metalicas", "/cotizar"]) {
     await page.goto(route, { waitUntil: "networkidle" });
     await expect(page.locator(".prd2-header")).toBeVisible();
     const state = await page.evaluate(() => ({
