@@ -50,18 +50,24 @@ test("home renders the approved visual system, not raw HTML", async ({ page }) =
 });
 
 test("critical commercial pages render with CSS and navigation", async ({ page }) => {
-  for (const route of ["/camarotes", "/estructuras-metalicas", "/cierres-perimetrales", "/cotizar"]) {
+  for (const route of ["/soluciones", "/camarotes", "/camarote-nido", "/estructuras-metalicas", "/cierres-perimetrales", "/mobiliario-institucional", "/cotizar"]) {
     await page.goto(route, { waitUntil: "networkidle" });
     await expect(page.locator(".prd2-header")).toBeVisible();
     const state = await page.evaluate(() => ({
       sheets: document.styleSheets.length,
       width: document.documentElement.scrollWidth,
       font: getComputedStyle(document.body).fontFamily,
-      text: document.body.innerText.slice(0, 2000),
+      text: document.body.innerText.slice(0, 2400),
     }));
     expect(state.sheets).toBeGreaterThanOrEqual(2);
     expect(state.width).toBeGreaterThan(1000);
     expect(state.font.toLowerCase()).toContain("raleway");
     expect(state.text).not.toMatch(/Ã.|Â.|â€|�/u);
   }
+});
+
+test("unknown root-level routes still return the real 404", async ({ page }) => {
+  const response = await page.goto("/__rinon_browser_missing_route__", { waitUntil: "networkidle" });
+  expect(response?.status()).toBe(404);
+  await expect(page.getByText("No encontramos esta página.")).toBeVisible();
 });
