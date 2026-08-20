@@ -1,35 +1,20 @@
 import type { MetadataRoute } from "next";
-import { publicSolutions } from "@/lib/site";
-import { publicResourceArticles } from "@/lib/resources";
-import { migrationResourceArticles } from "@/lib/migration-resources";
-import { legacyCommercialSlugs } from "@/lib/legacy-commercial";
-import { canonicalUrl } from "@/lib/seo";
+import {publicSolutions} from "@/lib/site";
+import {publicResourceArticles} from "@/lib/resources";
+import {migrationResourceArticles} from "@/lib/migration-resources";
+import {legacyCommercialSlugs} from "@/lib/legacy-commercial";
+import {commercialExpansions} from "@/lib/commercial-expansion";
+import {canonicalUrl} from "@/lib/seo";
 
-const durableRoutes = [
-  "/",
-  "/soluciones",
-  "/camarote-con-escritorio",
-  "/mallas-3d",
-  "/mallas-separadoras",
-  "/rejas-metalicas",
-  "/portones-metalicos",
-  "/recursos",
-  "/preguntas-frecuentes",
-  "/contacto",
-  "/nosotros",
-  "/empresas",
-  "/proyectos",
+const durableRoutes=[
+ "/","/soluciones","/camarote-con-escritorio","/mallas-3d","/mallas-separadoras","/rejas-metalicas","/portones-metalicos","/recursos","/preguntas-frecuentes","/contacto","/nosotros","/empresas","/proyectos",
 ];
 
-export default function sitemap(): MetadataRoute.Sitemap {
-  const solutionRoutes = publicSolutions.map((solution) => solution.slug);
-  const resourceRoutes = [...publicResourceArticles, ...migrationResourceArticles].map((article) => `/recursos/${article.slug}`);
-  const preservedCommercialRoutes = legacyCommercialSlugs.map((slug) => `/${slug}`);
-  const routes = [...new Set([...durableRoutes, ...solutionRoutes, ...preservedCommercialRoutes, ...resourceRoutes])];
-
-  return routes.map((pathname) => ({
-    url: canonicalUrl(pathname),
-    changeFrequency: pathname.startsWith("/recursos/") ? "monthly" : "weekly",
-    priority: pathname === "/" ? 1 : pathname === "/soluciones" ? 0.9 : pathname.startsWith("/recursos/") ? 0.6 : 0.8,
-  }));
+export default function sitemap():MetadataRoute.Sitemap{
+ const solutionRoutes=publicSolutions.map(solution=>solution.slug);
+ const expansionRoutes=commercialExpansions.map(item=>item.slug);
+ const resourceRoutes=[...publicResourceArticles,...migrationResourceArticles].map(article=>`/recursos/${article.slug}`);
+ const preservedCommercialRoutes=legacyCommercialSlugs.map(slug=>`/${slug}`);
+ const routes=[...new Set([...durableRoutes,...solutionRoutes,...expansionRoutes,...preservedCommercialRoutes,...resourceRoutes])];
+ return routes.map(pathname=>({url:canonicalUrl(pathname),changeFrequency:pathname.startsWith("/recursos/")?"monthly":"weekly",priority:pathname==="/"?1:pathname==="/soluciones"?.9:pathname.startsWith("/recursos/")?.6:.8}));
 }
