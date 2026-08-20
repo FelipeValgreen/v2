@@ -9,6 +9,8 @@ const durableRoutes = [
   "/",
   "/soluciones",
   "/camarote-con-escritorio",
+  "/mallas-3d",
+  "/mallas-separadoras",
   "/rejas-metalicas",
   "/portones-metalicos",
   "/recursos",
