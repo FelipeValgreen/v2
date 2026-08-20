@@ -10,9 +10,9 @@ permissions:
   contents: read
 
 jobs:
-  build-and-serve:
+  build-and-render:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 25
     env:
       RINON_INDEXABLE: "false"
       RINON_ENABLE_MIGRATION_REDIRECTS: "false"
@@ -42,11 +42,28 @@ jobs:
       - name: Build real Next.js application
         run: npm run build
 
-      - name: Served-build gate
+      - name: HTTP served-build gate
         run: npm run qa:served
+
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+
+      - name: Browser render gate
+        run: npm run qa:browser
+
+      - name: Preserve browser diagnostics on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: rinon-browser-qa
+          path: |
+            playwright-report
+            test-results
+          if-no-files-found: ignore
+          retention-days: 7
 
       - name: Deployment contract summary
         if: success()
         run: |
           echo "RINON deployment gate passed."
-          echo "Validated: real Next.js server, critical routes, CSS, JS, images, fonts, UTF-8, robots and 404 behavior."
+          echo "Validated: real Next.js server, critical routes, CSS, JS, images, fonts, UTF-8, robots, 404 behavior and Chromium-rendered layout."
