@@ -1,0 +1,30 @@
+.cookie-actions .button{min-height:42px;border-radius:0;font-size:10px}.cookie-actions .button.secondary{border-color:#4c5255;color:#fff}.cookie-actions a{color:#aeb4b7;font-size:9px;text-decoration:none;border-bottom:1px solid #666d70;padding-bottom:3px}.cookie-reopen{left:14px;bottom:14px;border:0;border-bottom:1px solid #777;background:transparent;color:#777;border-radius:0;padding:5px 0;font-size:8px;box-shadow:none;text-transform:uppercase;letter-spacing:.08em}
+@media(max-width:760px){.cookie-consent{grid-template-columns:1fr;gap:18px;bottom:10px;width:calc(100% - 20px)}.cookie-actions{justify-content:flex-start}.cookie-actions .button{width:auto}}
+@media(max-width:520px){.cookie-actions{display:grid;grid-template-columns:1fr 1fr}.cookie-actions a{grid-column:1/-1;width:max-content}.cookie-actions .button{width:100%}}
+
+/* V5.5 — SGEO answer block: concise, extractable, visually quiet */
+.resource-answer{background:#f7f7f5;padding:58px 0;border-bottom:1px solid #d8d7d2}.resource-answer-grid{display:grid;grid-template-columns:.68fr 1.32fr;gap:90px;align-items:start}.resource-answer span{font-size:9px;font-weight:900;letter-spacing:.18em;color:#9b4410}.resource-answer h2{font-size:clamp(32px,3.2vw,48px);line-height:.98;letter-spacing:-.045em;margin:12px 0 0}.resource-answer p{font-size:15px;line-height:1.75;color:#4f5558;margin:0 0 24px;max-width:760px}.resource-answer ul{list-style:none;margin:0;padding:0;border-top:1px solid #d1d0ca;display:grid;grid-template-columns:repeat(5,1fr)}.resource-answer li{font-size:10px;font-weight:800;padding:15px 16px 15px 0;margin-right:16px;border-bottom:1px solid #d1d0ca;color:#22272a}
+@media(max-width:900px){.resource-answer-grid{grid-template-columns:1fr;gap:28px}.resource-answer ul{grid-template-columns:1fr 1fr}}
+@media(max-width:560px){.resource-answer{padding:46px 0}.resource-answer ul{grid-template-columns:1fr}.resource-answer li{margin-right:0}}
+.resource-related{padding:82px 0;background:#111315;color:#fff}.resource-related-head{display:grid;grid-template-columns:220px 1fr;align-items:end;margin-bottom:34px}.resource-related-head span{font-size:9px;font-weight:900;letter-spacing:.18em;color:#f58220}.resource-related-head h2{font-size:clamp(34px,3.6vw,54px);margin:0}.resource-related-links{border-top:1px solid #34383a}.resource-related-links a{display:grid;grid-template-columns:210px 1fr auto;gap:30px;align-items:center;padding:24px 0;border-bottom:1px solid #292d2f;color:#fff;text-decoration:none}.resource-related-links small{color:#777f83;font-size:8px;text-transform:uppercase;letter-spacing:.1em}.resource-related-links b{font-size:15px;line-height:1.3}.resource-related-links em{font-style:normal;color:#f58220;font-size:9px;font-weight:900}.resource-related-links a:hover b,.resource-related-links a:focus-visible b{color:#f58220}.resource-related-links a:focus-visible{outline:none}
+@media(max-width:720px){.resource-related-head{grid-template-columns:1fr;gap:12px}.resource-related-links a{grid-template-columns:1fr auto;gap:10px}.resource-related-links small{grid-column:1/-1}}
+
+/* V5.5 remediation — Hero brand signature: Rhino Geometry, not decorative UI. */
+.s7-hero:after{
+  content:"";
+  position:absolute;
+  z-index:1;
+  right:-4vw;
+  top:8%;
+  width:min(48vw,720px);
+  aspect-ratio:1.79/1;
+  background:linear-gradient(135deg,rgba(204,205,210,.20),rgba(245,130,32,.13));
+  -webkit-mask:url("/brand/isotipo-rinoceronte-transparent.webp") center/contain no-repeat;
+  mask:url("/brand/isotipo-rinoceronte-transparent.webp") center/contain no-repeat;
+  opacity:.28;
+  pointer-events:none;
+  mix-blend-mode:screen;
+}
+.s7-hero-vignette{z-index:1}.s7-hero-inner{z-index:2}.s7-hero-image{z-index:0}
+@media(max-width:900px){.s7-hero:after{right:-18vw;top:48%;width:76vw;opacity:.18}}
+@media(max-width:560px){.s7-hero:after{right:-28vw;top:56%;width:95vw;opacity:.13}}
