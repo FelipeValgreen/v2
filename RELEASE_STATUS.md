@@ -1,13 +1,28 @@
-# RINON 2.0 — V5.6 Release Candidate
+# RINON 2.0 — Product / Growth Release Candidate
 
-Source: RINON_Growth_OS_v2_AUDIT_REMEDIATED_V5_6
 Application: Next.js 16.2.9 / React 19.2.4
-Release: 1.0.0-rc.3
+Release: 1.0.0-rc.6
+
+## Current preproduction scope
+- Unified Products + Services mega navigation.
+- Rebuilt mobile navigation and 4-column footer.
+- Logo/asset visual gate strengthened.
+- Home CRO entry paths added.
+- Premium conceptual residential structure visual integrated.
+- Nosotros rebuilt around workshop, process and location.
+- Google Maps + Waze directions integrated.
+- Contact journey simplified.
+- New intent owners: camas, camas balinesas, mesas, escritorios, Soldadura MIG, Corte, Instalación and Reparaciones.
+- Pintura electrostática confirmed as a commercial service with bounded technical claims.
+- Quote flow reorganized around requirement → context → contact.
+- Product/Service schema split for expanded catalog.
+- Migration contract and production preflight enforced inside Vercel build.
 
 ## Safe preproduction defaults
-- Indexation disabled.
-- Lead writes disabled until Supabase is provisioned and smoke-tested.
-- Production tracking disabled.
-- Admin disabled.
-- Revenue Ops disabled.
-- Existing production rinon.cl is not modified by this repository.
+- Indexation disabled (`RINON_INDEXABLE=false`).
+- Commercial migration redirects disabled.
+- Legacy blog redirects disabled.
+- Lead writes disabled unless explicitly enabled for a controlled environment.
+- Production tracking disabled until the production release is authorized.
+- Existing production `rinon.cl` is not modified by this repository.
+- Production cutover remains blocked behind explicit authorization.
