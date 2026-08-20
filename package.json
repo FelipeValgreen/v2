@@ -1,12 +1,12 @@
 {
   "name": "rinon-v2-staging",
-  "version": "1.0.0-rc.5",
+  "version": "1.0.0-rc.6",
   "private": true,
   "scripts": {
     "dev": "next dev",
     "prebuild": "node scripts/reconstruct-visual-assets.mjs",
     "preflight:production": "node scripts/preflight-production.mjs",
-    "build": "npm run preflight:production && next build",
+    "build": "npm run qa:migration && npm run preflight:production && next build",
     "start": "next start",
     "lint": "eslint",
     "typecheck": "tsc --noEmit --pretty false",
