@@ -51,7 +51,7 @@ export async function POST(request: Request) {
       mensaje: buildLegacyLeadMessage(body),
       contacto_preferido: "WhatsApp",
       pagina_origen: paginaOrigen,
-    });
+    }, ip);
     return Response.json({ ok: true });
   } catch (error) {
     console.error("Error al guardar cotización", error);
