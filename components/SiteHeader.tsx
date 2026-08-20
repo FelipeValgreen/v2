@@ -3,7 +3,7 @@ import Image from "next/image";
 import { MobileNav } from "@/components/MobileNav";
 
 const primaryNav = [
-  ["Productos", "/#soluciones"],
+  ["Soluciones", "/soluciones"],
   ["A medida", "/fabricacion-metalica"],
   ["Empresas", "/empresas"],
   ["Proyectos", "/proyectos"],
