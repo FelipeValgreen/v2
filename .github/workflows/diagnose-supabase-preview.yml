@@ -1,0 +1,30 @@
+name: Diagnose Supabase preview
+
+on:
+  push:
+    branches: [preview-static-build]
+    paths:
+      - ".github/workflows/diagnose-supabase-preview.yml"
+
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Probe GitHub raw and Supabase function routes
+        shell: bash
+        run: |
+          set -u
+          probe() {
+            label="$1"; url="$2"
+            echo "===== ${label} ====="
+            code=$(curl -sS -L -D /tmp/headers -o /tmp/body -w '%{http_code}' "$url" || true)
+            echo "HTTP ${code}"
+            sed -n '1,20p' /tmp/headers || true
+            echo "BODY:"
+            head -c 800 /tmp/body || true
+            echo
+          }
+          probe "RAW HOME" "https://raw.githubusercontent.com/FelipeValgreen/v2/static-preview/index.html"
+          probe "SUPABASE CLASSIC" "https://wbinwroidinsretcgsox.supabase.co/functions/v1/rinon-preview/"
+          probe "SUPABASE DEDICATED" "https://wbinwroidinsretcgsox.functions.supabase.co/rinon-preview/"
+          probe "PUBLIC INTAKE CLASSIC" "https://wbinwroidinsretcgsox.supabase.co/functions/v1/rinon-public-intake"
