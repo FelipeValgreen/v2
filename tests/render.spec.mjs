@@ -49,8 +49,8 @@ test("home renders the approved visual system, not raw HTML", async ({ page }) =
   expect(failures).toEqual([]);
 });
 
-test("critical commercial pages render with CSS and navigation", async ({ page }) => {
-  for (const route of ["/soluciones", "/camarotes", "/camarote-nido", "/estructuras-metalicas", "/cierres-perimetrales", "/mobiliario-institucional", "/cotizar"]) {
+test("critical commercial and migration pages render with CSS and navigation", async ({ page }) => {
+  for (const route of ["/soluciones", "/camarotes", "/camarote-nido", "/estructuras-metalicas", "/cierres-perimetrales", "/mobiliario-institucional", "/recursos/como-cotizar-rejas-metalicas", "/cotizar"]) {
     await page.goto(route, { waitUntil: "networkidle" });
     await expect(page.locator(".prd2-header")).toBeVisible();
     const state = await page.evaluate(() => ({
@@ -64,6 +64,13 @@ test("critical commercial pages render with CSS and navigation", async ({ page }
     expect(state.font.toLowerCase()).toContain("raleway");
     expect(state.text).not.toMatch(/Ã.|Â.|â€|�/u);
   }
+});
+
+test("approved legacy blog URL stays non-redirecting in safe preview", async ({ page }) => {
+  const response = await page.goto("/blog/como-cotizar-rejas-metalicas", { waitUntil: "networkidle" });
+  expect(response?.status()).toBe(200);
+  await expect(page.getByRole("heading", { name: "Esta guía ya tiene una versión actualizada." })).toBeVisible();
+  await expect(page.getByRole("link", { name: "Ver guía actualizada" })).toHaveAttribute("href", "/recursos/como-cotizar-rejas-metalicas");
 });
 
 test("unknown root-level routes still return the real 404", async ({ page }) => {
