@@ -1,0 +1,29 @@
+name: RINON Vercel public smoke
+
+on:
+  deployment_status:
+
+permissions:
+  contents: read
+
+jobs:
+  public-url-gate:
+    if: github.event.deployment_status.state == 'success' && contains(github.event.deployment_status.target_url, 'vercel.app')
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - name: Checkout deployed commit
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.deployment.sha }}
+
+      - name: Use Node 24
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+
+      - name: Verify the real Vercel URL
+        env:
+          TARGET_URL: ${{ github.event.deployment_status.target_url }}
+          VERCEL_AUTOMATION_BYPASS_SECRET: ${{ secrets.VERCEL_AUTOMATION_BYPASS_SECRET }}
+        run: node scripts/check-served-build.mjs "$TARGET_URL"
