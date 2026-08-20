@@ -1,4 +1,4 @@
-name: RINON V5.6 CI
+name: RINON deployment gate
 
 on:
   push:
@@ -10,9 +10,9 @@ permissions:
   contents: read
 
 jobs:
-  build:
+  build-and-serve:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 20
     env:
       RINON_INDEXABLE: "false"
       RINON_ENABLE_MIGRATION_REDIRECTS: "false"
@@ -28,11 +28,25 @@ jobs:
       RINON_PRIVACY_WRITE_ENABLED: "false"
       RINON_REVENUE_OPS_ENABLED: "false"
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - name: Checkout exact commit
+        uses: actions/checkout@v4
+
+      - name: Use Node 24
+        uses: actions/setup-node@v4
         with:
           node-version: 24
+
       - name: Install dependencies
         run: npm install --no-audit --no-fund
-      - name: Build Next.js
+
+      - name: Build real Next.js application
         run: npm run build
+
+      - name: Served-build gate
+        run: npm run qa:served
+
+      - name: Deployment contract summary
+        if: success()
+        run: |
+          echo "RINON deployment gate passed."
+          echo "Validated: real Next.js server, critical routes, CSS, JS, images, fonts, UTF-8, robots and 404 behavior."
