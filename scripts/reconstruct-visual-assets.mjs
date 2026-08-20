@@ -3,10 +3,10 @@ import { mkdir, readFile, readdir, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 
 const assets = [
-  { source: '.asset-chunks/home-hero-conceptual-welding.webp', target: 'public/visuals/home-hero-conceptual-welding.webp', sha256: '58433b1c12782d0f683407022b6db3879a688a590497f65e4a9b32f52f8d33c8' },
-  { source: '.asset-chunks/camarote-conceptual.webp', target: 'public/visuals/product-theatre/camarote-conceptual.webp', sha256: '9942ef3cb9b863fc3aebf2b0ad3face8f4fac86f161d588cb6f97e19ceaf35d6' },
-  { source: '.asset-chunks/cierre-conceptual.webp', target: 'public/visuals/product-theatre/cierre-conceptual.webp', sha256: 'ff4442f43e235c88d78c2234f8c5c5484e8df1cf499e11f82370bfc781c2d58a' },
-  { source: '.asset-chunks/estructura-conceptual.webp', target: 'public/visuals/product-theatre/estructura-conceptual.webp', sha256: '7d948f4abe4aca756f2bcde68479435b7738fc03099fd9435c771b28f786cc4c' },
+  { source: '.asset-chunks/home-hero-conceptual-welding.webp', target: 'public/visuals/home-hero-conceptual-welding.webp', sha256: 'd150f20dd38b61cb48e94dba24c304a23b8e09985416b6f4fca473487962951f' },
+  { source: '.asset-chunks/camarote-conceptual.webp', target: 'public/visuals/product-theatre/camarote-conceptual.webp', sha256: '34ecd542faeed218b673ab70d79480737d4da0ed68fd3ec54fca4f27a0664c9d' },
+  { source: '.asset-chunks/cierre-conceptual.webp', target: 'public/visuals/product-theatre/cierre-conceptual.webp', sha256: '934b333adfdbeae5a495beee0d22e7ac3f3d06c78dcee7f05ec264dddc191f62' },
+  { source: '.asset-chunks/estructura-conceptual.webp', target: 'public/visuals/product-theatre/estructura-conceptual.webp', sha256: 'ab18df9470c690bd68a4de1dea1e6bd2a28662a7727b1b5644eabfa6ddcbbd38' },
 ];
 
 const mismatches = [];
