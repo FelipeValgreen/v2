@@ -43,7 +43,7 @@ export async function POST(request: Request) {
   }
 
   try {
-    await createPrivacyRequest({ request_type: requestType, nombre, email, telefono: telefono || null, details, source_path: sourcePath });
+    await createPrivacyRequest({ request_type: requestType, nombre, email, telefono: telefono || null, details, source_path: sourcePath }, ip);
     return Response.json({ ok: true });
   } catch (error) {
     console.error("Error al registrar solicitud de privacidad", error);
