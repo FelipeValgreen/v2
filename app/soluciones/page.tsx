@@ -28,7 +28,7 @@ const groups = [
       ["Malla 3D / panel electrosoldado", "/mallas-3d"],
       ["Mallas separadoras", "/mallas-separadoras"],
       ["Rejas metálicas", "/rejas-metalicas"],
-      ["Portones metálicos", "/portones-metallicos"],
+      ["Portones metálicos", "/portones-metalicos"],
     ],
   },
   {
