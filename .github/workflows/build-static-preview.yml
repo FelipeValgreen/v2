@@ -28,7 +28,7 @@ jobs:
         run: |
           set -euo pipefail
           rm -rf app/api app/admin
-          rm -f proxy.ts app/opengraph-image.tsx app/opengraph-image.ts app/opengraph-image.js
+          rm -f proxy.ts app/opengraph-image.tsx app/opengraph-image.ts app/opengraph-image.js app/sitemap.ts app/robots.ts
 
           python3 - <<'PY'
           from pathlib import Path
