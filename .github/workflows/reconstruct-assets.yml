@@ -1,0 +1,42 @@
+name: Reconstruct V5.6 visual assets
+
+on:
+  push:
+    branches: [release/v5-6-assets-final]
+    paths:
+      - ".asset-chunks/READY"
+
+permissions:
+  contents: write
+
+jobs:
+  reconstruct:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Reconstruct and verify assets
+        shell: bash
+        run: |
+          set -euo pipefail
+          make_asset() {
+            name="$1"
+            dest="$2"
+            expected="$3"
+            mkdir -p "$(dirname "$dest")"
+            cat ".asset-chunks/$name/"*.b64 | base64 -d > "$dest"
+            echo "$expected  $dest" | sha256sum -c -
+          }
+          make_asset "camarote-conceptual.webp" "public/visuals/product-theatre/camarote-conceptual.webp" "194197ef3db17508cebe416d86ff94851eaf9cafabfab0b5ea8d7620380d32f5"
+          make_asset "cierre-conceptual.webp" "public/visuals/product-theatre/cierre-conceptual.webp" "4dbc8c864b27ce3588daaf9d6214c40c69f5c2563318c25f0d97cbf41ca315f3"
+          make_asset "estructura-conceptual.webp" "public/visuals/product-theatre/estructura-conceptual.webp" "2a5976a231464c85f0aaf805d7f67bce09b1367583b7676bfacd1b3e919a7d14"
+          make_asset "home-hero-conceptual-welding.webp" "public/visuals/home-hero-conceptual-welding.webp" "5364d854199dfbbf89fa4313fa4c23623a1d88c92d58978a66496b2e128edf04"
+          rm -rf .asset-chunks
+      - name: Commit verified assets
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A public/visuals .asset-chunks
+          git commit -m "assets: reconstruct verified V5.6 visuals"
+          git push origin HEAD:${GITHUB_REF_NAME}
