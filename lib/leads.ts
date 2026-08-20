@@ -1,4 +1,6 @@
 import "server-only";
+import { isPublicIntakeConfigured, sendPublicIntake } from "@/lib/public-intake";
+
 export type LegacyLead = {
   id: string;
   created_at: string;
@@ -24,19 +26,12 @@ function getHeaders(key: string) {
   return { apikey: key, Authorization: `Bearer ${key}`, "Content-Type": "application/json" };
 }
 
-export async function createLegacyLead(data: Omit<LegacyLead, "id" | "created_at" | "estado">) {
-  const config = getSupabaseConfig();
-  const response = await fetch(`${config.url}/rest/v1/leads`, {
-    method: "POST",
-    headers: { ...getHeaders(config.key), Prefer: "return=minimal" },
-    body: JSON.stringify({ ...data, estado: "nuevo" }),
-    cache: "no-store",
-  });
-  if (!response.ok) throw new Error(`No fue posible guardar el contacto (${response.status})`);
+export async function createLegacyLead(data: Omit<LegacyLead, "id" | "created_at" | "estado">, clientIp = "unknown") {
+  await sendPublicIntake("lead", { ...data, estado: "nuevo" }, clientIp);
 }
 
 export function isLeadWriteConfigured() {
-  return process.env.RINON_LEAD_WRITE_ENABLED === "true" && Boolean(process.env.SUPABASE_URL && process.env.SUPABASE_SERVICE_ROLE_KEY);
+  return isPublicIntakeConfigured();
 }
 
 export async function listLeads(): Promise<LegacyLead[]> {
