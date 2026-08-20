@@ -73,16 +73,16 @@ export const solutions: Solution[] = [
     seoTitle: "Estructuras metálicas a medida en Santiago",
     eyebrow: "ESTRUCTURAS METÁLICAS",
     title: "Estructuras metálicas a medida.",
-    description: "Fabricación de estructuras metálicas a medida para habilitación, soportes, plataformas, escaleras y proyectos especiales.",
-    intro: "Si ya tienes plano, medidas o fotografías, envíalos. Si todavía estás definiendo el proyecto, describe qué debe resolver la estructura y el lugar donde se utilizará. La fabricación se confirma una vez revisado el alcance técnico.",
+    description: "Fabricación de estructuras metálicas a medida para cobertizos, pérgolas, habilitación, soportes, plataformas, escaleras y proyectos especiales.",
+    intro: "Desde un cobertizo o pérgola para una vivienda hasta una estructura para una empresa: si ya tienes plano, medidas o fotografías, envíalos. Si todavía estás definiendo el proyecto, describe qué debe resolver la estructura y el lugar donde se utilizará. La fabricación se confirma una vez revisado el alcance técnico.",
     bullets: [
+      {title:"Cobertizos y pérgolas",body:"Estructuras residenciales o comerciales evaluadas según espacio, apoyos, cubierta, terminación e integración con el lugar."},
       {title:"Escaleras y plataformas",body:"Elementos de acceso o trabajo fabricados a medida cuando el alcance está correctamente definido."},
       {title:"Soportes y bastidores",body:"Marcos, soportes, bases y conjuntos para habilitación o apoyo de equipos y procesos."},
-      {title:"Estructuras de habilitación",body:"Soluciones livianas o medianas para organizar, proteger o habilitar espacios de trabajo."},
       {title:"Proyectos especiales",body:"Estructuras no estándar que requieren revisión de uso, dimensiones, material y forma de montaje."},
     ],
     evidence: ["estructura completa", "detalle de unión", "fabricación en taller", "montaje o resultado"],
-    applications: ["Habilitación", "Soportes y bastidores", "Plataformas y escaleras", "Proyectos especiales"],
+    applications: ["Cobertizos y pérgolas", "Soportes y bastidores", "Plataformas y escaleras", "Proyectos especiales"],
     quoteInputs: ["Plano, croquis o foto", "Dimensiones", "Uso y cargas si están definidas", "Ubicación y necesidad de montaje"],
     faqs: [
       {q:"¿Pueden cotizar desde un croquis?",a:"Sí, puede servir para iniciar la evaluación. Si el proyecto requiere antecedentes técnicos adicionales, se solicitan antes de fabricar."},
@@ -174,7 +174,7 @@ export const solutions: Solution[] = [
     eyebrow: "PINTURA ELECTROSTÁTICA",
     title: "Pintura electrostática para metal.",
     description: "Pintura electrostática para piezas y estructuras metálicas, cotizada según geometría, cantidad, estado y terminación.",
-    intro: "Para evaluar un lote se revisan tipo de pieza, cantidad, dimensiones, estado superficial y resultado esperado. El servicio se habilitará públicamente cuando sus límites operativos estén confirmados.",
+    intro: "Para evaluar una pieza o lote revisamos cantidad, dimensiones, geometría, estado superficial y resultado esperado. El servicio está disponible sujeto a confirmar que las piezas y el alcance sean compatibles con la operación vigente.",
     bullets: [
       {title:"Piezas y cantidades",body:"La geometría y el número de unidades ayudan a definir manipulación, secuencia y lote de trabajo."},
       {title:"Estado superficial",body:"La condición en que llegan las piezas puede cambiar la preparación necesaria antes de pintar."},
@@ -189,12 +189,12 @@ export const solutions: Solution[] = [
       {q:"¿Qué dimensiones máximas pueden pintar?",a:"Ese dato se confirma contra las dimensiones útiles reales del proceso antes de aceptar el trabajo."},
       {q:"¿Qué colores tienen?",a:"La disponibilidad se confirma al cotizar de acuerdo con la operación vigente del servicio."}
     ],
-    related: [{label:"Fabricación metálica",href:"/fabricacion-metalica"}],
+    related: [{label:"Fabricación metálica",href:"/fabricacion-metalica"},{label:"Reparaciones metálicas",href:"/reparaciones-metalicas"}],
     quoteCategory: "pintura",
   },
 ];
 
-import { isSolutionLaunchEnabled } from "@/lib/capabilities";
+import {isSolutionLaunchEnabled} from "@/lib/capabilities";
 
-export const publicSolutions = solutions.filter((solution) => isSolutionLaunchEnabled(solution.slug));
-export const navSolutions = publicSolutions.filter((s) => ["/camarotes", "/cierres-perimetrales", "/estructuras-metalicas", "/fabricacion-metalica", "/pintura-electrostatica"].includes(s.slug));
+export const publicSolutions=solutions.filter(solution=>isSolutionLaunchEnabled(solution.slug));
+export const navSolutions=publicSolutions.filter(s=>["/camarotes","/cierres-perimetrales","/estructuras-metalicas","/fabricacion-metalica","/pintura-electrostatica"].includes(s.slug));
