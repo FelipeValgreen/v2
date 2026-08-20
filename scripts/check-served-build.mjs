@@ -8,10 +8,13 @@ const START_LOCAL = !EXTERNAL_BASE;
 
 const criticalRoutes = [
   "/",
+  "/soluciones",
   "/camarotes",
+  "/camarote-nido",
   "/cierres-perimetrales",
   "/estructuras-metalicas",
   "/fabricacion-metalica",
+  "/mobiliario-institucional",
   "/empresas",
   "/proyectos",
   "/cotizar",
@@ -114,6 +117,9 @@ async function checkPage(route) {
     if (!html.includes("Lo necesitas")) fail("/: expected approved hero copy");
     if (!html.includes("home-hero-conceptual-welding.webp")) fail("/: expected approved hero visual reference");
   }
+  if (route === "/soluciones" && !html.includes("ARQUITECTURA DE SOLUCIONES")) fail("/soluciones: expected SILO hub marker");
+  if (route === "/camarote-nido" && !html.includes("CAMAROTE NIDO")) fail("/camarote-nido: expected preserved commercial landing");
+  if (route === "/mobiliario-institucional" && !html.includes("EMPRESAS E INSTITUCIONES")) fail("/mobiliario-institucional: expected preserved B2B landing");
 
   const assets = localAssetUrls(html);
   if (assets.length === 0) fail(`${route}: no local CSS/JS/image assets discovered`);
