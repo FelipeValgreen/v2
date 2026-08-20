@@ -77,7 +77,7 @@ export async function updateLeadStatus(id: string, estado: LeadStatus) {
   const config = getSupabaseConfig();
   const response = await fetch(`${config.url}/rest/v1/leads?id=eq.${encodeURIComponent(id)}`, {
     method: "PATCH",
-    headers: { ...getHeaders(key), Prefer: "return=minimal" },
+    headers: { ...getHeaders(config.key), Prefer: "return=minimal" },
     body: JSON.stringify({ estado }),
     cache: "no-store",
   });
