@@ -13,10 +13,12 @@ export function SiteFooter(){
         <p>Fabricación metálica para productos, proyectos y soluciones a medida.</p>
       </div>
       <nav className="s6-footer-nav" aria-label="Footer">
-        <Link href="/#soluciones">Soluciones</Link>
+        <Link href="/soluciones">Soluciones</Link>
         <Link href="/fabricacion-metalica">Fabricación</Link>
         <Link href="/empresas">Empresas</Link>
         <Link href="/proyectos">Proyectos</Link>
+        <Link href="/recursos">Recursos</Link>
+        <Link href="/nosotros">Nosotros</Link>
         <Link href="/contacto">Contacto</Link>
       </nav>
       <div className="s6-footer-contact">
