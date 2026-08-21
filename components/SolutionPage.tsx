@@ -5,7 +5,7 @@ import { WhatsAppCTA } from "@/components/WhatsAppCTA";
 import { JsonLd } from "@/components/JsonLd";
 import { solutionJsonLd } from "@/lib/seo";
 import { getSolutionReleaseNotice, isSolutionLaunchEnabled } from "@/lib/capabilities";
-import { TechnicalVisual, technicalKindForSlug } from "@/components/TechnicalVisual";
+import { CommercialEvidencePanel } from "@/components/CommercialEvidencePanel";
 import { getVisuals, getReferencePhotos } from "@/lib/visuals";
 import { ProductReferenceGallery } from "@/components/ProductReferenceGallery";
 import { RequirementFlow } from "@/components/RequirementFlow";
@@ -29,6 +29,7 @@ export function SolutionPage({ solution }: { solution: Solution }) {
     : solution.slug.includes("estructura") ? "theme-geometry"
     : solution.slug.includes("fabricacion") || solution.slug.includes("especial") ? "theme-transform"
     : "theme-equipment";
+  const fallbackEvidence=solution.bullets.slice(0,4).map(item=>({label:item.title.toUpperCase(),body:item.body}));
   return <main className={`prd2-solution-page ${visualTheme}`}>
     {launchEnabled?<JsonLd data={solutionJsonLd({ pathname: solution.slug, name: solution.label, description: solution.description, faqs: solution.faqs })} />:null}
 
@@ -46,9 +47,9 @@ export function SolutionPage({ solution }: { solution: Solution }) {
           </div>
           <div className="solution-meta-line" aria-label="Principios de evaluación"><span>Requerimiento primero</span><span>Cantidad y uso importan</span><span>Alcance antes de fabricar</span></div>
         </div>
-        <div className={`prd2-solution-media ${hasVisual?"has-photo":"technical"}`}>
-          {hasVisual?<VisualEvidence slug={solution.slug} fallback={solution.evidence}/>:<TechnicalVisual kind={technicalKindForSlug(solution.slug)} label="Del requerimiento a fabricación." detail="Medidas · cantidad · uso · antecedentes · alcance"/>}
-          <div className="prd2-solution-media-caption"><span>{hasVisual?(primaryVisualIsConceptual?"VISUAL CONCEPTUAL":"REFERENCIA DE PRODUCTO"):"VISUAL TÉCNICO"}</span><b>{hasVisual?(primaryVisualIsConceptual?"Dirección de producto · no obra ejecutada":"Producto · detalle · contexto"):"Alcance · geometría · requerimiento"}</b></div>
+        <div className={`prd2-solution-media ${hasVisual?"has-photo":"evidence-panel-only"}`}>
+          {hasVisual?<VisualEvidence slug={solution.slug} fallback={solution.evidence}/>:<CommercialEvidencePanel title="QUÉ PODEMOS EVALUAR" items={fallbackEvidence} note="La configuración, capacidad, plazo y alcance final se confirman para cada cotización."/>}
+          {hasVisual?<div className="prd2-solution-media-caption"><span>{primaryVisualIsConceptual?"VISUAL CONCEPTUAL":"REFERENCIA DE PRODUCTO"}</span><b>{primaryVisualIsConceptual?"Dirección de producto · no obra ejecutada":"Producto · detalle · contexto"}</b></div>:null}
         </div>
       </div>
     </section>
