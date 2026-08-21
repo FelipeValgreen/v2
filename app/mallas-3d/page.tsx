@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { routeMetadata } from "@/lib/seo";
-import { TechnicalVisual } from "@/components/TechnicalVisual";
+import { CommercialEvidencePanel } from "@/components/CommercialEvidencePanel";
 
 export const metadata=routeMetadata(
   "/mallas-3d",
@@ -8,8 +8,15 @@ export const metadata=routeMetadata(
   "Paneles de malla electrosoldada para evaluar dentro de cierres perimetrales. Configuración, altura, postes, terminación e instalación se confirman al cotizar.",
 );
 
+const heroEvidence=[
+ {label:"METRAJE",body:"Largo aproximado y forma del perímetro permiten dimensionar el sistema completo."},
+ {label:"ALTURA",body:"La altura objetivo debe revisarse junto con la configuración disponible y el uso."},
+ {label:"TERRENO",body:"Pendientes, muros, radieres y cambios de nivel afectan postes, fijaciones y encuentros."},
+ {label:"ACCESOS",body:"Puertas y portones se integran al recorrido cuando forman parte del cierre."},
+] as const;
+
 export default function Page(){return <main className="v5-editorial-page theme-product">
-  <section className="v2-solution-hero"><div className="container v2-solution-hero-grid"><div><div className="v2-eyebrow">MALLA 3D · PANEL ELECTROSOLDADO</div><h1>Un panel metálico modular para el perímetro.</h1><p>La malla 3D corresponde a la familia de paneles electrosoldados utilizados en cierres perimetrales. Antes de cotizar se confirman dimensiones, altura, postes, terminación, accesos y condiciones del terreno.</p><div className="v2-actions"><Link className="v2-btn orange" data-event="quote_start" data-cta-location="malla3d_hero" href="/cotizar?category=cierres&detail=malla_3d">Cotizar malla 3D</Link><Link className="v2-btn outline" href="/cierres-perimetrales">Comparar cierres</Link></div><div className="v2-kickers"><span>Panel electrosoldado</span><span>Postes</span><span>Altura</span><span>Metros lineales</span></div></div><TechnicalVisual kind="fence" label="Panel, postes y encuentros." detail="Metros · altura · terreno · accesos · terminación" /></div></section>
+  <section className="rinon-commercial-hero"><div className="container rinon-commercial-hero-grid"><div><div className="v2-eyebrow">MALLA 3D · PANEL ELECTROSOLDADO</div><h1>Un panel metálico modular para el perímetro.</h1><p>La malla 3D corresponde a la familia de paneles electrosoldados utilizados en cierres perimetrales. Antes de cotizar se confirman dimensiones, altura, postes, terminación, accesos y condiciones del terreno.</p><div className="v2-actions"><Link className="v2-btn orange" data-event="quote_start" data-cta-location="malla3d_hero" href="/cotizar?category=cierres&detail=malla_3d">Cotizar malla 3D</Link><Link className="v2-btn outline" href="/cierres-perimetrales">Comparar cierres</Link></div><div className="v2-kickers"><span>Panel electrosoldado</span><span>Postes</span><span>Altura</span><span>Metros lineales</span></div></div><CommercialEvidencePanel title="EL PANEL ES PARTE DE UN SISTEMA" items={heroEvidence} note="Dimensiones de panel, postes, fijaciones, terminación e instalación se confirman en la cotización vigente para el proyecto."/></div></section>
 
   <section className="v2-solution-section"><div className="container"><div className="section-head"><div><div className="v2-eyebrow">QUÉ SE DEFINE</div><h2>El panel es solo una parte del cierre.</h2></div><p>Para comparar correctamente una solución de malla electrosoldada hay que considerar también postes, fijaciones, encuentros, puertas o portones y la condición donde se instalará.</p></div><div className="card-grid"><article><span>01</span><h3>Panel</h3><p>La geometría, terminación y configuración vigente se expresan en la cotización aplicable al proyecto.</p></article><article><span>02</span><h3>Postes y fijación</h3><p>Se revisan según el recorrido, soporte disponible y alcance de instalación.</p></article><article><span>03</span><h3>Encuentros</h3><p>Esquinas, cambios de nivel y uniones con muros o accesos deben aparecer en el requerimiento.</p></article><article><span>04</span><h3>Accesos</h3><p>Puertas y portones se coordinan como parte del sistema cuando corresponda.</p></article></div></div></section>
 
