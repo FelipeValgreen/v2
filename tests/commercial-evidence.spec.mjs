@@ -14,6 +14,14 @@ test("perimeter money pages use concrete evidence panels instead of hero diagram
  }
 });
 
+test("generic commercial solution fallback never promotes a technical diagram to hero evidence",async({page})=>{
+ const response=await page.goto("/pintura-electrostatica",{waitUntil:"networkidle"});
+ expect(response?.status()).toBe(200);
+ await expect(page.locator(".prd2-solution-hero")).toBeVisible();
+ const visualCount=await page.locator(".prd2-solution-hero .visual-evidence").count();
+ if(visualCount===0){await expect(page.locator(".prd2-solution-hero .evidence-panel-only .commercial-evidence-panel")).toBeVisible();await expect(page.locator(".prd2-solution-hero .technical-visual")).toHaveCount(0)}
+});
+
 test("evidence-led perimeter heroes stay responsive",async({page})=>{
  for(const width of [320,375,430,768,1024]){
   await page.setViewportSize({width,height:900});
