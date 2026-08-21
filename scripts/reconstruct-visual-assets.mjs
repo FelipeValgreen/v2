@@ -3,10 +3,10 @@ import { mkdir, readFile, readdir, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 
 const assets = [
-  { id: 'RINON-VIS-P0-HOME-WELDING', source: '.asset-chunks/home-hero-conceptual-welding.webp', target: 'public/visuals/home-hero-conceptual-welding.webp', provenance: 'conceptual-context', sha256: 'd150f20dd38b61cb48e94dba24c304a23b8e09985416b6f4fca473487962951f' },
-  { id: 'RINON-VIS-P1-BUNK', source: '.asset-chunks/camarote-conceptual.webp', target: 'public/visuals/product-theatre/camarote-conceptual.webp', provenance: 'conceptual-context', sha256: '34ecd542faeed218b673ab70d79480737d4da0ed68fd3ec54fca4f27a0664c9d' },
-  { id: 'RINON-VIS-P1-FENCE', source: '.asset-chunks/cierre-conceptual.webp', target: 'public/visuals/product-theatre/cierre-conceptual.webp', provenance: 'conceptual-context', sha256: '934b333adfdbeae5a495beee0d22e7ac3f3d06c78dcee7f05ec264dddc191f62' },
-  { id: 'RINON-VIS-P0-HOME-STRUCTURE-TEMP', source: '.asset-chunks/estructura-conceptual.webp', target: 'public/visuals/product-theatre/estructura-conceptual.webp', provenance: 'conceptual-context', sha256: 'ab18df9470c690bd68a4de1dea1e6bd2a28662a7727b1b5644eabfa6ddcbbd38' },
+  { id: 'RINON-VIS-P0-HOME-WELDING', source: '.asset-chunks/home-hero-conceptual-welding.webp', target: 'public/visuals/home-hero-conceptual-welding.webp', provenance: 'conceptual-context', minWidth: 700, minHeight: 700, sha256: 'd150f20dd38b61cb48e94dba24c304a23b8e09985416b6f4fca473487962951f' },
+  { id: 'RINON-VIS-P1-BUNK', source: '.asset-chunks/camarote-conceptual.webp', target: 'public/visuals/product-theatre/camarote-conceptual.webp', provenance: 'conceptual-context', minWidth: 900, minHeight: 500, sha256: '34ecd542faeed218b673ab70d79480737d4da0ed68fd3ec54fca4f27a0664c9d' },
+  { id: 'RINON-VIS-P1-FENCE', source: '.asset-chunks/cierre-conceptual.webp', target: 'public/visuals/product-theatre/cierre-conceptual.webp', provenance: 'conceptual-context', minWidth: 900, minHeight: 500, sha256: '934b333adfdbeae5a495beee0d22e7ac3f3d06c78dcee7f05ec264dddc191f62' },
+  { id: 'RINON-VIS-P0-HOME-STRUCTURE-TEMP', source: '.asset-chunks/estructura-conceptual.webp', target: 'public/visuals/product-theatre/estructura-conceptual.webp', provenance: 'conceptual-context', minWidth: 900, minHeight: 500, sha256: 'ab18df9470c690bd68a4de1dea1e6bd2a28662a7727b1b5644eabfa6ddcbbd38' },
 ];
 
 function webpDimensions(binary) {
@@ -48,12 +48,13 @@ for (const asset of assets) {
 
   const actualHash = createHash('sha256').update(binary).digest('hex');
   const { width, height } = webpDimensions(binary);
-  console.log(`ASSET ${asset.id} target=${asset.target} provenance=${asset.provenance} dimensions=${width}x${height} bytes=${binary.length} sha256=${actualHash}`);
+  console.log(`ASSET ${asset.id} target=${asset.target} provenance=${asset.provenance} dimensions=${width}x${height} minimum=${asset.minWidth}x${asset.minHeight} bytes=${binary.length} sha256=${actualHash}`);
   if (actualHash !== asset.sha256) mismatches.push(`${asset.target}: expected ${asset.sha256}, got ${actualHash}`);
+  if (width < asset.minWidth || height < asset.minHeight) mismatches.push(`${asset.target}: ${width}x${height} is below minimum ${asset.minWidth}x${asset.minHeight}`);
 
   await mkdir(path.dirname(asset.target), { recursive: true });
   await writeFile(asset.target, binary);
 }
 
 if (mismatches.length) throw new Error(`Visual asset lock mismatch:\n${mismatches.join('\n')}`);
-console.log('✓ All final RINON visual assets reconstructed, measured and SHA-256 verified');
+console.log('✓ All final RINON visual assets reconstructed, measured, dimension-gated and SHA-256 verified');
