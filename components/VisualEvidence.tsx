@@ -19,8 +19,20 @@ export function VisualEvidence({ slug, fallback, mode="default" }: { slug: strin
   const verified = hero.provenance === "verified-rinon";
   const conceptual = hero.provenance === "conceptual";
   const provenanceLabel = verified ? "EVIDENCIA RINON VERIFICADA" : conceptual ? "VISUAL CONCEPTUAL" : "PRODUCTO / REFERENCIA ACTUAL";
-  return <figure className={`evidence-photo ${conceptual ? "is-conceptual" : ""} ${mode === "theatre" ? "is-theatre" : ""}`} data-visual-kind={hero.kind}>
-    <Image src={hero.src} alt={hero.alt} fill sizes={mode === "theatre" ? "(max-width: 900px) 100vw, 58vw" : "(max-width: 900px) 100vw, 52vw"} priority={mode === "theatre"} />
+  return <figure
+    className={`evidence-photo ${conceptual ? "is-conceptual" : ""} ${mode === "theatre" ? "is-theatre" : ""}`}
+    data-visual-kind={hero.kind}
+    data-source-width={hero.sourceWidth}
+    data-source-height={hero.sourceHeight}
+  >
+    <Image
+      src={hero.src}
+      alt={hero.alt}
+      fill
+      sizes={mode === "theatre" ? "(max-width: 900px) 100vw, 58vw" : "(max-width: 900px) 100vw, 52vw"}
+      priority={mode === "theatre"}
+      unoptimized={conceptual}
+    />
     <figcaption>
       <span>{provenanceLabel}</span>
       {mode === "default" ? <><b>{hero.label}</b>{hero.note ? <small>{hero.note}</small> : null}</> : null}
