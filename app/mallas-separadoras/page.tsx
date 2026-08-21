@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { routeMetadata } from "@/lib/seo";
-import { TechnicalVisual } from "@/components/TechnicalVisual";
+import { CommercialEvidencePanel } from "@/components/CommercialEvidencePanel";
 
 export const metadata=routeMetadata(
   "/mallas-separadoras",
@@ -14,9 +14,15 @@ const uses=[
   ["OPERACIÓN", "Control físico de zonas", "Delimitación de espacios cuyo acceso, dimensiones y uso deben quedar definidos antes de fabricar."],
   ["EQUIPOS", "Perímetros interiores", "Divisiones alrededor de equipos o recintos cuando el proyecto ya ha definido la función y los requisitos aplicables."],
 ] as const;
+const heroEvidence=[
+ {label:"RECORRIDO",body:"Metros lineales y forma general del trazado muestran cuánto espacio se debe dividir."},
+ {label:"ALTURA",body:"La altura objetivo y las restricciones del recinto condicionan la geometría del conjunto."},
+ {label:"ACCESOS",body:"Puertas, pasos y operación diaria deben quedar ubicados desde el inicio."},
+ {label:"SOPORTE",body:"Piso, muros, pilares y fotografías ayudan a revisar cómo podría fijarse la división."},
+] as const;
 
 export default function Page(){return <main className="v5-editorial-page theme-product">
-  <section className="v2-solution-hero"><div className="container v2-solution-hero-grid"><div><div className="v2-eyebrow">MALLAS SEPARADORAS · DIVISIONES INTERIORES</div><h1>Divide el espacio sin perder lectura del recinto.</h1><p>Fabricamos divisiones y paños metálicos para bodegas, galpones y otros espacios interiores. El sistema se define según metros, altura, accesos, soporte existente y función del proyecto.</p><div className="v2-actions"><Link className="v2-btn orange" data-event="quote_start" data-cta-location="mallas_hero" href="/cotizar?category=cierres&detail=mallas_separadoras">Cotizar mallas separadoras</Link><Link className="v2-btn outline" href="/cierres-perimetrales">Ver cierres</Link></div><div className="v2-kickers"><span>Metros lineales</span><span>Altura</span><span>Puertas / accesos</span><span>Soporte existente</span></div></div><TechnicalVisual kind="fence" label="División metálica definida por el espacio." detail="Metros · altura · accesos · soporte · uso" /></div></section>
+  <section className="rinon-commercial-hero"><div className="container rinon-commercial-hero-grid"><div><div className="v2-eyebrow">MALLAS SEPARADORAS · DIVISIONES INTERIORES</div><h1>Divide el espacio sin perder lectura del recinto.</h1><p>Fabricamos divisiones y paños metálicos para bodegas, galpones y otros espacios interiores. El sistema se define según metros, altura, accesos, soporte existente y función del proyecto.</p><div className="v2-actions"><Link className="v2-btn orange" data-event="quote_start" data-cta-location="mallas_hero" href="/cotizar?category=cierres&detail=mallas_separadoras">Cotizar mallas separadoras</Link><Link className="v2-btn outline" href="/cierres-perimetrales">Ver cierres</Link></div><div className="v2-kickers"><span>Metros lineales</span><span>Altura</span><span>Puertas / accesos</span><span>Soporte existente</span></div></div><CommercialEvidencePanel title="PARA UBICAR LA DIVISIÓN" items={heroEvidence} note="Si la separación forma parte de un resguardo de maquinaria o requisito normativo, esas condiciones deben venir definidas y validadas por el proyecto."/></div></section>
 
   <section className="v2-solution-section"><div className="container"><div className="section-head"><div><div className="v2-eyebrow">APLICACIONES</div><h2>Primero se define la función de la separación.</h2></div><p>Una misma geometría puede servir a usos distintos. Por eso evitamos asumir requisitos de seguridad, resistencia o normativa sin que estén definidos por el proyecto.</p></div><div className="card-grid">{uses.map(([tag,title,body])=><article key={tag}><span>{tag}</span><h3>{title}</h3><p>{body}</p></article>)}</div></div></section>
 
