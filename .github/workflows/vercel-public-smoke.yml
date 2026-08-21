@@ -10,7 +10,7 @@ jobs:
   public-url-gate:
     if: github.event.deployment_status.state == 'success' && contains(github.event.deployment_status.target_url, 'vercel.app')
     runs-on: ubuntu-latest
-    timeout-minutes: 8
+    timeout-minutes: 18
     steps:
       - name: Checkout deployed commit
         uses: actions/checkout@v4
@@ -22,8 +22,30 @@ jobs:
         with:
           node-version: 24
 
-      - name: Verify the real Vercel URL
+      - name: Install dependencies
+        run: npm install --no-audit --no-fund
+
+      - name: Verify the real Vercel URL over HTTP
         env:
           TARGET_URL: ${{ github.event.deployment_status.target_url }}
           VERCEL_AUTOMATION_BYPASS_SECRET: ${{ secrets.VERCEL_AUTOMATION_BYPASS_SECRET }}
         run: node scripts/check-served-build.mjs "$TARGET_URL"
+
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+
+      - name: Verify the real Vercel URL in Chromium
+        env:
+          RINON_PLAYWRIGHT_BASE_URL: ${{ github.event.deployment_status.target_url }}
+        run: npx playwright test
+
+      - name: Preserve remote browser diagnostics on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: rinon-vercel-browser-qa
+          path: |
+            playwright-report
+            test-results
+          if-no-files-found: ignore
+          retention-days: 7
