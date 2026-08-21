@@ -2,7 +2,7 @@ import Link from "next/link";
 import { routeMetadata, solutionJsonLd } from "@/lib/seo";
 import { WhatsAppCTA } from "@/components/WhatsAppCTA";
 import { JsonLd } from "@/components/JsonLd";
-import { TechnicalVisual } from "@/components/TechnicalVisual";
+import { CommercialEvidencePanel } from "@/components/CommercialEvidencePanel";
 import { RequirementFlowSimple } from "@/components/RequirementFlow";
 import { SolutionFeatureBand } from "@/components/SolutionFeatureBand";
 import { SolutionCrossNav } from "@/components/SolutionCrossNav";
@@ -15,8 +15,14 @@ const faqs=[
   {q:"¿Fabrican portones corredizos y batientes?",a:"Ambas configuraciones pueden evaluarse según el espacio, apoyos y condiciones del acceso."},
   {q:"¿Incluyen automatización?",a:"La automatización no se asume. Si la necesitas debe indicarse expresamente y solo se incorpora cuando ese alcance esté confirmado."},
 ];
+const heroEvidence=[
+ {label:"VANO",body:"Ancho y alto aproximados son el punto de partida para dimensionar el acceso."},
+ {label:"RECORRIDO",body:"Un corredizo necesita espacio lateral; uno batiente necesita espacio de giro."},
+ {label:"APOYOS",body:"Fotos del piso, pilares, muros y encuentros ayudan a entender cómo podría resolverse el conjunto."},
+ {label:"USO",body:"Frecuencia, tipo de tránsito y necesidad peatonal cambian la configuración a evaluar."},
+] as const;
 export default function Page(){return <main className="v5-editorial-page theme-perimeter"><JsonLd data={solutionJsonLd({pathname:"/portones-metalicos",name:"Portones metálicos a medida",description:"Portones metálicos fabricados según vano, tipo de apertura, uso y terminación.",faqs})}/>
-<section id="resumen" className="v2-solution-hero"><div className="container v2-solution-hero-grid"><div><div className="v2-eyebrow">PORTONES METÁLICOS</div><h1>Portones metálicos a medida.</h1><p>El vano es solo el inicio. Recorrido, tipo de apertura, apoyos y uso diario definen si una solución funciona realmente en el acceso.</p><div className="v2-actions"><Link className="v2-btn orange" data-event="quote_start" data-cta-location="hero" href="/cotizar?category=cierres&detail=porton">Cotizar portón</Link><WhatsAppCTA category="cierres" location="hero" label="WhatsApp" className="v2-btn outline" /></div><div className="solution-meta-line"><span>Ancho y alto</span><span>Espacio de apertura</span><span>Uso del acceso</span></div></div><TechnicalVisual kind="gate" label="Mide el vano y envía una foto." detail="Apertura · apoyos · uso · terminación" /></div></section>
+<section id="resumen" className="rinon-commercial-hero"><div className="container rinon-commercial-hero-grid"><div><div className="v2-eyebrow">PORTONES METÁLICOS</div><h1>Portones metálicos a medida.</h1><p>El vano es solo el inicio. Recorrido, tipo de apertura, apoyos y uso diario definen si una solución funciona realmente en el acceso.</p><div className="v2-actions"><Link className="v2-btn orange" data-event="quote_start" data-cta-location="hero" href="/cotizar?category=cierres&detail=porton">Cotizar portón</Link><WhatsAppCTA category="cierres" location="hero" label="WhatsApp" className="v2-btn outline" /></div><div className="solution-meta-line"><span>Ancho y alto</span><span>Espacio de apertura</span><span>Uso del acceso</span></div></div><CommercialEvidencePanel title="EL ACCESO SE REVISA COMPLETO" items={heroEvidence} note="Tipo de apertura, perfiles, terminación, instalación y cualquier automatización se confirman expresamente en el alcance."/></div></section>
 <SolutionLocalNav quoteHref="/cotizar?category=cierres&detail=porton" />
 <SolutionCrossNav slug="/portones-metalicos" />
 <RequirementFlowSimple entry="Ancho y alto del vano · fotografías · uso esperado" review="Tipo de apertura · recorrido · apoyos · terminación" />
