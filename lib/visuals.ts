@@ -2,7 +2,7 @@ export type VisualAsset = {
   src: string;
   alt: string;
   kind: "photo" | "conceptual" | "render";
-  provenance: "verified-rinon" | "current-site-approved" | "conceptual";
+  provenance: "verified-rinon" | "current-site-approved" | "user-drive-reference" | "conceptual";
   label: string;
   note?: string;
   sourceWidth?: number;
@@ -12,10 +12,28 @@ export type VisualAsset = {
 const referenceBase = "/visuals/reference-current";
 
 /**
- * Conceptual visuals are local art-direction assets and can always render because they are
- * explicitly labelled as conceptual. Legacy/current-site photos remain opt-in: approval to
- * use a photo as reference does not mean it is a verified client project.
+ * Visual provenance is intentionally conservative:
+ * - verified-rinon: only when RINON ownership/project attribution is independently verified.
+ * - user-drive-reference: product imagery found in the user's connected archive; useful as a
+ *   product reference, but never attributed to a client/project without further evidence.
+ * - current-site-approved: reference imagery inherited from the current public site.
+ * - conceptual: art-direction imagery, always labelled as conceptual.
  */
+const archiveReferenceAssets: Record<string, VisualAsset[]> = {
+  "/camarotes": [
+    {
+      src: "/visuals/archive/camarote-product-reference.webp",
+      alt: "Camarote metálico negro de una plaza en referencia de producto",
+      kind: "photo",
+      provenance: "user-drive-reference",
+      label: "Referencia de producto · archivo",
+      note: "Fotografía de producto proveniente del archivo del usuario. No se atribuye a un cliente o proyecto específico.",
+      sourceWidth: 1200,
+      sourceHeight: 900,
+    },
+  ],
+};
+
 const conceptualAssets: Record<string, VisualAsset[]> = {
   "/camarotes": [
     {
@@ -80,6 +98,10 @@ export function allowLegacyReferenceImages() {
   return process.env.RINON_ALLOW_LEGACY_REFERENCE_IMAGES === "true";
 }
 
+export function getArchiveReferenceVisuals(slug: string): VisualAsset[] {
+  return archiveReferenceAssets[slug] ?? [];
+}
+
 export function getConceptualVisuals(slug: string): VisualAsset[] {
   return conceptualAssets[slug] ?? [];
 }
@@ -90,9 +112,9 @@ export function getLegacyReferenceVisuals(slug: string): VisualAsset[] {
 }
 
 export function getVisuals(slug: string): VisualAsset[] {
-  return [...getLegacyReferenceVisuals(slug), ...getConceptualVisuals(slug)];
+  return [...getArchiveReferenceVisuals(slug), ...getLegacyReferenceVisuals(slug), ...getConceptualVisuals(slug)];
 }
 
 export function getReferencePhotos(slug: string): VisualAsset[] {
-  return getLegacyReferenceVisuals(slug).filter((asset) => asset.kind === "photo");
+  return [...getArchiveReferenceVisuals(slug), ...getLegacyReferenceVisuals(slug)].filter((asset) => asset.kind === "photo");
 }
