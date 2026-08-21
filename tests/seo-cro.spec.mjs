@@ -13,6 +13,15 @@ const preservedRoutes=[
 
 const primarySolutionRoutes=[
  "/camarotes","/cierres-perimetrales","/estructuras-metalicas","/rejas-metalicas","/portones-metalicos","/equipamiento-metalico",
+ "/pintura-electrostatica",
+];
+
+const dedicatedCommercialRoutes=[
+ "/mallas-3d","/mallas-separadoras","/fabricacion-metalica",
+];
+
+const preCutoverRedirectAliases=[
+ "/cercos-metalicos-santiago","/portones-industriales","/mallas-separadoras-industriales","/soldadura-metalica-santiago",
 ];
 
 async function assertSeoShell(page,route){
@@ -58,9 +67,22 @@ test("primary solution landings keep canonical intent and commercial exit",async
  for(const route of primarySolutionRoutes){await assertSeoShell(page,route);await assertCommercialPath(page,route,{dualPath:true});}
 });
 
+test("dedicated malla and custom-fabrication owners keep dual conversion paths",async({page})=>{
+ for(const route of dedicatedCommercialRoutes){await assertSeoShell(page,route);await assertCommercialPath(page,route,{dualPath:true});}
+});
+
+test("pre-cutover migration aliases remain disabled in staging",async({page})=>{
+ for(const route of preCutoverRedirectAliases){
+  const response=await page.goto(route,{waitUntil:"networkidle"});
+  expect(response?.status(),`${route} must not redirect before authorized cutover`).toBe(404);
+  const robots=await page.locator('meta[name="robots"]').first().getAttribute("content");
+  expect(robots?.toLowerCase(),`${route} 404 robots`).toContain("noindex");
+ }
+});
+
 test("representative organic landings remain usable at mobile width",async({page})=>{
  await page.setViewportSize({width:390,height:900});
- for(const route of ["/camarotes","/camas-metalicas","/cierres-perimetrales","/estructuras-metalicas","/camarote-nido","/soldadura-mig"]){
+ for(const route of ["/camarotes","/camas-metalicas","/cierres-perimetrales","/estructuras-metalicas","/mallas-3d","/mallas-separadoras","/fabricacion-metalica","/camarote-nido","/soldadura-mig"]){
   await page.goto(route,{waitUntil:"networkidle"});
   const metrics=await page.evaluate(()=>({scrollWidth:document.documentElement.scrollWidth,innerWidth:window.innerWidth}));
   expect(metrics.scrollWidth,`${route} mobile overflow`).toBeLessThanOrEqual(metrics.innerWidth+2);
