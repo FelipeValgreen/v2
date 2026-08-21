@@ -5,6 +5,8 @@ export type VisualAsset = {
   provenance: "verified-rinon" | "current-site-approved" | "conceptual";
   label: string;
   note?: string;
+  sourceWidth?: number;
+  sourceHeight?: number;
 };
 
 const referenceBase = "/visuals/reference-current";
@@ -23,6 +25,8 @@ const conceptualAssets: Record<string, VisualAsset[]> = {
       provenance: "conceptual",
       label: "Visual conceptual de producto",
       note: "Dirección de producto para explicar configuración y proporción. No corresponde a un proyecto ejecutado por RINON.",
+      sourceWidth: 900,
+      sourceHeight: 534,
     },
   ],
   "/cierres-perimetrales": [
@@ -33,6 +37,8 @@ const conceptualAssets: Record<string, VisualAsset[]> = {
       provenance: "conceptual",
       label: "Visual conceptual de sistema",
       note: "Dirección de producto para explicar modulación y proporción. No corresponde a un proyecto ejecutado por RINON.",
+      sourceWidth: 900,
+      sourceHeight: 537,
     },
   ],
   "/estructuras-metalicas": [
@@ -43,6 +49,8 @@ const conceptualAssets: Record<string, VisualAsset[]> = {
       provenance: "conceptual",
       label: "Visual conceptual de estructura",
       note: "Visual de dirección técnica. Geometría y solución final se definen según el requerimiento real.",
+      sourceWidth: 900,
+      sourceHeight: 500,
     },
   ],
 };
