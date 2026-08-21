@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { TechnicalVisual } from "@/components/TechnicalVisual";
+import { CommercialEvidencePanel } from "@/components/CommercialEvidencePanel";
 import { routeMetadata } from "@/lib/seo";
 import { getLegacyCommercialLanding, legacyCommercialSlugs } from "@/lib/legacy-commercial";
 
@@ -19,6 +19,7 @@ export default async function LegacyCommercialPage({ params }: { params: Promise
   const { legacy } = await params;
   const landing = getLegacyCommercialLanding(legacy);
   if (!landing) notFound();
+  const heroEvidence=landing.points.slice(0,4).map((point)=>({label:point.title,body:point.body}));
 
   return <main className="v5-editorial-page theme-product">
     <section className="v2-solution-hero">
@@ -33,7 +34,7 @@ export default async function LegacyCommercialPage({ params }: { params: Promise
           </div>
           <div className="solution-meta-line"><span>Configuración confirmada al cotizar</span><span>Cantidad y destino</span><span>Alcance vigente</span></div>
         </div>
-        <TechnicalVisual kind="equipment" label="Referencia de intención comercial." detail="Medidas · configuración · cantidad · destino" />
+        <CommercialEvidencePanel title="QUÉ CONVIENE CONFIRMAR" items={heroEvidence} note="Esta URL conserva una intención comercial histórica; medidas, precios y especificaciones se confirman con el requerimiento vigente."/>
       </div>
     </section>
 
