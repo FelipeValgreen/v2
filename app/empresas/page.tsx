@@ -15,7 +15,7 @@ const proof=[
  ["VOLUMEN","Series, lotes y compras repetibles cuando cantidad y configuración están definidas."],
  ["BAJO PLANO","Piezas, soportes y conjuntos cuando la geometría y especificación vienen definidas."],
  ["PROYECTO","Cierres, estructuras y equipamiento asociados a una obra o necesidad de terreno."],
- ["RECURRÍNTE","Requerimientos que se repiten y pueden estandarizarse comercialmente."],
+ ["RECURRENTE","Requerimientos que se repiten y pueden estandarizarse comercialmente."],
 ] as const;
 
 export default function Page(){return <main className="v5-editorial-page rinon-enterprise-page">
