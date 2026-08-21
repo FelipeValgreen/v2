@@ -1,0 +1,70 @@
+import {test,expect} from "@playwright/test";
+
+const expandedRoutes=[
+ "/camas-metalicas","/camas-balinesas","/mesas-metalicas","/escritorios-metalicos",
+ "/soldadura-mig","/corte-metalico","/instalacion","/reparaciones-metalicas",
+];
+
+const preservedRoutes=[
+ "/camarote-nido","/camarote-triple","/camarote-doble","/cama-alta","/camarote-titanic",
+ "/camarote-1-5-plazas","/camarote-desmontable","/cama-dos-plazas-con-cajon","/camarote-2-plazas",
+ "/cama-institucional-metalica","/cama-loft-metalica","/cama-loft-con-escritorio","/mobiliario-institucional",
+];
+
+const primarySolutionRoutes=[
+ "/camarotes","/cierres-perimetrales","/estructuras-metalicas","/rejas-metalicas","/portones-metalicos","/equipamiento-metalico",
+];
+
+async function assertSeoShell(page,route){
+ const response=await page.goto(route,{waitUntil:"networkidle"});
+ expect(response?.status(),`${route} status`).toBe(200);
+ const expectedCanonical=`https://rinon.cl${route}`;
+ await expect(page.locator('link[rel="canonical"]')).toHaveAttribute("href",expectedCanonical);
+ const robots=await page.locator('meta[name="robots"]').getAttribute("content");
+ expect(robots?.toLowerCase(),`${route} robots`).toContain("noindex");
+ expect(robots?.toLowerCase(),`${route} robots`).toContain("nofollow");
+ await expect(page.locator("main h1"),`${route} h1`).toHaveCount(1);
+ const title=await page.title();
+ expect(title.trim().length,`${route} title`).toBeGreaterThan(15);
+ const description=await page.locator('meta[name="description"]').getAttribute("content");
+ expect(description?.trim().length??0,`${route} description`).toBeGreaterThan(45);
+ const text=await page.locator("main").innerText();
+ expect(text,`${route} mojibake`).not.toMatch(/Ã.|Â.|â€|�/u);
+}
+
+async function assertCommercialPath(page,route,{dualPath=true}={}){
+ const main=page.locator("main");
+ const quoteLinks=main.locator('a[href^="/cotizar"]');
+ expect(await quoteLinks.count(),`${route} needs a main quote CTA`).toBeGreaterThan(0);
+ const trackedQuote=main.locator('[data-event="quote_start"]');
+ expect(await trackedQuote.count(),`${route} needs a tracked quote start`).toBeGreaterThan(0);
+ if(dualPath){
+  const whatsapp=main.locator('a[href*="wa.me/"]');
+  expect(await whatsapp.count(),`${route} needs a main WhatsApp path`).toBeGreaterThan(0);
+ }
+ const h2Count=await main.locator("h2").count();
+ expect(h2Count,`${route} needs decision-support content`).toBeGreaterThanOrEqual(2);
+}
+
+test("expanded commercial intent owners preserve SEO and dual conversion paths",async({page})=>{
+ for(const route of expandedRoutes){await assertSeoShell(page,route);await assertCommercialPath(page,route,{dualPath:true});}
+});
+
+test("preserved organic commercial URLs remain full conversion pages",async({page})=>{
+ for(const route of preservedRoutes){await assertSeoShell(page,route);await assertCommercialPath(page,route,{dualPath:true});}
+});
+
+test("primary solution landings keep canonical intent and commercial exit",async({page})=>{
+ for(const route of primarySolutionRoutes){await assertSeoShell(page,route);await assertCommercialPath(page,route,{dualPath:true});}
+});
+
+test("representative organic landings remain usable at mobile width",async({page})=>{
+ await page.setViewportSize({width:390,height:900});
+ for(const route of ["/camarotes","/camas-metalicas","/cierres-perimetrales","/estructuras-metalicas","/camarote-nido","/soldadura-mig"]){
+  await page.goto(route,{waitUntil:"networkidle"});
+  const metrics=await page.evaluate(()=>({scrollWidth:document.documentElement.scrollWidth,innerWidth:window.innerWidth}));
+  expect(metrics.scrollWidth,`${route} mobile overflow`).toBeLessThanOrEqual(metrics.innerWidth+2);
+  const primary=page.locator('main a[href^="/cotizar"]').first();
+  await expect(primary,`${route} mobile quote CTA`).toBeVisible();
+ }
+});
