@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { routeMetadata } from "@/lib/seo";
-import { TechnicalVisual } from "@/components/TechnicalVisual";
+import { CommercialEvidencePanel } from "@/components/CommercialEvidencePanel";
 import { VisualEvidence } from "@/components/VisualEvidence";
 
 export const metadata=routeMetadata("/proyectos","Proyectos de fabricación metálica | RINON","Referencias, criterios de proyecto y líneas de fabricación RINON para estructuras, cierres, equipamiento y requerimientos institucionales.");
@@ -12,8 +12,15 @@ const projectTypes=[
   ["INSTITUCIONAL", "Alojamiento y compras por volumen", "Camas, camarotes y equipamiento para instituciones, faenas y compras donde especificación, destino y calendario importan tanto como la unidad.", "/mobiliario-institucional"],
 ] as const;
 
+const projectEvidence=[
+  {label:"Requerimiento",body:"Función, uso, cantidad y problema que el proyecto debe resolver."},
+  {label:"Antecedentes",body:"Plano, croquis, fotos, muestra o medidas disponibles para iniciar la evaluación."},
+  {label:"Alcance",body:"Fabricación y, cuando corresponda al requerimiento, coordinación de despacho o montaje."},
+  {label:"Resultado",body:"Una solución fabricable cuyo alcance queda definido antes de producción."},
+] as const;
+
 export default function Page(){return <main className="v5-editorial-page">
-  <section className="v2-solution-hero"><div className="container v2-solution-hero-grid"><div><div className="v2-eyebrow">PROYECTOS Y EVIDENCIA</div><h1>Fabricación que se puede explicar.</h1><p>Mostramos referencias y criterios de proyecto sin atribuir clientes, cargas, resultados o especificaciones que no estén respaldadas. Lo importante es entender qué se pidió, qué se fabricó y qué debe volver a validarse en un nuevo requerimiento.</p><div className="v2-actions"><Link className="v2-btn orange" href="/cotizar?client=project">Cotizar proyecto</Link><Link className="v2-btn outline" href="/soluciones">Ver soluciones</Link></div></div><TechnicalVisual kind="structure" label="Evidencia verificable." detail="Requerimiento · proceso · escala · resultado" /></div></section>
+  <section className="v2-solution-hero"><div className="container v2-solution-hero-grid"><div><div className="v2-eyebrow">PROYECTOS Y EVIDENCIA</div><h1>Fabricación que se puede explicar.</h1><p>Mostramos referencias y criterios de proyecto sin atribuir clientes, cargas, resultados o especificaciones que no estén respaldadas. Lo importante es entender qué se pidió, qué se fabricó y qué debe volver a validarse en un nuevo requerimiento.</p><div className="v2-actions"><Link className="v2-btn orange" href="/cotizar?client=project">Cotizar proyecto</Link><Link className="v2-btn outline" href="/soluciones">Ver soluciones</Link></div></div><CommercialEvidencePanel title="QUÉ DEFINE UN PROYECTO" items={projectEvidence} note="Los antecedentes técnicos definitivos se confirman según el requerimiento específico."/></div></section>
 
   <section className="v2-solution-section"><div className="container"><div className="section-head"><div><div className="v2-eyebrow">TIPOS DE PROYECTO</div><h2>La fabricación cambia según lo que necesitas resolver.</h2></div><p>Estas líneas funcionan como punto de entrada. Cada una profundiza en antecedentes, alcance y forma de cotizar sin mezclar intenciones distintas.</p></div><div className="v2-resource-grid">{projectTypes.map(([tag,title,body,href])=><Link key={href} href={href}><span>{tag}</span><h3>{title}</h3><p>{body}</p><b>Ver línea →</b></Link>)}</div></div></section>
 
