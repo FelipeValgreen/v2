@@ -2,11 +2,13 @@ import Link from "next/link";
 import { routeMetadata } from "@/lib/seo";
 import { CommercialEvidencePanel } from "@/components/CommercialEvidencePanel";
 import { WhatsAppCTA } from "@/components/WhatsAppCTA";
+import {buildCommercialServiceJsonLd,type CommercialFaq} from "@/lib/commercial-jsonld";
 
+const description="Paneles de malla electrosoldada para evaluar dentro de cierres perimetrales. Configuración, altura, postes, terminación e instalación se confirman al cotizar.";
 export const metadata=routeMetadata(
   "/mallas-3d",
   "Malla 3D y panel electrosoldado para cierres perimetrales",
-  "Paneles de malla electrosoldada para evaluar dentro de cierres perimetrales. Configuración, altura, postes, terminación e instalación se confirman al cotizar.",
+  description,
 );
 
 const heroEvidence=[
@@ -16,7 +18,15 @@ const heroEvidence=[
  {label:"ACCESOS",body:"Puertas y portones se integran al recorrido cuando forman parte del cierre."},
 ] as const;
 
-export default function Page(){return <main className="v5-editorial-page theme-product">
+const faqs:readonly CommercialFaq[]=[
+ {q:"¿Qué necesito enviar para cotizar malla 3D?",a:"Metros lineales aproximados, altura objetivo, ubicación y fotografías del terreno son un buen punto de partida. Si existen accesos, conviene indicar también su cantidad y ancho aproximado."},
+ {q:"¿La cotización considera solo el panel?",a:"No necesariamente. La evaluación puede incluir postes, fijaciones, encuentros, puertas o portones cuando forman parte del alcance. Lo incluido se confirma en la cotización vigente."},
+ {q:"¿Pueden integrar puertas o portones al cierre?",a:"Sí, pueden evaluarse como parte del sistema cuando el proyecto los requiere. La configuración y el alcance de fabricación o instalación se confirman antes de comprometer el trabajo."},
+];
+const jsonLd=buildCommercialServiceJsonLd({path:"/mallas-3d",name:"Malla 3D y panel electrosoldado para cierres perimetrales",description,faqs});
+
+export default function Page(){return <main className="v5-editorial-page theme-product" data-sgeo-owner="mallas-3d">
+  <script type="application/ld+json" dangerouslySetInnerHTML={{__html:JSON.stringify(jsonLd)}}/>
   <section className="rinon-commercial-hero"><div className="container rinon-commercial-hero-grid"><div><div className="v2-eyebrow">MALLA 3D · PANEL ELECTROSOLDADO</div><h1>Un panel metálico modular para el perímetro.</h1><p>La malla 3D corresponde a la familia de paneles electrosoldados utilizados en cierres perimetrales. Antes de cotizar se confirman dimensiones, altura, postes, terminación, accesos y condiciones del terreno.</p><div className="v2-actions"><Link className="v2-btn orange" data-event="quote_start" data-cta-location="malla3d_hero" href="/cotizar?category=cierres&detail=malla_3d">Cotizar malla 3D</Link><WhatsAppCTA category="cierres" location="malla3d_hero" label="Hablar por WhatsApp" className="v2-btn outline"/><Link className="v2-btn outline" href="/cierres-perimetrales">Comparar cierres</Link></div><div className="v2-kickers"><span>Panel electrosoldado</span><span>Postes</span><span>Altura</span><span>Metros lineales</span></div></div><CommercialEvidencePanel title="EL PANEL ES PARTE DE UN SISTEMA" items={heroEvidence} note="Dimensiones de panel, postes, fijaciones, terminación e instalación se confirman en la cotización vigente para el proyecto."/></div></section>
 
   <section className="v2-solution-section"><div className="container"><div className="section-head"><div><div className="v2-eyebrow">QUÉ SE DEFINE</div><h2>El panel es solo una parte del cierre.</h2></div><p>Para comparar correctamente una solución de malla electrosoldada hay que considerar también postes, fijaciones, encuentros, puertas o portones y la condición donde se instalará.</p></div><div className="card-grid"><article><span>01</span><h3>Panel</h3><p>La geometría, terminación y configuración vigente se expresan en la cotización aplicable al proyecto.</p></article><article><span>02</span><h3>Postes y fijación</h3><p>Se revisan según el recorrido, soporte disponible y alcance de instalación.</p></article><article><span>03</span><h3>Encuentros</h3><p>Esquinas, cambios de nivel y uniones con muros o accesos deben aparecer en el requerimiento.</p></article><article><span>04</span><h3>Accesos</h3><p>Puertas y portones se coordinan como parte del sistema cuando corresponda.</p></article></div></div></section>
@@ -26,6 +36,8 @@ export default function Page(){return <main className="v5-editorial-page theme-p
   <section className="v2-capabilities"><div className="container v2-capabilities-grid"><div><div className="v2-eyebrow">SIN SOBREESPECIFICAR</div><h2>La cotización manda sobre la referencia web.</h2><p>No publicamos una única medida, calibre, resistencia o terminación como si aplicara a todos los proyectos. La configuración vigente y el alcance concreto quedan expresados antes de fabricar o suministrar.</p></div><div className="v2-capability-list"><div><span>01</span><strong>Metraje</strong><em>ESCALA</em></div><div><span>02</span><strong>Altura</strong><em>GEOMETRÍA</em></div><div><span>03</span><strong>Postes</strong><em>SISTEMA</em></div><div><span>04</span><strong>Accesos</strong><em>INTEGRACIÓN</em></div><div><span>05</span><strong>Terminación</strong><em>ALCANCE</em></div></div></div></section>
 
   <section className="v2-solution-section"><div className="container"><div className="section-head"><div><div className="v2-eyebrow">ALTERNATIVAS</div><h2>Compara por función y contexto.</h2></div><p>Si todavía no decidiste el tipo de cierre, revisa la familia completa antes de fijar material o geometría.</p></div><div className="v2-resource-grid"><Link href="/cierres-perimetrales"><span>GUÍA DE FAMILIA</span><h3>Cierres perimetrales</h3><p>Compara sistemas según uso, visibilidad, terreno y accesos.</p><b>Ver cierres →</b></Link><Link href="/rejas-metalicas"><span>REJA</span><h3>Rejas metálicas</h3><p>Alternativa fabricada según vanos, tramos y configuración del proyecto.</p><b>Ver rejas →</b></Link><Link href="/recursos/tipos-de-cierres-perimetrales"><span>RECURSO</span><h3>Tipos de cierres perimetrales</h3><p>Qué variables conviene comparar antes de pedir precio.</p><b>Leer guía →</b></Link></div></div></section>
+
+  <section id="faq" className="v2-solution-section soft"><div className="container"><div className="section-head"><div><div className="v2-eyebrow">PREGUNTAS FRECUENTES</div><h2>Lo necesario para evaluar el sistema.</h2></div><p>Estas respuestas describen el proceso de cotización. Las dimensiones y elementos definitivos se confirman para cada requerimiento.</p></div><div className="faq-grid">{faqs.map(faq=><details key={faq.q}><summary>{faq.q}</summary><p>{faq.a}</p></details>)}</div></div></section>
 
   <section className="v2-final-cta"><div className="container"><div><div className="v2-eyebrow">TU PERÍMETRO</div><h2>¿Quieres evaluar panel electrosoldado?</h2><p>Envía metros lineales, altura, ubicación y fotografías del terreno.</p></div><div className="v2-actions"><Link className="v2-btn orange" data-event="quote_start" data-cta-location="malla3d_footer" href="/cotizar?category=cierres&detail=malla_3d">Cotizar malla 3D</Link><WhatsAppCTA category="cierres" location="malla3d_footer" label="Hablar por WhatsApp" className="v2-btn outline"/></div></div></section>
 </main>}
