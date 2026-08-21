@@ -12,6 +12,6 @@ export function CommercialDock() {
   const whatsapp = whatsappUrl();
   return <div className="commercial-dock" aria-label="Acciones rápidas">
     {whatsapp ? <a href={whatsapp} target="_blank" rel="noopener noreferrer" data-event="contact_whatsapp" data-cta-location="commercial_dock">WhatsApp ↗</a> : null}
-    <Link href="/cotizar" data-event="quote_start" data-cta-location="commercial_dock">Cotizar proyecto ↗</Link>
+    <Link href="/cotizar" data-event="quote_start" data-cta-location="commercial_dock">Cotizar ↗</Link>
   </div>;
 }
