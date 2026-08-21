@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { CommercialEvidencePanel } from "@/components/CommercialEvidencePanel";
+import { WhatsAppCTA } from "@/components/WhatsAppCTA";
 import { routeMetadata } from "@/lib/seo";
 import { getLegacyCommercialLanding, legacyCommercialSlugs } from "@/lib/legacy-commercial";
 
@@ -20,6 +21,7 @@ export default async function LegacyCommercialPage({ params }: { params: Promise
   const landing = getLegacyCommercialLanding(legacy);
   if (!landing) notFound();
   const heroEvidence=landing.points.slice(0,4).map((point)=>({label:point.title,body:point.body}));
+  const quoteCategory=new URL(landing.quoteHref,"https://rinon.cl").searchParams.get("category") ?? "general";
 
   return <main className="v5-editorial-page theme-product">
     <section className="v2-solution-hero">
@@ -30,6 +32,7 @@ export default async function LegacyCommercialPage({ params }: { params: Promise
           <p>{landing.intro}</p>
           <div className="v2-actions">
             <Link className="v2-btn orange" data-event="quote_start" data-cta-location="legacy_commercial_hero" href={landing.quoteHref}>{landing.quoteLabel}</Link>
+            <WhatsAppCTA category={quoteCategory} location="legacy_commercial_hero" label="Hablar por WhatsApp" className="v2-btn outline"/>
             <Link className="v2-btn outline" href={landing.parentHref}>{landing.parentLabel}</Link>
           </div>
           <div className="solution-meta-line"><span>Configuración confirmada al cotizar</span><span>Cantidad y destino</span><span>Alcance vigente</span></div>
@@ -59,6 +62,6 @@ export default async function LegacyCommercialPage({ params }: { params: Promise
       </div>
     </section>
 
-    <section className="v2-final-cta"><div className="container"><div><div className="v2-eyebrow">SIGUIENTE PASO</div><h2>Confirma el producto que necesitas hoy.</h2><p>Indica cantidad, ubicación y, si la tienes, una foto o referencia del modelo.</p></div><Link className="v2-btn orange" href={landing.quoteHref}>{landing.quoteLabel}</Link></div></section>
+    <section className="v2-final-cta"><div className="container"><div><div className="v2-eyebrow">SIGUIENTE PASO</div><h2>Confirma el producto que necesitas hoy.</h2><p>Indica cantidad, ubicación y, si la tienes, una foto o referencia del modelo.</p></div><div className="v2-actions"><Link className="v2-btn orange" data-event="quote_start" data-cta-location="legacy_commercial_footer" href={landing.quoteHref}>{landing.quoteLabel}</Link><WhatsAppCTA category={quoteCategory} location="legacy_commercial_footer" label="Hablar por WhatsApp" className="v2-btn outline"/></div></div></section>
   </main>;
 }
