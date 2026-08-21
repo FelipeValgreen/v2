@@ -18,10 +18,18 @@ export function VisualEvidence({ slug, fallback, mode="default" }: { slug: strin
   const hero = visuals[0];
   const verified = hero.provenance === "verified-rinon";
   const conceptual = hero.provenance === "conceptual";
-  const provenanceLabel = verified ? "EVIDENCIA RINON VERIFICADA" : conceptual ? "VISUAL CONCEPTUAL" : "PRODUCTO / REFERENCIA ACTUAL";
+  const archiveReference = hero.provenance === "user-drive-reference";
+  const provenanceLabel = verified
+    ? "EVIDENCIA RINON VERIFICADA"
+    : archiveReference
+      ? "REFERENCIA DE PRODUCTO · ARCHIVO"
+      : conceptual
+        ? "VISUAL CONCEPTUAL"
+        : "PRODUCTO / REFERENCIA ACTUAL";
   return <figure
-    className={`evidence-photo ${conceptual ? "is-conceptual" : ""} ${mode === "theatre" ? "is-theatre" : ""}`}
+    className={`evidence-photo ${conceptual ? "is-conceptual" : ""} ${archiveReference ? "is-archive-reference" : ""} ${mode === "theatre" ? "is-theatre" : ""}`}
     data-visual-kind={hero.kind}
+    data-visual-provenance={hero.provenance}
     data-source-width={hero.sourceWidth}
     data-source-height={hero.sourceHeight}
   >
@@ -31,7 +39,7 @@ export function VisualEvidence({ slug, fallback, mode="default" }: { slug: strin
       fill
       sizes={mode === "theatre" ? "(max-width: 900px) 100vw, 58vw" : "(max-width: 900px) 100vw, 52vw"}
       priority={mode === "theatre"}
-      unoptimized={conceptual}
+      unoptimized={Boolean(hero.sourceWidth && hero.sourceHeight)}
     />
     <figcaption>
       <span>{provenanceLabel}</span>
