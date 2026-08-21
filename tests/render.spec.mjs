@@ -46,9 +46,21 @@ test("critical commercial pages including expanded catalog render with CSS",asyn
 
 test("projects-to-measure keeps SEO route but uses human-first UX",async({page})=>{await page.goto("/fabricacion-metalica",{waitUntil:"networkidle"});await expect(page.getByRole("heading",{name:/Tu proyecto en metal, hecho a medida/})).toBeVisible();await expect(page.getByText("PROYECTOS A MEDIDA · SAN BERNARDO")).toBeVisible();await expect(page.getByRole("link",{name:"Cotizar proyecto"}).first()).toHaveAttribute("href",/category=fabricacion/)});
 
+test("quote experience is a real three-step progressive wizard",async({page})=>{
+ await page.goto("/cotizar?category=fabricacion&detail=soldadura-mig",{waitUntil:"networkidle"});
+ await expect(page.getByRole("heading",{name:"Cuéntanos qué necesitas fabricar."})).toBeVisible();
+ await expect(page.locator('[data-quote-step="1"]')).toBeVisible();await expect(page.locator('[data-quote-step="2"]')).toBeHidden();await expect(page.getByText("Soldadura MIG")).toBeVisible();
+ await page.getByRole("button",{name:/Continuar/}).click();await expect(page.locator('[data-quote-step="2"]')).toBeVisible();await expect(page.locator('[data-quote-step="1"]')).toBeHidden();
+ await page.getByLabel("Ubicación *").fill("San Bernardo");await page.getByLabel("Cuéntanos qué necesitas resolver *").fill("Necesito fabricar y soldar una estructura metálica según medidas aproximadas.");await page.getByRole("button",{name:/Continuar/}).click();
+ await expect(page.locator('[data-quote-step="3"]')).toBeVisible();await page.getByLabel("Nombre *").fill("QA RINON");await page.getByLabel("Tipo de cliente *").selectOption("Particular");await page.getByLabel("WhatsApp *").fill("+56911111111");await page.getByLabel(/Acepto el uso de estos datos/).check();await page.getByRole("button",{name:"Solicitar cotización"}).click();
+ await expect(page.locator(".quote-status")).toContainText("Formulario revisado correctamente");
+});
+
 test("mobile navigation is task-led and responsive without overflow",async({page})=>{
  for(const width of [320,375,430,768,1024]){await page.setViewportSize({width,height:900});await page.goto("/",{waitUntil:"networkidle"});const state=await page.evaluate(()=>({scrollWidth:document.documentElement.scrollWidth,innerWidth:window.innerWidth}));expect(state.scrollWidth).toBeLessThanOrEqual(state.innerWidth+2);const toggle=page.locator(".mobile-nav-toggle");await expect(toggle).toBeVisible();await toggle.click();await expect(page.locator("#mobile-navigation")).toBeVisible();await expect(page.getByRole("link",{name:"Proyectos a medida"})).toBeVisible();await expect(page.getByRole("link",{name:"Empresas"})).toBeVisible();await expect(page.getByRole("link",{name:"Nosotros"})).toBeVisible();await expect(page.getByRole("link",{name:/Cotizar/}).last()).toBeVisible();await page.locator(".mobile-nav-close").click()}
 });
+
+test("quote wizard has no horizontal overflow on compact breakpoints",async({page})=>{for(const width of [320,360,375,390,430,768]){await page.setViewportSize({width,height:900});await page.goto("/cotizar?category=estructuras",{waitUntil:"networkidle"});const metrics=await page.evaluate(()=>({scrollWidth:document.documentElement.scrollWidth,innerWidth:window.innerWidth,progressVisible:!!document.querySelector(".quote-progress"),activeStep:document.querySelector('.quote-progress [aria-current="step"]')?.textContent??""}));expect(metrics.scrollWidth).toBeLessThanOrEqual(metrics.innerWidth+2);expect(metrics.progressVisible).toBeTruthy();expect(metrics.activeStep).toContain("Qué necesitas")}});
 
 test("desktop does not duplicate the conversion dock",async({page})=>{await page.setViewportSize({width:1440,height:1000});await page.goto("/empresas",{waitUntil:"networkidle"});await expect(page.locator(".prd2-header-cta")).toBeVisible();await expect(page.locator(".commercial-dock")).toBeHidden()});
 
