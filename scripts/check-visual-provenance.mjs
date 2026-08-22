@@ -4,6 +4,8 @@ import path from "node:path";
 const root=process.cwd();
 const visualsPath=path.join(root,"lib","visuals.ts");
 const structuresBriefPath=path.join(root,"docs","STRUCTURES_VISUAL_BRIEF.md");
+const inventoryPath=path.join(root,"docs","VISUAL_PROVENANCE_INVENTORY.md");
+const reconstructionPath=path.join(root,"scripts","reconstruct-visual-assets.mjs");
 
 function fail(message){
  console.error(`✗ ${message}`);
@@ -17,6 +19,8 @@ if(!fs.existsSync(visualsPath)){
 }
 
 const source=fs.readFileSync(visualsPath,"utf8");
+const inventory=fs.existsSync(inventoryPath)?fs.readFileSync(inventoryPath,"utf8"):"";
+const reconstruction=fs.existsSync(reconstructionPath)?fs.readFileSync(reconstructionPath,"utf8"):"";
 const assetBlocks=[...source.matchAll(/\{\s*\n\s*src:\s*[`\"][\s\S]*?\n\s*\},?/g)].map(match=>match[0]);
 
 if(assetBlocks.length===0){
@@ -56,6 +60,18 @@ if(!fs.existsSync(structuresBriefPath)) fail("structures conceptual replacement 
 else pass("structures conceptual replacement brief exists");
 if(!source.includes("docs/STRUCTURES_VISUAL_BRIEF.md")) fail("structure conceptual asset points to its replacement brief");
 else pass("structure conceptual asset points to its replacement brief");
+
+const blockerMatch=source.match(/VISUAL_CUTOVER_BLOCKERS\s*=\s*\[([\s\S]*?)\]\s*as const/);
+if(!blockerMatch){
+ fail("visual registry declares machine-readable cutover blockers");
+}else{
+ const blockers=[...blockerMatch[1].matchAll(/"([^"]+)"/g)].map(match=>match[1]);
+ pass(`visual registry declares ${blockers.length} cutover blocker${blockers.length===1?"":"s"}`);
+ if(reconstruction.includes("RINON-VIS-P0-HOME-WELDING") && inventory.includes("RINON-VIS-P0-HOME-WELDING") && inventory.includes("TEMPORARY") && !blockers.includes("home-hero-final-master")) fail("temporary Home hero cannot lose its cutover blocker");
+ else pass("Home hero temporary state remains release-gated");
+ if(source.includes("RINON-VIS-P0-HOME-STRUCTURE-TEMP") && !blockers.includes("structures-residential-final-master")) fail("temporary Structures visual cannot lose its cutover blocker");
+ else pass("Structures temporary state remains release-gated");
+}
 
 if(process.exitCode){
  console.error("RINON VISUAL PROVENANCE CONTRACT FAILED.");
