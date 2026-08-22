@@ -1,5 +1,6 @@
 export type NavItem={label:string;href:string;description?:string};
 export type NavGroup={label:string;items:readonly NavItem[]};
+export type NavigationSection="products"|"services"|"project"|"company"|"about"|null;
 
 export const productNavGroups:readonly NavGroup[]=[
   {label:"Camas y descanso",items:[
@@ -39,8 +40,35 @@ export const aboutNavItem:NavItem={label:"Nosotros",href:"/nosotros",description
 
 export const primaryStandaloneNav:readonly NavItem[]=[projectNavItem,companyNavItem,aboutNavItem] as const;
 
+const productHrefs=productNavGroups.flatMap(group=>group.items.map(item=>item.href));
+const serviceHrefs=serviceNavItems.map(item=>item.href);
+const legacyProductPrefixes=["/camarote-","/camarotes-","/cama-","/mobiliario-"] as const;
+
+export function navigationSection(pathname:string):NavigationSection{
+  const path=(pathname||"/").split("?")[0].split("#")[0].replace(/\/$/,"")||"/";
+  if(productHrefs.includes(path as never)||legacyProductPrefixes.some(prefix=>path.startsWith(prefix)))return "products";
+  if(serviceHrefs.includes(path as never))return "services";
+  if(path===projectNavItem.href)return "project";
+  if(path===companyNavItem.href)return "company";
+  if(path===aboutNavItem.href)return "about";
+  return null;
+}
+
+export function isExactNavPath(pathname:string,href:string){
+  const path=(pathname||"/").split("?")[0].split("#")[0].replace(/\/$/,"")||"/";
+  return path===href;
+}
+
 export const footerProductItems:readonly NavItem[]=[
-  {label:"Camarotes",href:"/camarotes"},{label:"Camas metálicas",href:"/camas-metalicas"},{label:"Camas balinesas",href:"/camas-balinesas"},
-  {label:"Mesas",href:"/mesas-metalicas"},{label:"Escritorios",href:"/escritorios-metalicos"},{label:"Cierres",href:"/cierres-perimetrales"},
-  {label:"Rejas",href:"/rejas-metalicas"},{label:"Portones",href:"/portones-metalicos"},
+  {label:"Camarotes",href:"/camarotes"},
+  {label:"Camas metálicas",href:"/camas-metalicas"},
+  {label:"Camas balinesas",href:"/camas-balinesas"},
+  {label:"Cierres",href:"/cierres-perimetrales"},
+  {label:"Rejas",href:"/rejas-metalicas"},
+  {label:"Portones",href:"/portones-metalicos"},
+  {label:"Malla 3D",href:"/mallas-3d"},
+  {label:"Estructuras",href:"/estructuras-metalicas"},
+  {label:"Equipamiento",href:"/equipamiento-metalico"},
+  {label:"Mesas",href:"/mesas-metalicas"},
+  {label:"Escritorios",href:"/escritorios-metalicos"},
 ] as const;
