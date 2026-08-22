@@ -120,6 +120,22 @@ test("enterprise landing is a B2B intent owner with structured answers and three
  expect(await closing.locator('a[href^="/recursos/"]').count()).toBeGreaterThan(0);
 });
 
+test("projects remains an evidence hub rather than a fake portfolio and keeps dual conversion",async({page})=>{
+ const route="/proyectos";
+ await assertSeoShell(page,route);
+ await assertCommercialPath(page,route,{dualPath:true});
+ const main=page.locator('main[data-sgeo-owner="proyectos"]');
+ await expect(main).toHaveCount(1);
+ const text=(await main.innerText()).toLowerCase();
+ expect(text).toContain("sin atribuir clientes, cargas, resultados o especificaciones que no estén respaldadas");
+ expect(text).toContain("regla de procedencia");
+ expect(text).toContain("un cliente o proyecto se identifica solo cuando existe respaldo suficiente");
+ const closing=page.locator("#cotizar");
+ expect(await closing.locator('a[href^="/cotizar"][data-event="quote_start"][data-cta-location="projects_footer"]').count()).toBeGreaterThan(0);
+ expect(await closing.locator('a[href*="wa.me/"][data-cta-location="projects_footer"]').count()).toBeGreaterThan(0);
+ expect(await closing.locator('a[href^="/recursos/"]').count()).toBeGreaterThan(0);
+});
+
 test("rejas and portones preserve a dual conversion choice at the decision point",async({page})=>{
  for(const route of ["/rejas-metalicas","/portones-metalicos"]){
   await assertSeoShell(page,route);
@@ -141,7 +157,7 @@ test("pre-cutover migration aliases remain disabled in staging",async({page})=>{
 
 test("representative organic landings remain usable at mobile width",async({page})=>{
  await page.setViewportSize({width:390,height:900});
- for(const route of ["/camarotes","/camas-metalicas","/cierres-perimetrales","/estructuras-metalicas","/rejas-metalicas","/portones-metalicos","/mallas-3d","/mallas-separadoras","/fabricacion-metalica","/empresas","/camarote-nido","/soldadura-mig"]){
+ for(const route of ["/camarotes","/camas-metalicas","/cierres-perimetrales","/estructuras-metalicas","/rejas-metalicas","/portones-metalicos","/mallas-3d","/mallas-separadoras","/fabricacion-metalica","/empresas","/proyectos","/camarote-nido","/soldadura-mig"]){
   await page.goto(route,{waitUntil:"networkidle"});
   const metrics=await page.evaluate(()=>({scrollWidth:document.documentElement.scrollWidth,innerWidth:window.innerWidth}));
   expect(metrics.scrollWidth,`${route} mobile overflow`).toBeLessThanOrEqual(metrics.innerWidth+2);
