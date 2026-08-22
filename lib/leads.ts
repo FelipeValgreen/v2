@@ -1,5 +1,6 @@
 import "server-only";
 import { isPublicIntakeConfigured, sendPublicIntake } from "@/lib/public-intake";
+import type { StructuredLeadFields } from "@/lib/quote";
 
 export type LegacyLead = {
   id: string;
@@ -14,7 +15,34 @@ export type LegacyLead = {
   pagina_origen: string;
   estado: string;
   archivo_ids?: string[] | null;
+  landing_path?: string | null;
+  referrer_host?: string | null;
+  utm_source?: string | null;
+  utm_medium?: string | null;
+  utm_campaign?: string | null;
+  utm_term?: string | null;
+  utm_content?: string | null;
+  gclid?: string | null;
+  gbraid?: string | null;
+  wbraid?: string | null;
+  fbclid?: string | null;
+  categoria?: string | null;
+  subcategoria?: string | null;
+  cantidad_aprox?: string | null;
+  ubicacion_proyecto?: string | null;
+  fecha_objetivo?: string | null;
+  requiere_instalacion?: boolean | null;
+  tiene_plano?: boolean | null;
+  uso_proyecto?: string | null;
+  estado_superficie?: string | null;
+  tipo_cliente?: string | null;
+  empresa?: string | null;
 };
+
+export type CreateLeadInput = Omit<LegacyLead,
+  "id" | "created_at" | "estado" | "archivo_ids" |
+  keyof StructuredLeadFields
+> & StructuredLeadFields;
 
 function getSupabaseConfig() {
   const url = process.env.SUPABASE_URL;
@@ -27,7 +55,7 @@ function getHeaders(key: string) {
   return { apikey: key, Authorization: `Bearer ${key}`, "Content-Type": "application/json" };
 }
 
-export async function createLegacyLead(data: Omit<LegacyLead, "id" | "created_at" | "estado">, clientIp = "unknown") {
+export async function createLegacyLead(data: CreateLeadInput, clientIp = "unknown") {
   const result = await sendPublicIntake("lead", { ...data, estado: "nuevo" }, clientIp);
   const id = typeof result.id === "string" ? result.id : "";
   if (!/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(id)) {
