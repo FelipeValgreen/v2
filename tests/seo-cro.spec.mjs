@@ -16,6 +16,8 @@ const primarySolutionRoutes=[
  "/pintura-electrostatica",
 ];
 
+const genericTemplateRoutes=["/camarotes","/cierres-perimetrales","/equipamiento-metalico","/pintura-electrostatica"];
+
 const dedicatedCommercialRoutes=[
  "/mallas-3d","/mallas-separadoras","/fabricacion-metalica",
 ];
@@ -67,6 +69,16 @@ test("primary solution landings keep canonical intent and commercial exit",async
  for(const route of primarySolutionRoutes){await assertSeoShell(page,route);await assertCommercialPath(page,route,{dualPath:true});}
 });
 
+test("generic solution template tracks the closing quote as well as WhatsApp",async({page})=>{
+ for(const route of genericTemplateRoutes){
+  await assertSeoShell(page,route);
+  const closing=page.locator("#cotizar");
+  await expect(closing,`${route} generic closing CTA`).toHaveCount(1);
+  expect(await closing.locator('a[href^="/cotizar"][data-event="quote_start"][data-cta-location="solution_footer"]').count(),`${route} tracked solution footer quote`).toBeGreaterThan(0);
+  expect(await closing.locator('a[href*="wa.me/"][data-cta-location="solution_footer"]').count(),`${route} solution footer WhatsApp`).toBeGreaterThan(0);
+ }
+});
+
 test("dedicated malla and custom-fabrication owners keep dual conversion paths",async({page})=>{
  for(const route of dedicatedCommercialRoutes){await assertSeoShell(page,route);await assertCommercialPath(page,route,{dualPath:true});}
 });
@@ -87,6 +99,25 @@ test("structures landing owns structural intent without pretending conceptual ev
  expect(schema).toContain('"@type":"Service"');
  expect(schema).toContain('"@type":"FAQPage"');
  expect(schema).toContain("Cobertizos y pérgolas");
+});
+
+test("enterprise landing is a B2B intent owner with structured answers and three closing paths",async({page})=>{
+ const route="/empresas";
+ await assertSeoShell(page,route);
+ await assertCommercialPath(page,route,{dualPath:true});
+ const main=page.locator('main[data-sgeo-owner="empresas"]');
+ await expect(main).toHaveCount(1);
+ const text=await main.innerText();
+ expect(text).toContain("Compra por volumen");
+ expect(text).toContain("RUTAS DE COMPRA");
+ expect(text).toContain("Bajo plano");
+ const schema=await main.locator('script[type="application/ld+json"]').first().textContent();
+ expect(schema).toContain('"@type":"Service"');
+ expect(schema).toContain('"@type":"FAQPage"');
+ const closing=page.locator("#cotizar");
+ expect(await closing.locator('a[href^="/cotizar"][data-event="quote_start"][data-cta-location="b2b_footer"]').count()).toBeGreaterThan(0);
+ expect(await closing.locator('a[href*="wa.me/"][data-cta-location="b2b_footer"]').count()).toBeGreaterThan(0);
+ expect(await closing.locator('a[href^="/recursos/"]').count()).toBeGreaterThan(0);
 });
 
 test("rejas and portones preserve a dual conversion choice at the decision point",async({page})=>{
@@ -110,7 +141,7 @@ test("pre-cutover migration aliases remain disabled in staging",async({page})=>{
 
 test("representative organic landings remain usable at mobile width",async({page})=>{
  await page.setViewportSize({width:390,height:900});
- for(const route of ["/camarotes","/camas-metalicas","/cierres-perimetrales","/estructuras-metalicas","/rejas-metalicas","/portones-metalicos","/mallas-3d","/mallas-separadoras","/fabricacion-metalica","/camarote-nido","/soldadura-mig"]){
+ for(const route of ["/camarotes","/camas-metalicas","/cierres-perimetrales","/estructuras-metalicas","/rejas-metalicas","/portones-metalicos","/mallas-3d","/mallas-separadoras","/fabricacion-metalica","/empresas","/camarote-nido","/soldadura-mig"]){
   await page.goto(route,{waitUntil:"networkidle"});
   const metrics=await page.evaluate(()=>({scrollWidth:document.documentElement.scrollWidth,innerWidth:window.innerWidth}));
   expect(metrics.scrollWidth,`${route} mobile overflow`).toBeLessThanOrEqual(metrics.innerWidth+2);
