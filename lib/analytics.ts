@@ -1,12 +1,45 @@
 import "server-only";
 import { sendPublicIntake } from "@/lib/public-intake";
 
-export const ANALYTICS_EVENTS = ["page_view", "contact_whatsapp", "contact_phone", "generate_lead"] as const;
+export const ANALYTICS_EVENTS = [
+  "page_view",
+  "view_product",
+  "view_service",
+  "quote_start",
+  "quote_step",
+  "quote_submit",
+  "contact_whatsapp",
+  "contact_phone",
+  "generate_lead",
+  "maps_click",
+  "waze_click",
+  "menu_product_click",
+  "menu_service_click",
+  "resource_view",
+  "cta_click",
+] as const;
 export type AnalyticsEventName = (typeof ANALYTICS_EVENTS)[number];
 
 export type AnalyticsSummary = {
-  totals: { views: number; visitors: number; whatsapp: number; phone: number; leads: number };
-  series: Array<{ bucket: string; views: number; visitors: number; contacts: number }>;
+  totals: {
+    views: number;
+    visitors: number;
+    whatsapp: number;
+    phone: number;
+    leads: number;
+    quote_starts: number;
+    quote_submits: number;
+    maps: number;
+    waze: number;
+  };
+  funnel: {
+    quote_starts: number;
+    quote_submits: number;
+    leads: number;
+    start_to_submit_rate: number;
+    submit_to_lead_rate: number;
+  };
+  series: Array<{ bucket: string; views: number; visitors: number; contacts: number; quote_starts: number; quote_submits: number }>;
   topPages: Array<{ path: string; views: number; visitors: number }>;
 };
 
