@@ -13,7 +13,7 @@ export default function Page(){
 
   <section className="v2-solution-section"><div className="container"><div className="rinon-contact-direct"><div><span>WHATSAPP</span><strong>{publicPhoneDisplay()}</strong>{whatsapp?<a href={whatsapp} target="_blank" rel="noopener noreferrer" data-event="contact_whatsapp" data-cta-location="contact_direct">Escribir ahora ↗</a>:null}</div><div><span>TELÉFONO</span><strong>{publicPhoneDisplay()}</strong>{phone?<a href={phone} data-event="contact_phone" data-cta-location="contact_direct">Llamar ↗</a>:null}</div><div><span>TALLER</span><strong>San Bernardo</strong><p>{publicAddressDisplay()}<br/>Región Metropolitana</p></div></div></div></section>
 
-  <div className="container rinon-map-wrap" id="ubicacion"><MapPanel compact/></div>
+  <div className="container rinon-map-wrap"><MapPanel compact/></div>
 
   <section className="v2-solution-section soft"><div className="container"><div className="section-head"><div><div className="v2-eyebrow">PARA AVANZAR MÁS RÁPIDO</div><h2>Con cuatro datos podemos empezar.</h2></div><p>No todos aplican a todos los trabajos. Envía lo que tengas y completamos solo lo necesario durante la evaluación.</p></div><div className="card-grid"><article><span>01</span><h3>Qué necesitas</h3><p>Producto, estructura, cierre, reparación o una explicación simple del problema.</p></article><article><span>02</span><h3>Referencia</h3><p>Plano, foto, croquis, muestra o dimensiones aproximadas.</p></article><article><span>03</span><h3>Cantidad</h3><p>Una unidad, un lote o un volumen estimado.</p></article><article><span>04</span><h3>Ubicación</h3><p>Comuna o región para evaluar logística e instalación cuando corresponda.</p></article></div></div></section>
  </main>}
