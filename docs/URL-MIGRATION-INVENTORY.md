@@ -1,6 +1,6 @@
 # RINON 2.0 — URL Migration Inventory
 
-**Status:** cutover baseline · 2026-08-21.  
+**Status:** cutover baseline · 2026-08-22.  
 **Rule:** every known public URL needs an explicit migration decision. No listed decision changes without SEO review.  
 **Completeness:** this inventory combines the migration contract, preserved commercial catalog and URLs discovered in the current public site/search crawl. It is deliberately **not complete** until a full live crawl is reconciled with exported Google Search Console landing-page/query data. Until then `RINON_URL_INVENTORY_COMPLETE=false` is mandatory.
 
@@ -24,7 +24,9 @@ These routes own materially different product/service intent instead of sending 
 
 ## 3. Live-observed commercial URLs — REVIEW / GSC-PENDING
 
-The following **36 URLs** were directly observed as live/indexable or prominently linked from the current public site during the pre-cutover crawl. They are quarantined before broad family redirect rules in `lib/migration.ts`. No blanket 301 is allowed until their Search Console landing-page/query performance is reconciled.
+The following **50 URLs** were directly observed as live/indexable or prominently linked from the current public site during the pre-cutover crawl. They are quarantined before broad family redirect rules in `lib/migration.ts`. No blanket 301 is allowed until their Search Console landing-page/query performance is reconciled.
+
+### Camarotes / camas
 
 | Current URL | Candidate owner | Protection reason |
 |---|---|---|
@@ -53,8 +55,19 @@ The following **36 URLs** were directly observed as live/indexable or prominentl
 | `/camarotes-renca` | `/camarotes` | Current geographic landing. |
 | `/camarotes-estacion-central` | `/camarotes` | Current internally linked comuna landing. |
 | `/camarotes-lo-barnechea` | `/camarotes` | Current internally linked comuna landing. |
+| `/camarote-con-escritorio-economico` | `/camarote-con-escritorio` | Prominently linked model variant. |
+| `/camarote-con-escritorio-full` | `/camarote-con-escritorio` | Live premium-model intent. |
+| `/camarote-con-escritorio-full-2-plazas` | `/camarote-con-escritorio` | Live distinct product/model intent with strong claims. |
+
+### Rejas / cierres / mallas / portones
+
+| Current URL | Candidate owner | Protection reason |
+|---|---|---|
 | `/reja-metalica-santiago` | `/rejas-metalicas` | Primary geographic reja intent. |
 | `/rejas-metalicas-pudahuel` | `/rejas-metalicas` | Geographic/industrial intent. |
+| `/rejas-metalicas-maipu` | `/rejas-metalicas` | Live geographic landing. |
+| `/rejas-metalicas-cerrillos` | `/rejas-metalicas` | Live geographic/industrial landing. |
+| `/rejas-metalicas-precio` | `/rejas-metalicas` | Live price-intent page. |
 | `/rejas-decorativas` | `/rejas-metalicas` | Design-led use intent. |
 | `/rejas-para-exteriores` | `/rejas-metalicas` | Exterior-use intent and durability-claim risk. |
 | `/rejas-para-terraza` | `/rejas-metalicas` | Terrace/safety intent and claim risk. |
@@ -65,13 +78,26 @@ The following **36 URLs** were directly observed as live/indexable or prominentl
 | `/cercos-perimetrales-concepcion` | `/cierres-perimetrales` | Live regional geographic intent. |
 | `/mallas-separadoras-industriales` | `/mallas-separadoras` | Distinct industrial/interior separation intent. |
 
+### Fabricación / soldadura / pintura electrostática
+
+| Current URL | Candidate owner | Protection reason |
+|---|---|---|
+| `/soldadura-metalica-santiago` | `/soldadura-mig` | Live local welding/fabrication intent. |
+| `/pintura-electrostatica-zona-sur-santiago` | `/pintura-electrostatica` | Live service hub with local-intent links. |
+| `/pintura-electrostatica-colina` | `/pintura-electrostatica` | Live north-RM/local service intent. |
+| `/pintura-electrostatica-las-condes` | `/pintura-electrostatica` | Live east-RM/local service intent. |
+| `/pintura-electrostatica-providencia` | `/pintura-electrostatica` | Live local/design-service intent. |
+| `/pintura-electrostatica-santiago-centro` | `/pintura-electrostatica` | Live central/commercial service intent. |
+| `/pintura-electrostatica-maipu` | `/pintura-electrostatica` | Live west-RM/local service intent. |
+| `/pintura-electrostatica-talagante` | `/pintura-electrostatica` | Live outer-RM/local service intent. |
+
 **Release rule:** every row above must become an explicitly approved KEEP/REBUILD/301 decision before `RINON_URL_INVENTORY_COMPLETE=true`. If Search Console data is unavailable, **default to preserving** rather than deleting proven organic entry points.
 
 ## 4. Camarote aliases eligible for 301 after protected exceptions
 
 Candidate aliases: `/camarotes-militares`, `/litera-metalica`, `/camarote-de-acero`, `/literas-militares`, `/venta-mayor-camarotes-metalicos`.
 
-Family rule: `/camarotes-*` → `/camarotes` only after the live-observed exception set has been evaluated. `/camarote-con-escritorio-*` and `/camarotes-con-escritorio-*` → `/camarote-con-escritorio` unless final GSC review establishes a distinct owner.
+Family rule: `/camarotes-*` → `/camarotes` only after the live-observed exception set has been evaluated. `/camarote-con-escritorio-*` and `/camarotes-con-escritorio-*` → `/camarote-con-escritorio` only after the three protected model exceptions above are resolved.
 
 ## 5. Cierres / cercos — 301 candidates
 
@@ -91,16 +117,20 @@ Geographic pages are not recreated as thin doorway pages unless GSC plus differe
 
 ## 7. Rejas — 301 candidates after protected exceptions
 
-Protected in section 3: `/reja-metalica-santiago`, `/rejas-metalicas-pudahuel`, `/rejas-decorativas`, `/rejas-para-exteriores`, `/rejas-para-terraza`, `/rejas-para-balcon`.
+Protected in section 3: `/reja-metalica-santiago`, `/rejas-metalicas-pudahuel`, `/rejas-metalicas-maipu`, `/rejas-metalicas-cerrillos`, `/rejas-metalicas-precio`, `/rejas-decorativas`, `/rejas-para-exteriores`, `/rejas-para-terraza`, `/rejas-para-balcon`.
 
 Other known candidates to `/rejas-metalicas`:
-`/rejas-metalicas-las-condes`, `/rejas-metalicas-providencia`, `/rejas-metalicas-nunoa`, `/rejas-metalicas-maipu`, `/rejas-metalicas-san-bernardo`, `/rejas-metalicas-cerrillos`, `/reja-tubular`, `/rejas-tubulares`, `/rejas-de-fierro`, `/rejas-galvanizadas`, `/rejas-de-seguridad`, `/instalacion-de-rejas`, `/reja-para-jardin`, `/rejas-para-ventanas`, `/rejas-para-puertas`, `/rejas-para-locales-comerciales`, `/rejas-para-galpones`, `/rejas-para-colegios`, `/fabricante-rejas-metalicas-chile`.
+`/rejas-metalicas-las-condes`, `/rejas-metalicas-providencia`, `/rejas-metalicas-nunoa`, `/rejas-metalicas-san-bernardo`, `/reja-tubular`, `/rejas-tubulares`, `/rejas-de-fierro`, `/rejas-galvanizadas`, `/rejas-de-seguridad`, `/instalacion-de-rejas`, `/reja-para-jardin`, `/rejas-para-ventanas`, `/rejas-para-puertas`, `/rejas-para-locales-comerciales`, `/rejas-para-galpones`, `/rejas-para-colegios`, `/fabricante-rejas-metalicas-chile`.
 
 ## 8. Portones
 
 `/portones-industriales` is protected in section 3. Lower-risk candidates `/fabricante-portones-metalicos-chile` and `/puertas-peatonales` may consolidate to `/portones-metalicos` after final GSC review. Automation/motor claims are never inherited automatically.
 
-## 9. Fabricación / estructuras / servicios — known candidates
+## 9. Fabricación / estructuras / servicios
+
+Protected in section 3: `/soldadura-metalica-santiago` and the seven live local powder-coating pages plus the zone-sur hub.
+
+Other known candidates:
 
 | Old URL | Candidate destination |
 |---|---|
@@ -108,10 +138,8 @@ Other known candidates to `/rejas-metalicas`:
 | `/fabricante-estructuras-metalicas-chile` | `/estructuras-metalicas` |
 | `/escaleras-metalicas` | `/estructuras-metalicas` |
 | `/barandas-metalicas` | `/estructuras-metalicas` |
-| `/soldadura-metalica-santiago` | `/soldadura-mig` |
 | `/metalurgica-rinon` | `/fabricacion-metalica` |
 | `/pintura-electrostatica-santiago` | `/pintura-electrostatica` |
-| `/pintura-electrostatica-zona-sur-santiago` | `/pintura-electrostatica` |
 
 ## 10. Approved editorial redirects
 
@@ -141,7 +169,7 @@ These require individual review because price, safety, child/elderly use, techni
 1. Export Search Console landing pages and queries for the pre-migration comparison window.
 2. Crawl the complete live `rinon.cl` site and collect every indexable/internal URL, status, canonical, title and inbound internal links.
 3. Reconcile crawl + GSC + this inventory and add every missing URL.
-4. Review every URL with clicks, impressions, backlinks or material commercial intent individually, including all 36 section-3 URLs.
+4. Review every URL with clicks, impressions, backlinks or material commercial intent individually, including all 50 section-3 URLs.
 5. Resolve every `REVIEW / GSC-PENDING` item to an approved release state.
 6. Verify every approved 301 destination returns 200 and preserves or improves intent relevance.
 7. Run migration, SEO/CRO, served-build and browser gates on the exact release candidate.
