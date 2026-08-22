@@ -71,6 +71,24 @@ test("dedicated malla and custom-fabrication owners keep dual conversion paths",
  for(const route of dedicatedCommercialRoutes){await assertSeoShell(page,route);await assertCommercialPath(page,route,{dualPath:true});}
 });
 
+test("structures landing owns structural intent without pretending conceptual evidence is executed work",async({page})=>{
+ const route="/estructuras-metalicas";
+ await assertSeoShell(page,route);
+ await assertCommercialPath(page,route,{dualPath:true});
+ const main=page.locator('main[data-sgeo-owner="estructuras-metalicas"]');
+ await expect(main).toHaveCount(1);
+ const text=await main.innerText();
+ expect(text).toContain("Cobertizos y pérgolas");
+ expect(text).toContain("EMPRESAS Y OPERACIÓN");
+ expect(text).toContain("Fabricar una estructura no equivale automáticamente a desarrollar su ingeniería");
+ expect(text).toContain("VISUAL CONCEPTUAL");
+ expect(text).toContain("no obra ejecutada");
+ const schema=await main.locator('script[type="application/ld+json"]').first().textContent();
+ expect(schema).toContain('"@type":"Service"');
+ expect(schema).toContain('"@type":"FAQPage"');
+ expect(schema).toContain("Cobertizos y pérgolas");
+});
+
 test("pre-cutover migration aliases remain disabled in staging",async({page})=>{
  for(const route of preCutoverRedirectAliases){
   const response=await page.goto(route,{waitUntil:"networkidle"});
