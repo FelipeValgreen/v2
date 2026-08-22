@@ -1,6 +1,6 @@
 import {readFileSync} from "node:fs";
 const failures=[];const read=path=>readFileSync(path,"utf8");const check=(condition,message)=>{if(condition)console.log(`✓ ${message}`);else{failures.push(message);console.error(`✗ ${message}`)}};
-const migration=read("lib/migration.ts"),legacyCommercial=read("lib/legacy-commercial.ts"),blogMigration=read("lib/blog-migration.ts"),migrationResources=read("lib/migration-resources.ts"),blogPage=read("app/blog/[slug]/page.tsx"),sitemap=read("app/sitemap.ts"),navigation=read("lib/navigation.ts"),expansions=read("lib/commercial-expansion.ts"),capabilities=read("lib/capabilities.ts"),malla3d=read("app/mallas-3d/page.tsx"),mallasSeparadoras=read("app/mallas-separadoras/page.tsx"),proxy=read("proxy.ts"),envExample=read(".env.example"),envPreview=read(".env.preview.example"),urlInventory=read("docs/URL-MIGRATION-INVENTORY.md");
+const migration=read("lib/migration.ts"),legacyCommercial=read("lib/legacy-commercial.ts"),blogMigration=read("lib/blog-migration.ts"),migrationResources=read("lib/migration-resources.ts"),blogPage=read("app/blog/[slug]/page.tsx"),sitemap=read("app/sitemap.ts"),navigation=read("lib/navigation.ts"),expansions=read("lib/commercial-expansion.ts"),capabilities=read("lib/capabilities.ts"),malla3d=read("app/mallas-3d/page.tsx"),mallasSeparadoras=read("app/mallas-separadoras/page.tsx"),proxy=read("proxy.ts"),envExample=read(".env.example"),envPreview=read(".env.preview.example"),urlInventory=read("docs/URL-MIGRATION-INVENTORY.md"),preflight=read("scripts/preflight-production.mjs");
 
 const preservedCommercial=["camarote-nido","camarote-triple","camarote-doble","cama-alta","camarote-titanic","camarote-1-5-plazas","camarote-desmontable","cama-dos-plazas-con-cajon","camarote-2-plazas","cama-institucional-metalica","cama-loft-metalica","cama-loft-con-escritorio","mobiliario-institucional"];
 const newOwners=["/camas-metalicas","/camas-balinesas","/mesas-metalicas","/escritorios-metalicos","/soldadura-mig","/corte-metalico","/instalacion","/reparaciones-metalicas"];
@@ -29,6 +29,9 @@ const broadRejaIndex=migration.indexOf('if(path.startsWith("/rejas-metalicas-")'
 const broadPortonIndex=migration.indexOf('if(path.startsWith("/portones-")');
 check(observedGuardIndex>=0&&observedGuardIndex<broadCamaroteIndex&&observedGuardIndex<broadRejaIndex&&observedGuardIndex<broadPortonIndex,"live-observed guard executes before all broad commercial family redirects");
 check(urlInventory.includes("REVIEW / GSC-PENDING")&&urlInventory.includes("default to preserving"),"inventory defaults to preservation when GSC evidence is unavailable");
+const declaredPending=Number(migration.match(/MIGRATION_GSC_REVIEW_PENDING_COUNT\s*=\s*(\d+)/)?.[1]??NaN);
+check(declaredPending===observedLiveReview.length,`machine-readable GSC pending count matches ${observedLiveReview.length} protected live URLs`);
+check(preflight.includes('check(gscPendingCount===0,"no live-observed GSC migration reviews remain unresolved")'),"authorized production preflight hard-blocks unresolved GSC URL reviews");
 
 check(malla3d.includes('"/mallas-3d"'),"/mallas-3d has a dedicated page owner");check(mallasSeparadoras.includes('"/mallas-separadoras"'),"/mallas-separadoras has a dedicated page owner");check(navigation.includes('/mallas-3d')&&navigation.includes('/mallas-separadoras'),"navigation links both malla intent owners");check(migration.includes('path.startsWith("/mallas-separadoras-")')&&migration.includes('destination:"/mallas-separadoras"'),"legacy mallas separadoras aliases consolidate to dedicated owner");
 
