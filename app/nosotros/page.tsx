@@ -29,7 +29,7 @@ export default function Page(){return <main className="v5-editorial-page rinon-a
 
  <section className="v2-solution-section soft"><div className="container"><div className="section-head"><div><div className="v2-eyebrow">CÓMO TRABAJAMOS</div><h2>Un proceso simple antes de entrar a taller.</h2></div><p>Primero entendemos qué necesitas. Después pedimos solo la información que realmente cambia la fabricación o la cotización.</p></div><ol className="rinon-about-process">{process.map(([n,title,body])=><li key={n}><span>{n}</span><strong>{title}</strong><p>{body}</p></li>)}</ol></div></section>
 
- <div className="container rinon-map-wrap" id="ubicacion"><MapPanel/></div>
+ <div className="container rinon-map-wrap"><MapPanel/></div>
 
  <section id="cotizar" className="v2-solution-section"><div className="container"><div className="section-head"><div><div className="v2-eyebrow">COBERTURA</div><h2>Desde San Bernardo hacia el proyecto.</h2></div><p>La Región Metropolitana es nuestra base operativa. Despachos, proyectos regionales e instalación se evalúan de acuerdo con el tipo de trabajo, destino y alcance requerido.</p></div><div className="v2-actions"><Link className="v2-btn orange" data-event="quote_start" data-cta-location="about_footer" href="/cotizar">Cuéntanos qué necesitas</Link><WhatsAppCTA location="about_footer" label="Hablar por WhatsApp" className="v2-btn outline"/><Link className="v2-btn outline" href="/contacto">Contacto</Link></div></div></section>
  </main>}
