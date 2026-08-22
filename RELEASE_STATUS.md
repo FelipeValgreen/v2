@@ -24,12 +24,16 @@ Mode: **SAFE PRE-CUTOVER**
 - New intent owners are available for camas, camas balinesas, mesas, escritorios, Malla 3D, mallas separadoras, Soldadura MIG, Corte, Instalación and Reparaciones.
 - Pintura electrostática is a confirmed commercial service with bounded technical claims.
 - Migration, SEO/CRO, visual provenance, attachment, structured CRM and production preflight contracts run inside the Vercel build.
-- 22 live-observed/current organic URLs are quarantined as `REVIEW / GSC-PENDING` before broad redirect families, preventing accidental zero-loss SEO regressions.
+- **36** live-observed/current organic URLs are quarantined as `REVIEW / GSC-PENDING` before broad redirect families.
+- Production preflight now also reads the machine-readable `VISUAL_CUTOVER_BLOCKERS` registry and refuses authorized cutover while final visual blockers remain.
+- Three user-provided cobertizo renders were dimension/SHA audited as reference-only assets; `COBERTIZO SALA.jpg` is the strongest current contextual candidate but is not represented as a completed RINON project.
 
 ## Remaining pre-cutover work / external evidence
-- Reconcile the complete live crawl with an exported Google Search Console landing-page/query dataset and resolve every `REVIEW / GSC-PENDING` URL.
-- Produce/approve the final high-resolution residential pergola/cobertizo contextual visual for Home/Estructuras.
-- Replace evidence-panel fallbacks with verified RINON photography when authentic source material becomes available, prioritizing Nosotros/workshop, Empresas/B2B, welding and powder coating.
+- Reconcile the complete live crawl with an exported Google Search Console landing-page/query dataset and resolve all **36** `REVIEW / GSC-PENDING` URLs.
+- Resolve the two final visual blockers:
+  1. `home-hero-final-master` — replace the constrained 720×730 temporary Home hero master.
+  2. `structures-residential-final-master` — replace the generic industrial structures visual with the accepted premium residential cobertizo/pergola direction.
+- Where available, promote verified RINON photography for Nosotros/workshop, Empresas/B2B, welding and powder coating; evidence-panel fallbacks remain acceptable until authentic evidence exists.
 - Complete final visual acceptance across desktop/tablet/mobile after final masters are installed.
 - Obtain explicit production cutover authorization before changing domain/indexation/redirect/write/tracking flags.
 
@@ -40,5 +44,6 @@ Mode: **SAFE PRE-CUTOVER**
 - Lead writes disabled unless explicitly enabled for a controlled environment or authorized production release.
 - Production tracking disabled until the production release is authorized and consent-gated.
 - URL inventory completion remains false until crawl + GSC reconciliation.
+- Visual cutover blocker list is non-empty until final masters pass provenance + QA.
 - Existing production `rinon.cl` is not modified by this repository.
-- Production cutover remains blocked behind explicit authorization.
+- Production cutover remains blocked behind explicit authorization and all hard gates.
