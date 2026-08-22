@@ -23,6 +23,16 @@ type ReferenceVisual = VisualBase & {
 
 export type VisualAsset = VerifiedRinonVisual | ReferenceVisual;
 
+/**
+ * Production cutover is blocked while these release-level visual requirements remain.
+ * Remove an ID only after the replacement asset is integrated, provenance-registered,
+ * dimension-gated and visually accepted on desktop/tablet/mobile.
+ */
+export const VISUAL_CUTOVER_BLOCKERS=[
+  "home-hero-final-master",
+  "structures-residential-final-master",
+] as const;
+
 const referenceBase = "/visuals/reference-current";
 
 /**
