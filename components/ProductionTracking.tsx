@@ -7,6 +7,13 @@ const CONSENT_KEY = "rinon_cookie_consent";
 const VISITOR_KEY = "rinon_analytics_visitor";
 const SESSION_KEY = "rinon_analytics_session";
 export const ATTRIBUTION_KEY = "rinon_attribution_v1";
+const INTERNAL_ANALYTICS_EVENTS = [
+  "page_view","view_product","view_service","quote_start","quote_step","quote_submit",
+  "contact_whatsapp","contact_phone","generate_lead","maps_click","waze_click",
+  "menu_product_click","menu_service_click","resource_view","cta_click",
+] as const;
+type InternalAnalyticsEvent = (typeof INTERNAL_ANALYTICS_EVENTS)[number];
+const INTERNAL_ANALYTICS_EVENT_SET = new Set<string>(INTERNAL_ANALYTICS_EVENTS);
 
 declare global { interface Window { dataLayer?: Array<Record<string, unknown>> } }
 function hasAnalyticsConsent() { try { const saved = JSON.parse(localStorage.getItem(CONSENT_KEY) ?? "null"); return saved?.value === "all"; } catch { return false; } }
@@ -33,12 +40,15 @@ function storeAttribution(){
     sessionStorage.setItem(ATTRIBUTION_KEY,JSON.stringify(values));
   }catch{}
 }
-function sendAnalyticsEvent(eventName: "page_view" | "contact_whatsapp" | "contact_phone" | "generate_lead") {
+function sendAnalyticsEvent(eventName: InternalAnalyticsEvent) {
   const visitorId = getAnonymousId(localStorage, VISITOR_KEY); const sessionId = getAnonymousId(sessionStorage, SESSION_KEY);
   let referrerHost = ""; try { referrerHost = document.referrer ? new URL(document.referrer).hostname : ""; } catch {}
   const payload = JSON.stringify({ eventName, pagePath: window.location.pathname, pageTitle: document.title, referrerHost, visitorId, sessionId });
   if (navigator.sendBeacon) navigator.sendBeacon("/api/analytics", new Blob([payload], { type: "application/json" }));
   else void fetch("/api/analytics", { method: "POST", headers: { "Content-Type": "application/json" }, body: payload, keepalive: true });
+}
+function persistIfInternal(eventName: string) {
+  if (INTERNAL_ANALYTICS_EVENT_SET.has(eventName)) sendAnalyticsEvent(eventName as InternalAnalyticsEvent);
 }
 
 export function ProductionTracking() {
@@ -53,10 +63,20 @@ export function ProductionTracking() {
     if (!enabled) return;
     const trackClick = (event: MouseEvent) => {
       const target=(event.target as HTMLElement); const link=target.closest<HTMLAnchorElement>("a"); const tracked=target.closest<HTMLElement>("[data-event]");
-      if(tracked){const eventName=tracked.dataset.event;if(eventName && !["whatsapp_click"].includes(eventName)){window.dataLayer=window.dataLayer??[];window.dataLayer.push({event:eventName,page_path:window.location.pathname,cta_location:tracked.dataset.ctaLocation||"unknown",quote_category:tracked.dataset.quoteCategory||undefined});}}
+      if(tracked){
+        const eventName=tracked.dataset.event;
+        if(eventName && eventName!=="whatsapp_click"){
+          window.dataLayer=window.dataLayer??[];
+          window.dataLayer.push({event:eventName,page_path:window.location.pathname,cta_location:tracked.dataset.ctaLocation||"unknown",quote_category:tracked.dataset.quoteCategory||undefined});
+          if(eventName!=="contact_whatsapp"&&eventName!=="contact_phone")persistIfInternal(eventName);
+        }
+      }
       if (!link) return; const href=link.href;
       const eventName = href.includes("wa.me/") ? "contact_whatsapp" : href.startsWith("tel:") ? "contact_phone" : null;
-      if (!eventName) return; window.dataLayer=window.dataLayer??[];window.dataLayer.push({event:eventName,page_path:window.location.pathname,link_text:link.textContent?.trim().slice(0,80)||eventName,quote_category:tracked?.dataset.quoteCategory||undefined,cta_location:tracked?.dataset.ctaLocation||undefined}); sendAnalyticsEvent(eventName);
+      if (!eventName) return;
+      window.dataLayer=window.dataLayer??[];
+      window.dataLayer.push({event:eventName,page_path:window.location.pathname,link_text:link.textContent?.trim().slice(0,80)||eventName,quote_category:tracked?.dataset.quoteCategory||undefined,cta_location:tracked?.dataset.ctaLocation||undefined});
+      sendAnalyticsEvent(eventName);
     };
     const trackForm = () => { window.dataLayer=window.dataLayer??[]; window.dataLayer.push({event:"generate_lead",page_path:window.location.pathname}); sendAnalyticsEvent("generate_lead"); };
     const semantic=(event:Event)=>{
@@ -75,6 +95,7 @@ export function ProductionTracking() {
         lead_transport:typeof detail.lead_transport==="string"?detail.lead_transport:undefined,
       };
       window.dataLayer=window.dataLayer??[];window.dataLayer.push(allowed);
+      persistIfInternal(eventName);
     };
     document.addEventListener("click",trackClick); window.addEventListener("rinon-lead-submitted",trackForm); window.addEventListener("rinon-semantic-event",semantic);
     return()=>{document.removeEventListener("click",trackClick);window.removeEventListener("rinon-lead-submitted",trackForm);window.removeEventListener("rinon-semantic-event",semantic)};
