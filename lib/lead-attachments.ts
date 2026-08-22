@@ -60,6 +60,23 @@ async function bestEffortDeleteObject(url: string, key: string, objectPath: stri
   }).catch(() => undefined);
 }
 
+async function bestEffortDeleteMetadata(url: string, key: string, id: string) {
+  await fetch(`${url}/rest/v1/rinon_lead_attachments?id=eq.${encodeURIComponent(id)}`, {
+    method: "DELETE",
+    headers: { ...authHeaders(key), Prefer: "return=minimal" },
+    cache: "no-store",
+  }).catch(() => undefined);
+}
+
+async function rollbackStored(stored: LeadAttachment[]) {
+  if (!stored.length) return;
+  const { url, key } = getSupabaseConfig();
+  await Promise.allSettled(stored.flatMap((item) => [
+    bestEffortDeleteObject(url, key, item.object_path),
+    bestEffortDeleteMetadata(url, key, item.id),
+  ]));
+}
+
 async function uploadOne(leadId: string, file: File): Promise<LeadAttachment> {
   const { url, key } = getSupabaseConfig();
   const extension = allowedMimeToExtension[file.type];
@@ -115,21 +132,26 @@ export async function storeLeadAttachments(leadId: string, files: File[]) {
   if (!files.length) return [] as LeadAttachment[];
 
   const stored: LeadAttachment[] = [];
-  for (const file of files) stored.push(await uploadOne(leadId, file));
+  try {
+    for (const file of files) stored.push(await uploadOne(leadId, file));
 
-  const { url, key } = getSupabaseConfig();
-  await fetch(`${url}/rest/v1/leads?id=eq.${encodeURIComponent(leadId)}`, {
-    method: "PATCH",
-    headers: {
-      ...authHeaders(key),
-      "Content-Type": "application/json",
-      Prefer: "return=minimal",
-    },
-    body: JSON.stringify({ archivo_ids: stored.map((item) => item.id) }),
-    cache: "no-store",
-  }).catch(() => undefined);
-
-  return stored;
+    const { url, key } = getSupabaseConfig();
+    const patch = await fetch(`${url}/rest/v1/leads?id=eq.${encodeURIComponent(leadId)}`, {
+      method: "PATCH",
+      headers: {
+        ...authHeaders(key),
+        "Content-Type": "application/json",
+        Prefer: "return=minimal",
+      },
+      body: JSON.stringify({ archivo_ids: stored.map((item) => item.id) }),
+      cache: "no-store",
+    });
+    if (!patch.ok) throw new Error(`No fue posible vincular los adjuntos al lead (${patch.status}).`);
+    return stored;
+  } catch (error) {
+    await rollbackStored(stored);
+    throw error;
+  }
 }
 
 export async function listLeadAttachments(leadId: string): Promise<LeadAttachment[]> {
