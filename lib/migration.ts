@@ -20,6 +20,7 @@ export const observedLiveReviewPaths=new Set([
  "/camarotes-providencia","/camarotes-las-condes","/camarotes-maipu","/camarotes-nunoa","/camarotes-la-florida","/camarotes-pudahuel","/camarotes-santiago-centro","/camarotes-penalolen","/camarotes-quilicura","/camarotes-puente-alto","/camarotes-san-bernardo","/camarotes-renca","/camarotes-estacion-central","/camarotes-lo-barnechea",
  "/reja-metalica-santiago","/rejas-metalicas-pudahuel","/portones-industriales",
 ]);
+export const MIGRATION_GSC_REVIEW_PENDING_COUNT=22;
 function normalize(path:string){const clean=path.split("?")[0].split("#")[0].trim();if(!clean||clean==="/")return "/";return `/${clean.replace(/^\/+|\/+$/g,"")}`.toLowerCase()}
 
 export function resolveMigration(inputPath:string):MigrationDecision{
