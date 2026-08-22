@@ -24,10 +24,16 @@ old_url,decision,new_url,family,evidence_state,cutover_rule
 /instalacion,REBUILD,/instalacion,services,new owner,keep
 /reparaciones-metalicas,REBUILD,/reparaciones-metalicas,services,new owner,keep
 /literas,REVIEW,/camarotes,camarotes,LIVE-OBSERVED GSC-PENDING,no redirect until resolved
-/camarotes-baratos,REVIEW,/camarotes,camarotes,LIVE-OBSERVED GSC-PENDING,no redirect until resolved
-/camarotes-faenas,REVIEW,/camarotes,camarotes,LIVE-OBSERVED GSC-PENDING,no redirect until resolved
-/camarotes-salmoneras,REVIEW,/camarotes,camarotes,LIVE-OBSERVED GSC-PENDING,no redirect until resolved
-/camarotes-mineria,REVIEW,/camarotes,camarotes,LIVE-OBSERVED GSC-PENDING,no redirect until resolved
+/camarotes-baratos,REVIEW,/camarotes,camarotes price,LIVE-OBSERVED GSC-PENDING,no redirect until resolved
+/camarotes-precio,REVIEW,/camarotes,camarotes price,LIVE-OBSERVED GSC-PENDING,no redirect until resolved
+/camarotes-faenas,REVIEW,/camarotes,camarotes B2B,LIVE-OBSERVED GSC-PENDING,no redirect until resolved
+/camarotes-salmoneras,REVIEW,/camarotes,camarotes sector,LIVE-OBSERVED GSC-PENDING,no redirect until resolved
+/camarotes-mineria,REVIEW,/camarotes,camarotes sector,LIVE-OBSERVED GSC-PENDING,no redirect until resolved
+/camarotes-metalicos,REVIEW,/camarotes,camarotes generic,LIVE-OBSERVED GSC-PENDING,no redirect until resolved
+/fabricante-camarotes-chile,REVIEW,/camarotes,camarotes manufacturer,LIVE-OBSERVED GSC-PENDING,no redirect until resolved
+/camarotes-al-por-mayor,REVIEW,/camarotes,camarotes volume,LIVE-OBSERVED GSC-PENDING,no redirect until resolved
+/camarotes-para-internados,REVIEW,/camarotes,camarotes institutional,LIVE-OBSERVED GSC-PENDING,no redirect until resolved
+/camarotes-para-hospitales,REVIEW,/camarotes,camarotes institutional,LIVE-OBSERVED GSC-PENDING,no redirect until resolved
 /camarotes-providencia,REVIEW,/camarotes,camarotes geo,LIVE-OBSERVED GSC-PENDING,no redirect until resolved
 /camarotes-las-condes,REVIEW,/camarotes,camarotes geo,LIVE-OBSERVED GSC-PENDING,no redirect until resolved
 /camarotes-maipu,REVIEW,/camarotes,camarotes geo,LIVE-OBSERVED GSC-PENDING,no redirect until resolved
@@ -44,26 +50,30 @@ old_url,decision,new_url,family,evidence_state,cutover_rule
 /camarotes-lo-barnechea,REVIEW,/camarotes,camarotes geo,LIVE-OBSERVED GSC-PENDING,no redirect until resolved
 /reja-metalica-santiago,REVIEW,/rejas-metalicas,rejas geo,LIVE-OBSERVED GSC-PENDING,no redirect until resolved
 /rejas-metalicas-pudahuel,REVIEW,/rejas-metalicas,rejas geo,LIVE-OBSERVED GSC-PENDING,no redirect until resolved
+/rejas-decorativas,REVIEW,/rejas-metalicas,rejas use,LIVE-OBSERVED GSC-PENDING,no redirect until resolved
+/rejas-para-exteriores,REVIEW,/rejas-metalicas,rejas use,LIVE-OBSERVED GSC-PENDING,no redirect until resolved
+/rejas-para-terraza,REVIEW,/rejas-metalicas,rejas use,LIVE-OBSERVED GSC-PENDING,no redirect until resolved
+/rejas-para-balcon,REVIEW,/rejas-metalicas,rejas use,LIVE-OBSERVED GSC-PENDING,no redirect until resolved
 /portones-industriales,REVIEW,/portones-metalicos,portones sector,LIVE-OBSERVED GSC-PENDING,no redirect until resolved
+/cercos-para-empresas,REVIEW,/cierres-perimetrales,cierres B2B,LIVE-OBSERVED GSC-PENDING,no redirect until resolved
+/cercos-para-parcelas,REVIEW,/cierres-perimetrales,cierres use,LIVE-OBSERVED GSC-PENDING,no redirect until resolved
+/cercos-perimetrales-concepcion,REVIEW,/cierres-perimetrales,cierres geo,LIVE-OBSERVED GSC-PENDING,no redirect until resolved
+/mallas-separadoras-industriales,REVIEW,/mallas-separadoras,mallas sector,LIVE-OBSERVED GSC-PENDING,no redirect until resolved
 /camarotes-militares,301 candidate,/camarotes,camarotes sector,inventory only,enable only after GSC reconciliation
-/camarotes-para-hospitales,301 candidate,/camarotes,camarotes sector,inventory only,enable only after GSC reconciliation
-/camarotes-para-internados,301 candidate,/camarotes,camarotes sector,inventory only,enable only after GSC reconciliation
-/camarotes-al-por-mayor,301 candidate,/camarotes,camarotes volume,inventory only,enable only after GSC reconciliation
 /litera-metalica,301 candidate,/camarotes,camarotes synonym,inventory only,enable only after GSC reconciliation
 /camarote-de-acero,301 candidate,/camarotes,camarotes synonym,inventory only,enable only after GSC reconciliation
+/literas-militares,301 candidate,/camarotes,camarotes sector,inventory only,enable only after GSC reconciliation
+/venta-mayor-camarotes-metalicos,301 candidate,/camarotes,camarotes volume,inventory only,enable only after GSC reconciliation
 /cierre-perimetral-industrial,301 candidate,/cierres-perimetrales,cierres,inventory only,enable only after GSC reconciliation
-/cercos-para-empresas,301 candidate,/cierres-perimetrales,cierres,inventory only,enable only after GSC reconciliation
-/cercos-para-parcelas,301 candidate,/cierres-perimetrales,cierres,inventory only,enable only after GSC reconciliation
+/cercos-perimetrales-empresas,301 candidate,/cierres-perimetrales,cierres B2B,inventory only,enable only after GSC reconciliation
+/cercos-perimetrales-antofagasta,301 candidate,/cierres-perimetrales,cierres geo,inventory only,enable only after GSC reconciliation
 /cercos-metalicos-santiago,301 candidate,/cierres-perimetrales,cierres geo,inventory only,enable only after GSC reconciliation
 /cercos-metalicos-valparaiso,301 candidate,/cierres-perimetrales,cierres geo,inventory only,enable only after GSC reconciliation
 /cercos-metalicos-ohiggins,301 candidate,/cierres-perimetrales,cierres geo,inventory only,enable only after GSC reconciliation
 /cercos-metalicos-maule,301 candidate,/cierres-perimetrales,cierres geo,inventory only,enable only after GSC reconciliation
-/mallas-separadoras-industriales,301 candidate,/mallas-separadoras,mallas,inventory only,enable only after GSC reconciliation
 /mallas-separadoras-bodegas,301 candidate,/mallas-separadoras,mallas,inventory only,enable only after GSC reconciliation
+/mallas-separadoras-plantas,301 candidate,/mallas-separadoras,mallas,inventory only,enable only after GSC reconciliation
 /rejas-metalicas-cerrillos,301 candidate,/rejas-metalicas,rejas geo,inventory only,enable only after GSC reconciliation
-/rejas-para-terraza,301 candidate,/rejas-metalicas,rejas use,inventory only,enable only after GSC reconciliation
-/rejas-para-exteriores,301 candidate,/rejas-metalicas,rejas use,inventory only,enable only after GSC reconciliation
-/rejas-decorativas,301 candidate,/rejas-metalicas,rejas use,inventory only,enable only after GSC reconciliation
 /soldadura-metalica-santiago,301 candidate,/soldadura-mig,soldadura,inventory only,enable only after GSC reconciliation
 /pintura-electrostatica-santiago,301 candidate,/pintura-electrostatica,pintura geo,inventory only,enable only after GSC reconciliation
 /pintura-electrostatica-zona-sur-santiago,301 candidate,/pintura-electrostatica,pintura geo,inventory only,enable only after GSC reconciliation
