@@ -14,8 +14,23 @@ function getAnonymousId(storage: Storage, key: string) { const saved = storage.g
 function storeAttribution(){
   try{
     const params=new URLSearchParams(window.location.search);
-    const values={utm_source:params.get("utm_source")||undefined,utm_medium:params.get("utm_medium")||undefined,utm_campaign:params.get("utm_campaign")||undefined,utm_content:params.get("utm_content")||undefined,utm_term:params.get("utm_term")||undefined,gclid:params.get("gclid")||undefined};
-    if(Object.values(values).some(Boolean))sessionStorage.setItem(ATTRIBUTION_KEY,JSON.stringify(values));
+    const existing=JSON.parse(sessionStorage.getItem(ATTRIBUTION_KEY)||"{}") as Record<string,string|undefined>;
+    let referrerHost=existing.referrer_host||"";
+    try{const ref=document.referrer?new URL(document.referrer):null;if(ref&&ref.hostname!==window.location.hostname)referrerHost=referrerHost||ref.hostname}catch{}
+    const values={
+      landing_path:existing.landing_path||window.location.pathname,
+      referrer_host:referrerHost||undefined,
+      utm_source:existing.utm_source||params.get("utm_source")||undefined,
+      utm_medium:existing.utm_medium||params.get("utm_medium")||undefined,
+      utm_campaign:existing.utm_campaign||params.get("utm_campaign")||undefined,
+      utm_content:existing.utm_content||params.get("utm_content")||undefined,
+      utm_term:existing.utm_term||params.get("utm_term")||undefined,
+      gclid:existing.gclid||params.get("gclid")||undefined,
+      gbraid:existing.gbraid||params.get("gbraid")||undefined,
+      wbraid:existing.wbraid||params.get("wbraid")||undefined,
+      fbclid:existing.fbclid||params.get("fbclid")||undefined,
+    };
+    sessionStorage.setItem(ATTRIBUTION_KEY,JSON.stringify(values));
   }catch{}
 }
 function sendAnalyticsEvent(eventName: "page_view" | "contact_whatsapp" | "contact_phone" | "generate_lead") {
@@ -44,7 +59,23 @@ export function ProductionTracking() {
       if (!eventName) return; window.dataLayer=window.dataLayer??[];window.dataLayer.push({event:eventName,page_path:window.location.pathname,link_text:link.textContent?.trim().slice(0,80)||eventName,quote_category:tracked?.dataset.quoteCategory||undefined,cta_location:tracked?.dataset.ctaLocation||undefined}); sendAnalyticsEvent(eventName);
     };
     const trackForm = () => { window.dataLayer=window.dataLayer??[]; window.dataLayer.push({event:"generate_lead",page_path:window.location.pathname}); sendAnalyticsEvent("generate_lead"); };
-    const semantic=(event:Event)=>{const detail=(event as CustomEvent<Record<string,unknown>>).detail||{};const eventName=detail.event;if(typeof eventName!=="string"||eventName==="generate_lead")return;const allowed={event:eventName,page_path:window.location.pathname,quote_category:typeof detail.quote_category==="string"?detail.quote_category:undefined,cta_location:typeof detail.cta_location==="string"?detail.cta_location:undefined,file_type:typeof detail.file_type==="string"?detail.file_type:undefined,file_size_bucket:typeof detail.file_size_bucket==="string"?detail.file_size_bucket:undefined,lead_transport:typeof detail.lead_transport==="string"?detail.lead_transport:undefined};window.dataLayer=window.dataLayer??[];window.dataLayer.push(allowed);};
+    const semantic=(event:Event)=>{
+      const detail=(event as CustomEvent<Record<string,unknown>>).detail||{};
+      const eventName=detail.event;if(typeof eventName!=="string"||eventName==="generate_lead")return;
+      const allowed={
+        event:eventName,page_path:window.location.pathname,
+        quote_category:typeof detail.quote_category==="string"?detail.quote_category:undefined,
+        quote_detail:typeof detail.quote_detail==="string"?detail.quote_detail:undefined,
+        quote_step:typeof detail.quote_step==="string"||typeof detail.quote_step==="number"?detail.quote_step:undefined,
+        request_type:typeof detail.request_type==="string"?detail.request_type:undefined,
+        attachment_count:typeof detail.attachment_count==="number"?detail.attachment_count:undefined,
+        cta_location:typeof detail.cta_location==="string"?detail.cta_location:undefined,
+        file_type:typeof detail.file_type==="string"?detail.file_type:undefined,
+        file_size_bucket:typeof detail.file_size_bucket==="string"?detail.file_size_bucket:undefined,
+        lead_transport:typeof detail.lead_transport==="string"?detail.lead_transport:undefined,
+      };
+      window.dataLayer=window.dataLayer??[];window.dataLayer.push(allowed);
+    };
     document.addEventListener("click",trackClick); window.addEventListener("rinon-lead-submitted",trackForm); window.addEventListener("rinon-semantic-event",semantic);
     return()=>{document.removeEventListener("click",trackClick);window.removeEventListener("rinon-lead-submitted",trackForm);window.removeEventListener("rinon-semantic-event",semantic)};
   },[enabled]);
