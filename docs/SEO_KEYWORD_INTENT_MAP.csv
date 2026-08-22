@@ -1,0 +1,30 @@
+route,ux_label,primary_intent,primary_keyword_theme,secondary_theme,user_type,funnel_stage,cta_context,status
+/,RINON,fabricante metálico / soluciones,soluciones metálicas Santiago,fabricación metálica San Bernardo,particular+B2B,discovery,quote general,KEEP 200
+/camarotes,Camarotes,comprar/cotizar camarotes,camarotes metálicos,camarotes Santiago; literas,B2C+B2B,commercial,category=camarotes,KEEP 200
+/camas-metalicas,Camas,comprar/cotizar cama,camas metálicas,camas de acero; cama institucional,B2C+B2B,commercial,category=camarotes detail=camas-metalicas,REBUILD
+/camas-balinesas,Camas balinesas,comprar/cotizar cama balinesa,camas balinesas metálicas,cama balinesa exterior,B2C+hospitality,commercial,category=equipamiento detail=camas-balinesas,REBUILD
+/camarote-con-escritorio,Camarote con escritorio,comprar producto,camarote con escritorio,cama loft escritorio; cama alta escritorio,B2C,commercial,category=camarotes detail=camarote_escritorio,KEEP 200
+/mesas-metalicas,Mesas,comprar/cotizar mesa,mesas metálicas,mesas a medida,B2C+B2B,commercial,category=equipamiento detail=mesas-metalicas,REBUILD
+/escritorios-metalicos,Escritorios,comprar/cotizar escritorio,escritorios metálicos,escritorios a medida,B2C+B2B,commercial,category=equipamiento detail=escritorios-metalicos,REBUILD
+/equipamiento-metalico,Equipamiento,equipamiento de proyecto,equipamiento metálico,mobiliario institucional,B2B,inquiry,category=equipamiento,KEEP 200
+/cierres-perimetrales,Cierres,cotizar cierre,cierres perimetrales,cercos metálicos; cierre industrial,B2C+B2B,commercial,category=cierres detail=cierre,KEEP 200
+/rejas-metalicas,Rejas,cotizar reja,rejas metálicas,rejas Santiago; reja tubular,B2C+B2B,commercial,category=cierres detail=reja,KEEP 200
+/portones-metalicos,Portones,cotizar portón,portones metálicos,portón corredizo; portón industrial,B2C+B2B,commercial,category=cierres detail=porton,KEEP 200
+/mallas-3d,Malla 3D,cotizar malla/panel,malla 3D,panel 3D cierre; malla electrosoldada,B2B+B2C,commercial,category=cierres detail=malla_3d,KEEP 200
+/mallas-separadoras,Mallas separadoras,cotizar división interior,mallas separadoras industriales,mallas para bodegas,B2B,commercial,category=cierres detail=mallas_separadoras,REBUILD
+/estructuras-metalicas,Estructuras,cotizar estructura,estructuras metálicas a medida,cobertizos; pérgolas; mezzanines,B2C+B2B,commercial,category=estructuras,KEEP 200
+/fabricacion-metalica,Proyectos a medida,cotizar fabricación a medida,fabricación metálica a medida,metalúrgica Santiago; proyecto metal,B2C+B2B,commercial,category=fabricacion,KEEP 200
+/fabricaciones-especiales,Fabricaciones especiales,cotizar pieza/proyecto especial,fabricaciones metálicas especiales,piezas a medida,B2B,commercial,category=especiales,REBUILD
+/soldadura-mig,Soldadura MIG,cotizar soldadura,soldadura MIG Santiago,soldadura metálica,B2B+B2C,commercial,category=fabricacion detail=soldadura-mig,REBUILD
+/corte-metalico,Corte,cotizar corte/corte dimensionado,corte metálico,corte y dimensionado de acero,B2B,commercial,category=fabricacion detail=corte-metalico,REBUILD
+/pintura-electrostatica,Pintura electrostática,cotizar acabado,pintura electrostática al horno,pintura electrostática Santiago,B2B+B2C,commercial,category=pintura,KEEP 200
+/instalacion,Instalación,cotizar instalación/montaje,instalación de estructuras metálicas,montaje metálico Santiago,B2B+B2C,commercial,category=fabricacion detail=instalacion,REBUILD
+/reparaciones-metalicas,Reparaciones,cotizar reparación,reparaciones metálicas,reparación estructuras/rejas/portones,B2B+B2C,commercial,category=fabricacion detail=reparaciones-metalicas,REBUILD
+/empresas,Empresas,proveedor/fabricante B2B,fabricante metálico para empresas,fabricación por volumen; instituciones,B2B,consideration,client=b2b,KEEP 200
+/proyectos,Proyectos,explorar aplicaciones,proyectos metálicos,estructuras y fabricación a medida,B2B+B2C,consideration,category=estructuras,KEEP 200
+/soluciones,Soluciones,encontrar producto/servicio,soluciones metálicas,camas cierres estructuras servicios,all,discovery,route to intent owner,KEEP 200
+/nosotros,Nosotros,validar fabricante/localidad,fabricante metálico San Bernardo,taller metálico Santiago,all,trust,quote+maps+WhatsApp,KEEP 200
+/contacto,Contacto,contactar/visitar/contactar RINON,contacto RINON San Bernardo,dirección RINON; WhatsApp RINON,all,conversion,quote+phone+WhatsApp+maps,KEEP 200
+/cotizar,Cotizar,enviar requerimiento,cotizar fabricación metálica,cotizar RINON,all,conversion,progressive quote,KEEP 200
+/recursos,Recursos,investigar antes de cotizar,guías fabricación metálica,cómo cotizar estructuras cierres productos,all,informational,related commercial CTA,KEEP 200
+/preguntas-frecuentes,Preguntas frecuentes,resolver objeciones,preguntas fabricación metálica,cotización instalación medidas plazos,all,consideration,related quote CTA,KEEP 200
