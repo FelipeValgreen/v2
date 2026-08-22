@@ -13,6 +13,7 @@ export type LegacyLead = {
   contacto_preferido: string;
   pagina_origen: string;
   estado: string;
+  archivo_ids?: string[] | null;
 };
 
 function getSupabaseConfig() {
