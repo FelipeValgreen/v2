@@ -16,11 +16,12 @@ const protectedProductCandidates=new Set(["/camarote-nido","/camarote-triple","/
  * equity, so a broad family redirect is unsafe until the Search Console export is reconciled.
  */
 export const observedLiveReviewPaths=new Set([
- "/literas","/camarotes-baratos","/camarotes-faenas","/camarotes-salmoneras","/camarotes-mineria",
+ "/literas","/camarotes-baratos","/camarotes-precio","/camarotes-faenas","/camarotes-salmoneras","/camarotes-mineria","/camarotes-metalicos","/fabricante-camarotes-chile","/camarotes-al-por-mayor","/camarotes-para-internados","/camarotes-para-hospitales",
  "/camarotes-providencia","/camarotes-las-condes","/camarotes-maipu","/camarotes-nunoa","/camarotes-la-florida","/camarotes-pudahuel","/camarotes-santiago-centro","/camarotes-penalolen","/camarotes-quilicura","/camarotes-puente-alto","/camarotes-san-bernardo","/camarotes-renca","/camarotes-estacion-central","/camarotes-lo-barnechea",
- "/reja-metalica-santiago","/rejas-metalicas-pudahuel","/portones-industriales",
+ "/reja-metalica-santiago","/rejas-metalicas-pudahuel","/rejas-decorativas","/rejas-para-exteriores","/rejas-para-terraza","/rejas-para-balcon",
+ "/portones-industriales","/cercos-para-empresas","/cercos-para-parcelas","/cercos-perimetrales-concepcion","/mallas-separadoras-industriales",
 ]);
-export const MIGRATION_GSC_REVIEW_PENDING_COUNT=22;
+export const MIGRATION_GSC_REVIEW_PENDING_COUNT=36;
 function normalize(path:string){const clean=path.split("?")[0].split("#")[0].trim();if(!clean||clean==="/")return "/";return `/${clean.replace(/^\/+|\/+$/g,"")}`.toLowerCase()}
 
 export function resolveMigration(inputPath:string):MigrationDecision{
