@@ -32,11 +32,14 @@ function authHeaders(key: string) {
   return { apikey: key, Authorization: `Bearer ${key}` };
 }
 
-function assertLeadId(leadId: string) {
-  if (!/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(leadId)) {
-    throw new Error("ID de lead inválido para adjuntos");
+function assertUuid(value: string, label: string) {
+  if (!/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(value)) {
+    throw new Error(`${label} inválido`);
   }
 }
+
+function assertLeadId(leadId: string) { assertUuid(leadId, "ID de lead"); }
+function assertAttachmentId(attachmentId: string) { assertUuid(attachmentId, "ID de adjunto"); }
 
 function cleanOriginalName(value: string) {
   return value.trim().replace(/[\u0000-\u001f\u007f]/g, "").slice(0, 180) || "archivo";
@@ -164,4 +167,42 @@ export async function listLeadAttachments(leadId: string): Promise<LeadAttachmen
   });
   if (!response.ok) throw new Error(`No fue posible cargar adjuntos (${response.status})`);
   return response.json() as Promise<LeadAttachment[]>;
+}
+
+export async function listAllLeadAttachments(limit = 1500): Promise<LeadAttachment[]> {
+  const { url, key } = getSupabaseConfig();
+  const safeLimit = Math.max(1, Math.min(3000, Math.floor(limit)));
+  const query = new URLSearchParams({ select: "*", order: "created_at.desc", limit: String(safeLimit) });
+  const response = await fetch(`${url}/rest/v1/rinon_lead_attachments?${query.toString()}`, {
+    headers: { ...authHeaders(key), "Content-Type": "application/json" },
+    cache: "no-store",
+  });
+  if (!response.ok) throw new Error(`No fue posible cargar metadatos de adjuntos (${response.status})`);
+  return response.json() as Promise<LeadAttachment[]>;
+}
+
+export async function getLeadAttachment(leadId: string, attachmentId: string): Promise<LeadAttachment | null> {
+  assertLeadId(leadId);
+  assertAttachmentId(attachmentId);
+  const { url, key } = getSupabaseConfig();
+  const query = new URLSearchParams({ select: "*", lead_id: `eq.${leadId}`, id: `eq.${attachmentId}`, limit: "1" });
+  const response = await fetch(`${url}/rest/v1/rinon_lead_attachments?${query.toString()}`, {
+    headers: { ...authHeaders(key), "Content-Type": "application/json" },
+    cache: "no-store",
+  });
+  if (!response.ok) throw new Error(`No fue posible cargar el adjunto (${response.status})`);
+  const rows = await response.json() as LeadAttachment[];
+  return rows[0] ?? null;
+}
+
+export async function fetchLeadAttachmentContent(attachment: LeadAttachment) {
+  const { url, key } = getSupabaseConfig();
+  if (attachment.bucket_id !== BUCKET) throw new Error("Bucket de adjunto inválido");
+  const encodedPath = attachment.object_path.split("/").map(encodeURIComponent).join("/");
+  const response = await fetch(`${url}/storage/v1/object/authenticated/${BUCKET}/${encodedPath}`, {
+    headers: authHeaders(key),
+    cache: "no-store",
+  });
+  if (!response.ok || !response.body) throw new Error(`No fue posible descargar el adjunto (${response.status})`);
+  return response;
 }
