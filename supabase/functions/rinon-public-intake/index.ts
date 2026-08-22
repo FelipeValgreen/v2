@@ -5,7 +5,7 @@ const SERVICE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
 const jsonHeaders = { "Content-Type": "application/json", "Cache-Control": "no-store" };
 const dbHeaders = { apikey: SERVICE_KEY, Authorization: `Bearer ${SERVICE_KEY}`, "Content-Type": "application/json" };
 const kinds = new Set(["lead", "privacy", "analytics"]);
-const analyticsEvents = new Set(["page_view", "contact_whatsapp", "contact_phone", "generate_lead"]);
+const analyticsEvents = new Set(["page_view", "view_product", "view_service", "quote_start", "quote_step", "quote_submit", "contact_whatsapp", "contact_phone", "generate_lead", "maps_click", "waze_click", "menu_product_click", "menu_service_click", "resource_view", "cta_click"]);
 const privacyTypes = new Set(["access", "rectification", "deletion", "opposition", "other"]);
 
 function clean(value: unknown, max = 1000) { return typeof value === "string" ? value.trim().slice(0, max) : ""; }
