@@ -1,6 +1,6 @@
 import { readPublicJsonWrite, readPublicMultipartWrite } from "@/lib/request-security";
 import { createLegacyLead, isLeadWriteConfigured } from "@/lib/leads";
-import { buildLegacyLeadMessage, clean, quoteCategoryLabels } from "@/lib/quote";
+import { buildLegacyLeadMessage, buildStructuredLeadFields, clean, quoteCategoryLabels } from "@/lib/quote";
 import { storeLeadAttachments, validateLeadAttachments } from "@/lib/lead-attachments";
 
 export const runtime = "nodejs";
@@ -25,6 +25,11 @@ function recordFromFormData(formData: FormData) {
 
 function filesFromFormData(formData: FormData) {
   return formData.getAll("attachments").filter((value): value is File => value instanceof File && value.size > 0);
+}
+
+function referrerHost(request: Request) {
+  const value = request.headers.get("referer") || "";
+  try { return value ? new URL(value).hostname.slice(0, 200) : ""; } catch { return ""; }
 }
 
 export async function POST(request: Request) {
@@ -60,7 +65,9 @@ export async function POST(request: Request) {
   const ubicacion = clean(body.ubicacion, 100);
   const categoria = clean(body.categoria, 80);
   const servicio = quoteCategoryLabels[categoria] ?? categoria;
-  const paginaOrigen = clean(body.pagina_origen, 300) || "/cotizar";
+  const rawPaginaOrigen = clean(body.pagina_origen, 300);
+  const paginaOrigen = rawPaginaOrigen.startsWith("/") ? rawPaginaOrigen : "/cotizar";
+  body.referrer_host = clean(body.referrer_host, 200) || referrerHost(request);
 
   if (nombre.length < 2 || telefono.replace(/\D/g, "").length < 8 || !ubicacion || !servicio) {
     return Response.json({ error: "Completa nombre, WhatsApp, ubicación y tipo de solicitud." }, { status: 400 });
@@ -78,6 +85,7 @@ export async function POST(request: Request) {
       mensaje: buildLegacyLeadMessage(body),
       contacto_preferido: "WhatsApp",
       pagina_origen: paginaOrigen,
+      ...buildStructuredLeadFields(body, paginaOrigen),
     }, ip);
 
     let attachmentsUploaded = 0;
