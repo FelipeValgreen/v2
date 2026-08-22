@@ -77,16 +77,26 @@ test("structures landing owns structural intent without pretending conceptual ev
  await assertCommercialPath(page,route,{dualPath:true});
  const main=page.locator('main[data-sgeo-owner="estructuras-metalicas"]');
  await expect(main).toHaveCount(1);
- const text=await main.innerText();
- expect(text).toContain("Cobertizos y pérgolas");
- expect(text).toContain("EMPRESAS Y OPERACIÓN");
- expect(text).toContain("Fabricar una estructura no equivale automáticamente a desarrollar su ingeniería");
- expect(text).toContain("VISUAL CONCEPTUAL");
+ const text=(await main.innerText()).toLowerCase();
+ expect(text).toContain("cobertizos y pérgolas");
+ expect(text).toContain("empresas y operación");
+ expect(text).toContain("fabricar una estructura no equivale automáticamente a desarrollar su ingeniería");
+ expect(text).toContain("visual conceptual");
  expect(text).toContain("no obra ejecutada");
  const schema=await main.locator('script[type="application/ld+json"]').first().textContent();
  expect(schema).toContain('"@type":"Service"');
  expect(schema).toContain('"@type":"FAQPage"');
  expect(schema).toContain("Cobertizos y pérgolas");
+});
+
+test("rejas and portones preserve a dual conversion choice at the decision point",async({page})=>{
+ for(const route of ["/rejas-metalicas","/portones-metalicos"]){
+  await assertSeoShell(page,route);
+  const closing=page.locator("#cotizar");
+  await expect(closing,`${route} closing CTA`).toHaveCount(1);
+  expect(await closing.locator('a[href^="/cotizar"][data-event="quote_start"]').count(),`${route} tracked closing quote`).toBeGreaterThan(0);
+  expect(await closing.locator('a[href*="wa.me/"]').count(),`${route} closing WhatsApp`).toBeGreaterThan(0);
+ }
 });
 
 test("pre-cutover migration aliases remain disabled in staging",async({page})=>{
@@ -100,7 +110,7 @@ test("pre-cutover migration aliases remain disabled in staging",async({page})=>{
 
 test("representative organic landings remain usable at mobile width",async({page})=>{
  await page.setViewportSize({width:390,height:900});
- for(const route of ["/camarotes","/camas-metalicas","/cierres-perimetrales","/estructuras-metalicas","/mallas-3d","/mallas-separadoras","/fabricacion-metalica","/camarote-nido","/soldadura-mig"]){
+ for(const route of ["/camarotes","/camas-metalicas","/cierres-perimetrales","/estructuras-metalicas","/rejas-metalicas","/portones-metalicos","/mallas-3d","/mallas-separadoras","/fabricacion-metalica","/camarote-nido","/soldadura-mig"]){
   await page.goto(route,{waitUntil:"networkidle"});
   const metrics=await page.evaluate(()=>({scrollWidth:document.documentElement.scrollWidth,innerWidth:window.innerWidth}));
   expect(metrics.scrollWidth,`${route} mobile overflow`).toBeLessThanOrEqual(metrics.innerWidth+2);
