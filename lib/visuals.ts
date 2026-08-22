@@ -1,23 +1,40 @@
-export type VisualAsset = {
+type VisualBase = {
   src: string;
   alt: string;
   kind: "photo" | "conceptual" | "render";
-  provenance: "verified-rinon" | "current-site-approved" | "user-drive-reference" | "conceptual";
   label: string;
   note?: string;
   sourceWidth?: number;
   sourceHeight?: number;
+  /** Human-auditable origin for the asset. Never use a vague label such as "internal". */
+  sourceRef: string;
 };
+
+type VerifiedRinonVisual = VisualBase & {
+  provenance: "verified-rinon";
+  /** Required before an image can be presented as verified RINON evidence. */
+  verificationRef: string;
+};
+
+type ReferenceVisual = VisualBase & {
+  provenance: "current-site-approved" | "user-drive-reference" | "conceptual";
+  verificationRef?: never;
+};
+
+export type VisualAsset = VerifiedRinonVisual | ReferenceVisual;
 
 const referenceBase = "/visuals/reference-current";
 
 /**
  * Visual provenance is intentionally conservative:
- * - verified-rinon: only when RINON ownership/project attribution is independently verified.
+ * - verified-rinon: only when RINON ownership/project attribution is independently verified;
+ *   TypeScript requires an explicit verificationRef before that provenance can be used.
  * - user-drive-reference: product imagery found in the user's connected archive; useful as a
  *   product reference, but never attributed to a client/project without further evidence.
  * - current-site-approved: reference imagery inherited from the current public site.
  * - conceptual: art-direction imagery, always labelled as conceptual.
+ *
+ * sourceRef is required for every asset so provenance can be audited without relying on memory.
  */
 const archiveReferenceAssets: Record<string, VisualAsset[]> = {
   "/camarotes": [
@@ -28,6 +45,7 @@ const archiveReferenceAssets: Record<string, VisualAsset[]> = {
       provenance: "user-drive-reference",
       label: "Referencia de producto · archivo",
       note: "Fotografía de producto proveniente del archivo del usuario. No se atribuye a un cliente o proyecto específico.",
+      sourceRef: "Google Drive archive · promoted under RINON-VIS-P1-BUNK-ARCHIVE",
       sourceWidth: 1200,
       sourceHeight: 900,
     },
@@ -43,6 +61,7 @@ const conceptualAssets: Record<string, VisualAsset[]> = {
       provenance: "conceptual",
       label: "Visual conceptual de producto",
       note: "Dirección de producto para explicar configuración y proporción. No corresponde a un proyecto ejecutado por RINON.",
+      sourceRef: "RINON conceptual art direction · RINON-VIS-P1-BUNK",
       sourceWidth: 900,
       sourceHeight: 534,
     },
@@ -55,6 +74,7 @@ const conceptualAssets: Record<string, VisualAsset[]> = {
       provenance: "conceptual",
       label: "Visual conceptual de sistema",
       note: "Dirección de producto para explicar modulación y proporción. No corresponde a un proyecto ejecutado por RINON.",
+      sourceRef: "RINON conceptual art direction · RINON-VIS-P1-FENCE",
       sourceWidth: 900,
       sourceHeight: 537,
     },
@@ -66,7 +86,8 @@ const conceptualAssets: Record<string, VisualAsset[]> = {
       kind: "conceptual",
       provenance: "conceptual",
       label: "Visual conceptual de estructura",
-      note: "Visual de dirección técnica. Geometría y solución final se definen según el requerimiento real.",
+      note: "Referencia de dirección visual; no corresponde a una obra ejecutada por RINON. Geometría y solución final se definen según el requerimiento real.",
+      sourceRef: "RINON conceptual art direction · RINON-VIS-P0-HOME-STRUCTURE-TEMP · replacement brief docs/STRUCTURES_VISUAL_BRIEF.md",
       sourceWidth: 900,
       sourceHeight: 500,
     },
@@ -82,6 +103,7 @@ const legacyReferenceAssets: Record<string, VisualAsset[]> = {
       provenance: "current-site-approved",
       label: "Producto / referencia actual",
       note: "Imagen del sitio RINON actual. No se atribuye a un cliente o proyecto específico.",
+      sourceRef: "Current public rinon.cl reference library",
     },
     {
       src: `${referenceBase}/camarote-desmontable-dormitorio-compartido.jpg`,
@@ -89,6 +111,7 @@ const legacyReferenceAssets: Record<string, VisualAsset[]> = {
       kind: "photo",
       provenance: "current-site-approved",
       label: "Producto / referencia actual",
+      sourceRef: "Current public rinon.cl reference library",
     },
   ],
   "/camarote-con-escritorio": [],
