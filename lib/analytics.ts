@@ -27,19 +27,19 @@ export type AnalyticsSummary = {
     whatsapp: number;
     phone: number;
     leads: number;
-    quote_starts: number;
-    quote_submits: number;
-    maps: number;
-    waze: number;
+    quote_starts?: number;
+    quote_submits?: number;
+    maps?: number;
+    waze?: number;
   };
-  funnel: {
+  funnel?: {
     quote_starts: number;
     quote_submits: number;
     leads: number;
     start_to_submit_rate: number;
     submit_to_lead_rate: number;
   };
-  series: Array<{ bucket: string; views: number; visitors: number; contacts: number; quote_starts: number; quote_submits: number }>;
+  series: Array<{ bucket: string; views: number; visitors: number; contacts: number; quote_starts?: number; quote_submits?: number }>;
   topPages: Array<{ path: string; views: number; visitors: number }>;
 };
 
