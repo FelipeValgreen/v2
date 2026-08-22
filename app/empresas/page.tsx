@@ -1,8 +1,11 @@
 import Link from "next/link";
-import { routeMetadata } from "@/lib/seo";
+import { routeMetadata, solutionJsonLd } from "@/lib/seo";
 import { WhatsAppCTA } from "@/components/WhatsAppCTA";
+import { JsonLd } from "@/components/JsonLd";
 
-export const metadata=routeMetadata("/empresas","Fabricación metálica para empresas e instituciones","Fabricación metálica para compras por volumen, proyectos, obras e instituciones con evaluación de cantidad, alcance, logística y fecha objetivo.");
+const description="Fabricación metálica para compras por volumen, proyectos, obras e instituciones con evaluación de cantidad, alcance, logística y fecha objetivo.";
+
+export const metadata=routeMetadata("/empresas","Fabricación metálica para empresas e instituciones",description);
 
 const buyers=[
   ["COMPRAS", "Necesita comparar alcance y precio", "Cantidad, especificación, destino, fecha y condiciones comerciales claramente separadas."],
@@ -18,7 +21,16 @@ const proof=[
  ["RECURRENTE","Requerimientos que se repiten y pueden estandarizarse comercialmente."],
 ] as const;
 
-export default function Page(){return <main className="v5-editorial-page rinon-enterprise-page">
+const faqs=[
+  {q:"¿Pueden cotizar compras por volumen?",a:"Sí. Para evaluar un lote conviene indicar producto o referencia, cantidad, destino y fecha objetivo. La capacidad y el plazo se confirman para el requerimiento concreto."},
+  {q:"¿Trabajan a partir de planos o especificaciones de empresa?",a:"Sí, pueden evaluarse piezas, soportes, estructuras y conjuntos bajo plano o especificación cuando la geometría, materiales y requisitos aplicables están suficientemente definidos."},
+  {q:"¿Pueden incluir despacho o montaje?",a:"Puede evaluarse según ubicación, accesos, condiciones del sitio y alcance del proyecto. No se asume como incluido hasta que aparezca expresamente en la cotización."},
+  {q:"¿Qué información conviene enviar primero?",a:"Una referencia, la cantidad aproximada, el destino y la fecha objetivo suelen ser suficientes para iniciar. Si existe plano, fotografía, ficha o especificación, también ayuda a reducir iteraciones."},
+];
+
+export default function Page(){return <main className="v5-editorial-page rinon-enterprise-page" data-sgeo-owner="empresas">
+  <JsonLd data={solutionJsonLd({pathname:"/empresas",name:"Fabricación metálica para empresas e instituciones",description,faqs})}/>
+
   <section className="v2-solution-hero rinon-enterprise-hero"><div className="container rinon-enterprise-hero-grid"><div><div className="v2-eyebrow">EMPRESAS · INSTITUCIONES · OBRAS</div><h1>Fabricación para empresas, obras e instituciones.</h1><p>Desde una serie de camarotes hasta cierres, estructuras, soportes o piezas bajo plano. Cuéntanos cantidad, destino y fecha objetivo para ordenar la evaluación desde el inicio.</p><div className="v2-actions"><Link className="v2-btn orange" data-event="quote_start" data-cta-location="b2b_hero" href="/cotizar?client=b2b">Cotizar para empresa</Link><WhatsAppCTA location="b2b_hero" label="Conversar por WhatsApp" className="v2-btn outline" /></div><div className="v2-kickers"><span>Compra por volumen</span><span>Proyecto / obra</span><span>Bajo plano</span><span>Requerimiento recurrente</span></div></div><aside className="rinon-proof-panel" aria-label="Modalidades de fabricación para empresas"><span>QUÉ PODEMOS ORDENAR CONTIGO</span>{proof.map(([title,body],index)=><div key={title}><b>0{index+1}</b><strong>{title}</strong><p>{body}</p></div>)}<small>La capacidad, plazo y alcance final se confirman para cada cotización.</small></aside></div></section>
 
   <section className="v2-solution-section soft"><div className="container"><div className="section-head"><div><div className="v2-eyebrow">QUIÉN NECESITA QUÉ</div><h2>Un mismo proyecto se ve distinto según el rol.</h2></div><p>La solicitud comercial debe recoger suficiente contexto para que el requerimiento sobreviva al traspaso entre áreas.</p></div><div className="card-grid">{buyers.map(([tag,title,body])=><article key={tag}><span>{tag}</span><h3>{title}</h3><p>{body}</p></article>)}</div></div></section>
@@ -29,5 +41,9 @@ export default function Page(){return <main className="v5-editorial-page rinon-e
 
   <section className="v2-solution-section"><div className="container"><div className="section-head"><div><div className="v2-eyebrow">PARA UNA PRIMERA REVISIÓN</div><h2>Cuatro datos permiten empezar.</h2></div><p>No necesitas preparar una licitación completa para conversar. Con estos antecedentes podemos identificar rápidamente qué falta.</p></div><div className="v2-step-grid"><article><span>01 · REFERENCIA</span><h3>Qué necesitas</h3><p>Producto, plano, fotografía, muestra o descripción funcional.</p></article><article><span>02 · CANTIDAD</span><h3>Qué volumen</h3><p>Unidades o metraje aproximado para dimensionar fabricación.</p></article><article><span>03 · DESTINO</span><h3>Dónde se entrega</h3><p>Ubicación para evaluar logística y montaje cuando corresponda.</p></article><article><span>04 · FECHA</span><h3>Cuándo lo necesitas</h3><p>Plazo objetivo sujeto a revisión contra alcance y capacidad.</p></article></div></div></section>
 
-  <section className="v2-final-cta"><div className="container"><div><div className="v2-eyebrow">EMPRESAS</div><h2>¿Tienes un requerimiento por volumen?</h2><p>Indica cantidad, referencia, destino y fecha objetivo para empezar.</p></div><div className="v2-final-actions"><Link className="v2-btn orange" data-event="quote_start" data-cta-location="b2b_footer" href="/cotizar?client=b2b">Enviar requerimiento B2B</Link><Link className="v2-btn outline" href="/recursos/fabricacion-por-lote-que-definir">Preparar compra</Link></div></div></section>
+  <section className="v2-solution-section soft"><div className="container"><div className="section-head"><div><div className="v2-eyebrow">RUTAS DE COMPRA</div><h2>Entra por la necesidad que ya tienes definida.</h2></div><p>Estas rutas mantienen separada la intención de producto, cierre y proyecto a medida para evitar cotizaciones ambiguas.</p></div><div className="v2-resource-grid"><Link href="/camarotes"><span>ALOJAMIENTO</span><h3>Camas y camarotes</h3><p>Compra por unidad o volumen con configuración confirmada al cotizar.</p><b>Ver productos →</b></Link><Link href="/cierres-perimetrales"><span>PERÍMETRO</span><h3>Cierres y accesos</h3><p>Cierres, mallas, rejas y portones para terrenos, obras y recintos.</p><b>Ver cierres →</b></Link><Link href="/estructuras-metalicas"><span>ESTRUCTURAS</span><h3>Estructuras metálicas</h3><p>Cobertizos, escaleras, plataformas, soportes y conjuntos especiales.</p><b>Ver estructuras →</b></Link><Link href="/fabricacion-metalica"><span>A MEDIDA</span><h3>Fabricación bajo requerimiento</h3><p>Parte desde plano, foto, muestra, croquis o una necesidad funcional.</p><b>Ver fabricación →</b></Link></div></div></section>
+
+  <section id="faq" className="v2-solution-section"><div className="container"><div className="section-head"><div><div className="v2-eyebrow">PREGUNTAS FRECUENTES</div><h2>Antes de enviar un requerimiento B2B.</h2></div><p>La cotización vigente define capacidad, plazo, logística, montaje y documentación aplicables a cada compra.</p></div><div className="faq-grid">{faqs.map(item=><details key={item.q}><summary>{item.q}</summary><p>{item.a}</p></details>)}</div></div></section>
+
+  <section id="cotizar" className="v2-final-cta"><div className="container"><div><div className="v2-eyebrow">EMPRESAS</div><h2>¿Tienes un requerimiento por volumen o proyecto?</h2><p>Indica referencia, cantidad, destino y fecha objetivo. Si tienes plano, ficha o fotografías, también puedes enviarlas por WhatsApp.</p></div><div className="v2-final-actions"><Link className="v2-btn orange" data-event="quote_start" data-cta-location="b2b_footer" href="/cotizar?client=b2b">Enviar requerimiento B2B</Link><WhatsAppCTA location="b2b_footer" label="Enviar antecedentes por WhatsApp" className="v2-btn outline"/><Link className="v2-btn outline" href="/recursos/fabricacion-por-lote-que-definir">Preparar compra</Link></div></div></section>
 </main>}
