@@ -48,8 +48,14 @@ old_url,decision,new_url,family,evidence_state,cutover_rule
 /camarotes-renca,REVIEW,/camarotes,camarotes geo,LIVE-OBSERVED GSC-PENDING,no redirect until resolved
 /camarotes-estacion-central,REVIEW,/camarotes,camarotes geo,LIVE-OBSERVED GSC-PENDING,no redirect until resolved
 /camarotes-lo-barnechea,REVIEW,/camarotes,camarotes geo,LIVE-OBSERVED GSC-PENDING,no redirect until resolved
+/camarote-con-escritorio-economico,REVIEW,/camarote-con-escritorio,camarote escritorio model,LIVE-OBSERVED GSC-PENDING,no redirect until resolved
+/camarote-con-escritorio-full,REVIEW,/camarote-con-escritorio,camarote escritorio model,LIVE-OBSERVED GSC-PENDING,no redirect until resolved
+/camarote-con-escritorio-full-2-plazas,REVIEW,/camarote-con-escritorio,camarote escritorio model,LIVE-OBSERVED GSC-PENDING,no redirect until resolved
 /reja-metalica-santiago,REVIEW,/rejas-metalicas,rejas geo,LIVE-OBSERVED GSC-PENDING,no redirect until resolved
 /rejas-metalicas-pudahuel,REVIEW,/rejas-metalicas,rejas geo,LIVE-OBSERVED GSC-PENDING,no redirect until resolved
+/rejas-metalicas-maipu,REVIEW,/rejas-metalicas,rejas geo,LIVE-OBSERVED GSC-PENDING,no redirect until resolved
+/rejas-metalicas-cerrillos,REVIEW,/rejas-metalicas,rejas geo,LIVE-OBSERVED GSC-PENDING,no redirect until resolved
+/rejas-metalicas-precio,REVIEW,/rejas-metalicas,rejas price,LIVE-OBSERVED GSC-PENDING,no redirect until resolved
 /rejas-decorativas,REVIEW,/rejas-metalicas,rejas use,LIVE-OBSERVED GSC-PENDING,no redirect until resolved
 /rejas-para-exteriores,REVIEW,/rejas-metalicas,rejas use,LIVE-OBSERVED GSC-PENDING,no redirect until resolved
 /rejas-para-terraza,REVIEW,/rejas-metalicas,rejas use,LIVE-OBSERVED GSC-PENDING,no redirect until resolved
@@ -59,6 +65,14 @@ old_url,decision,new_url,family,evidence_state,cutover_rule
 /cercos-para-parcelas,REVIEW,/cierres-perimetrales,cierres use,LIVE-OBSERVED GSC-PENDING,no redirect until resolved
 /cercos-perimetrales-concepcion,REVIEW,/cierres-perimetrales,cierres geo,LIVE-OBSERVED GSC-PENDING,no redirect until resolved
 /mallas-separadoras-industriales,REVIEW,/mallas-separadoras,mallas sector,LIVE-OBSERVED GSC-PENDING,no redirect until resolved
+/soldadura-metalica-santiago,REVIEW,/soldadura-mig,soldadura,LIVE-OBSERVED GSC-PENDING,no redirect until resolved
+/pintura-electrostatica-zona-sur-santiago,REVIEW,/pintura-electrostatica,pintura geo hub,LIVE-OBSERVED GSC-PENDING,no redirect until resolved
+/pintura-electrostatica-colina,REVIEW,/pintura-electrostatica,pintura geo,LIVE-OBSERVED GSC-PENDING,no redirect until resolved
+/pintura-electrostatica-las-condes,REVIEW,/pintura-electrostatica,pintura geo,LIVE-OBSERVED GSC-PENDING,no redirect until resolved
+/pintura-electrostatica-providencia,REVIEW,/pintura-electrostatica,pintura geo,LIVE-OBSERVED GSC-PENDING,no redirect until resolved
+/pintura-electrostatica-santiago-centro,REVIEW,/pintura-electrostatica,pintura geo,LIVE-OBSERVED GSC-PENDING,no redirect until resolved
+/pintura-electrostatica-maipu,REVIEW,/pintura-electrostatica,pintura geo,LIVE-OBSERVED GSC-PENDING,no redirect until resolved
+/pintura-electrostatica-talagante,REVIEW,/pintura-electrostatica,pintura geo,LIVE-OBSERVED GSC-PENDING,no redirect until resolved
 /camarotes-militares,301 candidate,/camarotes,camarotes sector,inventory only,enable only after GSC reconciliation
 /litera-metalica,301 candidate,/camarotes,camarotes synonym,inventory only,enable only after GSC reconciliation
 /camarote-de-acero,301 candidate,/camarotes,camarotes synonym,inventory only,enable only after GSC reconciliation
@@ -73,10 +87,7 @@ old_url,decision,new_url,family,evidence_state,cutover_rule
 /cercos-metalicos-maule,301 candidate,/cierres-perimetrales,cierres geo,inventory only,enable only after GSC reconciliation
 /mallas-separadoras-bodegas,301 candidate,/mallas-separadoras,mallas,inventory only,enable only after GSC reconciliation
 /mallas-separadoras-plantas,301 candidate,/mallas-separadoras,mallas,inventory only,enable only after GSC reconciliation
-/rejas-metalicas-cerrillos,301 candidate,/rejas-metalicas,rejas geo,inventory only,enable only after GSC reconciliation
-/soldadura-metalica-santiago,301 candidate,/soldadura-mig,soldadura,inventory only,enable only after GSC reconciliation
 /pintura-electrostatica-santiago,301 candidate,/pintura-electrostatica,pintura geo,inventory only,enable only after GSC reconciliation
-/pintura-electrostatica-zona-sur-santiago,301 candidate,/pintura-electrostatica,pintura geo,inventory only,enable only after GSC reconciliation
 /estructuras-metalicas-a-pedido,301 candidate,/estructuras-metalicas,estructuras,inventory only,enable only after GSC reconciliation
 /fabricante-estructuras-metalicas-chile,301 candidate,/estructuras-metalicas,estructuras,inventory only,enable only after GSC reconciliation
 /metalurgica-rinon,301 candidate,/fabricacion-metalica,fabricacion,inventory only,enable only after GSC reconciliation
