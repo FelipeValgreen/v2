@@ -7,6 +7,7 @@ const assets = [
   { id: 'RINON-VIS-P1-BUNK', source: '.asset-chunks/camarote-conceptual.webp', target: 'public/visuals/product-theatre/camarote-conceptual.webp', provenance: 'conceptual-context', minWidth: 900, minHeight: 500, sha256: '34ecd542faeed218b673ab70d79480737d4da0ed68fd3ec54fca4f27a0664c9d' },
   { id: 'RINON-VIS-P1-BUNK-ARCHIVE', source: '.asset-chunks/camarote-drive-reference.webp', target: 'public/visuals/archive/camarote-product-reference.webp', provenance: 'user-drive-reference', minWidth: 1200, minHeight: 900, sha256: '9165c9e04eccbb62208db32d5fbe3c61b2a084c1e35dd6a09bdb5a62a63b1892' },
   { id: 'RINON-VIS-P1-FENCE', source: '.asset-chunks/cierre-conceptual.webp', target: 'public/visuals/product-theatre/cierre-conceptual.webp', provenance: 'conceptual-context', minWidth: 900, minHeight: 500, sha256: '934b333adfdbeae5a495beee0d22e7ac3f3d06c78dcee7f05ec264dddc191f62' },
+  { id: 'RINON-VIS-P0-STRUCTURE-RESIDENTIAL-REFERENCE', source: '.asset-chunks/structures-residential-reference.webp', target: 'public/visuals/archive/structures-residential-reference.webp', provenance: 'user-drive-reference', minWidth: 1200, minHeight: 500, sha256: 'f222ebf91b11dcef94b922655d9db6fa968779cd841af05aa770dd5f70f8a4d6' },
   { id: 'RINON-VIS-P0-HOME-STRUCTURE-TEMP', source: '.asset-chunks/estructura-conceptual.webp', target: 'public/visuals/product-theatre/estructura-conceptual.webp', provenance: 'conceptual-context', minWidth: 900, minHeight: 500, sha256: 'ab18df9470c690bd68a4de1dea1e6bd2a28662a7727b1b5644eabfa6ddcbbd38' },
 ];
 
