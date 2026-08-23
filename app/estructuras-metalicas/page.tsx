@@ -69,7 +69,7 @@ export default function Page() {
         </div>
         <div className="prd2-solution-media has-photo">
           <VisualEvidence slug="/estructuras-metalicas" fallback={["estructura completa", "detalle de unión", "contexto de uso"]} />
-          <div className="prd2-solution-media-caption"><span>NO OBRA EJECUTADA</span><b>Referencia de contexto conceptual</b></div>
+          <div className="prd2-solution-media-caption"><span>REFERENCIA · NO OBRA EJECUTADA</span><b>Render aportado para mostrar contexto residencial</b></div>
         </div>
       </div>
     </section>
