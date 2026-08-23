@@ -19,15 +19,18 @@ export function VisualEvidence({ slug, fallback, mode="default" }: { slug: strin
   const verified = hero.provenance === "verified-rinon";
   const conceptual = hero.provenance === "conceptual";
   const archiveReference = hero.provenance === "user-drive-reference";
+  const archiveRender = archiveReference && hero.kind === "render";
   const provenanceLabel = verified
     ? "EVIDENCIA RINON VERIFICADA"
-    : archiveReference
-      ? "REFERENCIA DE PRODUCTO · ARCHIVO"
-      : conceptual
-        ? "VISUAL CONCEPTUAL"
-        : "PRODUCTO / REFERENCIA ACTUAL";
+    : archiveRender
+      ? "REFERENCIA ARQUITECTÓNICA · RENDER"
+      : archiveReference
+        ? "REFERENCIA DE PRODUCTO · ARCHIVO"
+        : conceptual
+          ? "VISUAL CONCEPTUAL"
+          : "PRODUCTO / REFERENCIA ACTUAL";
   return <figure
-    className={`evidence-photo ${conceptual ? "is-conceptual" : ""} ${archiveReference ? "is-archive-reference" : ""} ${mode === "theatre" ? "is-theatre" : ""}`}
+    className={`evidence-photo ${conceptual ? "is-conceptual" : ""} ${archiveReference ? "is-archive-reference" : ""} ${archiveRender ? "is-archive-render" : ""} ${mode === "theatre" ? "is-theatre" : ""}`}
     data-visual-kind={hero.kind}
     data-visual-provenance={hero.provenance}
     data-source-width={hero.sourceWidth}
