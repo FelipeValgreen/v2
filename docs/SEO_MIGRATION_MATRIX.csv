@@ -14,6 +14,14 @@ old_url,decision,new_url,family,evidence_state,cutover_rule
 /cama-loft-metalica,KEEP 200,/cama-loft-metalica,product,durable,keep
 /cama-loft-con-escritorio,KEEP 200,/cama-loft-con-escritorio,product,durable,keep
 /mobiliario-institucional,KEEP 200,/mobiliario-institucional,institutional,durable,keep
+/camarote-con-escritorio,KEEP 200,/camarote-con-escritorio,product,durable,keep
+/cierres-perimetrales,KEEP 200,/cierres-perimetrales,cierres,durable,keep
+/mallas-3d,KEEP 200,/mallas-3d,mallas,durable,keep
+/rejas-metalicas,KEEP 200,/rejas-metalicas,rejas,durable,keep
+/portones-metalicos,KEEP 200,/portones-metalicos,portones,durable,keep
+/estructuras-metalicas,KEEP 200,/estructuras-metalicas,estructuras,durable,keep
+/fabricacion-metalica,KEEP 200,/fabricacion-metalica,fabricacion,durable,keep
+/pintura-electrostatica,KEEP 200,/pintura-electrostatica,services,durable,keep
 /camas-metalicas,REBUILD,/camas-metalicas,camas,new owner,keep
 /camas-balinesas,REBUILD,/camas-balinesas,camas,new owner,keep
 /mesas-metalicas,REBUILD,/mesas-metalicas,equipment,new owner,keep
@@ -34,6 +42,7 @@ old_url,decision,new_url,family,evidence_state,cutover_rule
 /camarotes-al-por-mayor,REVIEW,/camarotes,camarotes volume,LIVE-OBSERVED GSC-PENDING,no redirect until resolved
 /camarotes-para-internados,REVIEW,/camarotes,camarotes institutional,LIVE-OBSERVED GSC-PENDING,no redirect until resolved
 /camarotes-para-hospitales,REVIEW,/camarotes,camarotes institutional,LIVE-OBSERVED GSC-PENDING,no redirect until resolved
+/camarotes-militares,REVIEW,/camarotes,camarotes institutional,LIVE-OBSERVED GSC-PENDING,no redirect until resolved
 /camarotes-providencia,REVIEW,/camarotes,camarotes geo,LIVE-OBSERVED GSC-PENDING,no redirect until resolved
 /camarotes-las-condes,REVIEW,/camarotes,camarotes geo,LIVE-OBSERVED GSC-PENDING,no redirect until resolved
 /camarotes-maipu,REVIEW,/camarotes,camarotes geo,LIVE-OBSERVED GSC-PENDING,no redirect until resolved
@@ -56,6 +65,7 @@ old_url,decision,new_url,family,evidence_state,cutover_rule
 /rejas-metalicas-maipu,REVIEW,/rejas-metalicas,rejas geo,LIVE-OBSERVED GSC-PENDING,no redirect until resolved
 /rejas-metalicas-cerrillos,REVIEW,/rejas-metalicas,rejas geo,LIVE-OBSERVED GSC-PENDING,no redirect until resolved
 /rejas-metalicas-precio,REVIEW,/rejas-metalicas,rejas price,LIVE-OBSERVED GSC-PENDING,no redirect until resolved
+/rejas-metalicas-para-casas,REVIEW,/rejas-metalicas,rejas residential,LIVE-OBSERVED GSC-PENDING,no redirect until resolved
 /rejas-decorativas,REVIEW,/rejas-metalicas,rejas use,LIVE-OBSERVED GSC-PENDING,no redirect until resolved
 /rejas-para-exteriores,REVIEW,/rejas-metalicas,rejas use,LIVE-OBSERVED GSC-PENDING,no redirect until resolved
 /rejas-para-terraza,REVIEW,/rejas-metalicas,rejas use,LIVE-OBSERVED GSC-PENDING,no redirect until resolved
@@ -64,6 +74,7 @@ old_url,decision,new_url,family,evidence_state,cutover_rule
 /cercos-para-empresas,REVIEW,/cierres-perimetrales,cierres B2B,LIVE-OBSERVED GSC-PENDING,no redirect until resolved
 /cercos-para-parcelas,REVIEW,/cierres-perimetrales,cierres use,LIVE-OBSERVED GSC-PENDING,no redirect until resolved
 /cercos-perimetrales-concepcion,REVIEW,/cierres-perimetrales,cierres geo,LIVE-OBSERVED GSC-PENDING,no redirect until resolved
+/cercos-perimetrales-antofagasta,REVIEW,/cierres-perimetrales,cierres geo/mining,LIVE-OBSERVED GSC-PENDING,no redirect until resolved
 /mallas-separadoras-industriales,REVIEW,/mallas-separadoras,mallas sector,LIVE-OBSERVED GSC-PENDING,no redirect until resolved
 /soldadura-metalica-santiago,REVIEW,/soldadura-mig,soldadura,LIVE-OBSERVED GSC-PENDING,no redirect until resolved
 /pintura-electrostatica-zona-sur-santiago,REVIEW,/pintura-electrostatica,pintura geo hub,LIVE-OBSERVED GSC-PENDING,no redirect until resolved
@@ -73,14 +84,12 @@ old_url,decision,new_url,family,evidence_state,cutover_rule
 /pintura-electrostatica-santiago-centro,REVIEW,/pintura-electrostatica,pintura geo,LIVE-OBSERVED GSC-PENDING,no redirect until resolved
 /pintura-electrostatica-maipu,REVIEW,/pintura-electrostatica,pintura geo,LIVE-OBSERVED GSC-PENDING,no redirect until resolved
 /pintura-electrostatica-talagante,REVIEW,/pintura-electrostatica,pintura geo,LIVE-OBSERVED GSC-PENDING,no redirect until resolved
-/camarotes-militares,301 candidate,/camarotes,camarotes sector,inventory only,enable only after GSC reconciliation
 /litera-metalica,301 candidate,/camarotes,camarotes synonym,inventory only,enable only after GSC reconciliation
 /camarote-de-acero,301 candidate,/camarotes,camarotes synonym,inventory only,enable only after GSC reconciliation
 /literas-militares,301 candidate,/camarotes,camarotes sector,inventory only,enable only after GSC reconciliation
 /venta-mayor-camarotes-metalicos,301 candidate,/camarotes,camarotes volume,inventory only,enable only after GSC reconciliation
 /cierre-perimetral-industrial,301 candidate,/cierres-perimetrales,cierres,inventory only,enable only after GSC reconciliation
 /cercos-perimetrales-empresas,301 candidate,/cierres-perimetrales,cierres B2B,inventory only,enable only after GSC reconciliation
-/cercos-perimetrales-antofagasta,301 candidate,/cierres-perimetrales,cierres geo,inventory only,enable only after GSC reconciliation
 /cercos-metalicos-santiago,301 candidate,/cierres-perimetrales,cierres geo,inventory only,enable only after GSC reconciliation
 /cercos-metalicos-valparaiso,301 candidate,/cierres-perimetrales,cierres geo,inventory only,enable only after GSC reconciliation
 /cercos-metalicos-ohiggins,301 candidate,/cierres-perimetrales,cierres geo,inventory only,enable only after GSC reconciliation
