@@ -39,8 +39,8 @@ const referenceBase = "/visuals/reference-current";
  * Visual provenance is intentionally conservative:
  * - verified-rinon: only when RINON ownership/project attribution is independently verified;
  *   TypeScript requires an explicit verificationRef before that provenance can be used.
- * - user-drive-reference: product imagery found in the user's connected archive; useful as a
- *   product reference, but never attributed to a client/project without further evidence.
+ * - user-drive-reference: product or architectural reference imagery found in the user's archive;
+ *   never attributed to a client/project without further evidence.
  * - current-site-approved: reference imagery inherited from the current public site.
  * - conceptual: art-direction imagery, always labelled as conceptual.
  *
@@ -58,6 +58,19 @@ const archiveReferenceAssets: Record<string, VisualAsset[]> = {
       sourceRef: "Google Drive archive · promoted under RINON-VIS-P1-BUNK-ARCHIVE",
       sourceWidth: 1200,
       sourceHeight: 900,
+    },
+  ],
+  "/estructuras-metalicas": [
+    {
+      src: "/visuals/archive/structures-residential-reference.webp",
+      alt: "Render de referencia de un espacio residencial cubierto para orientar una solución de cobertizo o pérgola",
+      kind: "render",
+      provenance: "user-drive-reference",
+      label: "Referencia arquitectónica · render aportado",
+      note: "Render de referencia proveniente del archivo del usuario. Ayuda a explicar contexto e integración espacial; no corresponde a una obra ejecutada por RINON ni define la solución estructural final.",
+      sourceRef: "User archive · COBERTIZO SALA.jpg · derived RINON-VIS-P0-STRUCTURE-RESIDENTIAL-REFERENCE",
+      sourceWidth: 1200,
+      sourceHeight: 510,
     },
   ],
 };
