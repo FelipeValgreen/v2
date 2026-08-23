@@ -10,6 +10,7 @@ Mode: **SAFE PRE-CUTOVER**
 - Services menu exposes commercial services only: MIG welding, cutting/dimensioning, powder coating, installation/mounting and repairs.
 - `/fabricacion-metalica` remains an SEO owner while visible UX uses `Proyectos a medida`.
 - Header/footer logos are direct static assets and footer links have explicit RINON styling.
+- Footer discovery is intentionally concise: priority products, pure service links and separate project/company navigation.
 - Home CRO paths, Soluciones, Empresas, Nosotros and Contacto are task-first and conversion-oriented.
 - Nosotros/Contacto share one canonical `#ubicacion` anchor and expose tracked Google Maps/Waze actions.
 - Commercial pages use evidence panels rather than invented project photography when verified media is unavailable.
@@ -35,6 +36,7 @@ Mode: **SAFE PRE-CUTOVER**
   2. `structures-residential-final-master` — replace the generic industrial structures visual with the accepted premium residential cobertizo/pergola direction.
 - Where available, promote verified RINON photography for Nosotros/workshop, Empresas/B2B, welding and powder coating; evidence-panel fallbacks remain acceptable until authentic evidence exists.
 - Complete final visual acceptance across desktop/tablet/mobile after final masters are installed.
+- Obtain formal approval of the legal content and authorized production values for legal representative, legal address and privacy contact. These values must not be inferred from the workshop/public operating address; set `RINON_LEGAL_APPROVED=true` only after that approval.
 - Obtain explicit production cutover authorization before changing domain/indexation/redirect/write/tracking flags.
 
 ## Safe preproduction defaults
@@ -45,5 +47,6 @@ Mode: **SAFE PRE-CUTOVER**
 - Production tracking disabled until the production release is authorized and consent-gated.
 - URL inventory completion remains false until crawl + GSC reconciliation.
 - Visual cutover blocker list is non-empty until final masters pass provenance + QA.
+- Legal approval remains false until formal legal identity/contact values and draft content are approved (`RINON_LEGAL_APPROVED=false`).
 - Existing production `rinon.cl` is not modified by this repository.
 - Production cutover remains blocked behind explicit authorization and all hard gates.
