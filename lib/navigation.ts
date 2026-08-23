@@ -62,13 +62,10 @@ export function isExactNavPath(pathname:string,href:string){
 export const footerProductItems:readonly NavItem[]=[
   {label:"Camarotes",href:"/camarotes"},
   {label:"Camas metálicas",href:"/camas-metalicas"},
-  {label:"Camas balinesas",href:"/camas-balinesas"},
+  {label:"Equipamiento",href:"/equipamiento-metalico"},
   {label:"Cierres",href:"/cierres-perimetrales"},
   {label:"Rejas",href:"/rejas-metalicas"},
   {label:"Portones",href:"/portones-metalicos"},
   {label:"Malla 3D",href:"/mallas-3d"},
   {label:"Estructuras",href:"/estructuras-metalicas"},
-  {label:"Equipamiento",href:"/equipamiento-metalico"},
-  {label:"Mesas",href:"/mesas-metalicas"},
-  {label:"Escritorios",href:"/escritorios-metalicos"},
 ] as const;
