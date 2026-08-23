@@ -27,10 +27,16 @@ test("mobile navigation marks the current task family without overflow",async({p
  expect(metrics.scrollWidth).toBeLessThanOrEqual(metrics.innerWidth+2);
 });
 
-test("footer exposes priority product, service and resource discovery",async({page})=>{
+test("footer keeps products concise and services semantically pure",async({page})=>{
  await page.setViewportSize({width:1440,height:1000});
  await page.goto("/",{waitUntil:"networkidle"});
  const footer=page.locator(".s6-footer");
+ const products=footer.getByRole("navigation",{name:"Productos"});
+ const services=footer.getByRole("navigation",{name:"Servicios"});
+ await expect(products.getByRole("link")).toHaveCount(8);
+ await expect(services.getByRole("link")).toHaveCount(5);
+ await expect(services.getByRole("link",{name:"Proyectos a medida"})).toHaveCount(0);
+ await expect(footer.getByRole("link",{name:"Proyectos a medida"})).toBeVisible();
  await expect(footer.getByRole("link",{name:"Malla 3D"})).toBeVisible();
  await expect(footer.getByRole("link",{name:"Estructuras"})).toBeVisible();
  await expect(footer.getByRole("link",{name:"Guías y recursos"})).toBeVisible();
