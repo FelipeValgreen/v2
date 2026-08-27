@@ -6,6 +6,8 @@ const visualsPath=path.join(root,"lib","visuals.ts");
 const structuresBriefPath=path.join(root,"docs","STRUCTURES_VISUAL_BRIEF.md");
 const inventoryPath=path.join(root,"docs","VISUAL_PROVENANCE_INVENTORY.md");
 const reconstructionPath=path.join(root,"scripts","reconstruct-visual-assets.mjs");
+const homePath=path.join(root,"app","page.tsx");
+const xrayPath=path.join(root,"components","XRayMetal.tsx");
 
 function fail(message){
  console.error(`✗ ${message}`);
@@ -21,6 +23,8 @@ if(!fs.existsSync(visualsPath)){
 const source=fs.readFileSync(visualsPath,"utf8");
 const inventory=fs.existsSync(inventoryPath)?fs.readFileSync(inventoryPath,"utf8"):"";
 const reconstruction=fs.existsSync(reconstructionPath)?fs.readFileSync(reconstructionPath,"utf8"):"";
+const home=fs.existsSync(homePath)?fs.readFileSync(homePath,"utf8"):"";
+const xray=fs.existsSync(xrayPath)?fs.readFileSync(xrayPath,"utf8"):"";
 const assetBlocks=[...source.matchAll(/\{\s*\n\s*src:\s*[`\"][\s\S]*?\n\s*\},?/g)].map(match=>match[0]);
 
 if(assetBlocks.length===0){
@@ -61,6 +65,13 @@ else pass("structures conceptual replacement brief exists");
 if(!source.includes("docs/STRUCTURES_VISUAL_BRIEF.md")) fail("structure conceptual asset points to its replacement brief");
 else pass("structure conceptual asset points to its replacement brief");
 
+// Vercel's image optimizer currently returns 400/attachment for local brand assets in this project.
+// Any local RINON visual rendered through next/image must therefore be explicitly unoptimized/direct.
+if(/src="\/brand\/isotipo-rinoceronte-transparent\.webp"[\s\S]{0,180}?unoptimized/.test(home)) pass("Home rhino mark bypasses the broken Vercel image optimizer");
+else fail("Home rhino mark must render unoptimized/direct");
+if(/<Image\s+src=\{image\}[\s\S]{0,220}?unoptimized/.test(xray)) pass("XRay local visual bypasses the broken Vercel image optimizer");
+else fail("XRay local visual must render unoptimized/direct");
+
 const blockerMatch=source.match(/VISUAL_CUTOVER_BLOCKERS\s*=\s*\[([\s\S]*?)\]\s*as const/);
 if(!blockerMatch){
  fail("visual registry declares machine-readable cutover blockers");
@@ -77,4 +88,4 @@ if(process.exitCode){
  console.error("RINON VISUAL PROVENANCE CONTRACT FAILED.");
  process.exit(process.exitCode);
 }
-console.log(`RINON VISUAL PROVENANCE CONTRACT PASSED: ${assetBlocks.length} assets have explicit, auditable provenance.`);
+console.log(`RINON VISUAL PROVENANCE CONTRACT PASSED: ${assetBlocks.length} assets have explicit, auditable provenance and local critical visuals bypass the broken optimizer.`);
