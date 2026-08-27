@@ -21,6 +21,7 @@
     "qa:served": "node scripts/check-served-build.mjs",
     "qa:remote": "node scripts/check-served-build.mjs",
     "qa:browser:remote": "RINON_PLAYWRIGHT_BASE_URL=${RINON_PLAYWRIGHT_BASE_URL:-https://rinon-v2.vercel.app} playwright test",
+    "preqa:browser": "npm run prebuild",
     "qa:browser": "playwright test",
     "check:release": "npm run qa:static && npm run build && npm run qa:served && npm run qa:browser"
   },

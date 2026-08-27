@@ -1,6 +1,12 @@
 node_modules/
 .next/
 out/
+playwright-report/
+test-results/
+tsconfig.tsbuildinfo
+public/visuals/archive/
+public/visuals/product-theatre/
+public/visuals/home-hero-conceptual-welding.webp
 .env
 .env.local
 .env.*.local
