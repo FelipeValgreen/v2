@@ -1,5 +1,164 @@
 # handoff-to-claude.md
 
+## ACTUALIZACION VIGENTE — Codex 2026-08-27
+
+Esta seccion corrige el estado del paquete generado previamente. Claude debe usar esta actualizacion como estado actual y tratar las secciones antiguas inferiores como contexto literal historico cuando difieran.
+
+### Tarea 1 — verificacion de estado
+
+```text
+Repositorio revisado: /Users/valgreen/Documents/CLIENTES/RINON/rinon-v2
+Branch actual: codex/rc7
+Branch codex/rc7 existe: si
+Commit 1157c4d existe: si, tipo commit
+Stash: vacio
+Working tree antes de generar este addendum: limpio
+AGENTS.md existe: si
+CODEX_HANDOFF.md existe: si
+RELEASE_STATUS.md existe: si
+```
+
+### git status --short --branch actual
+
+```text
+## codex/rc7...origin/codex/rc7
+```
+
+### git log --oneline -10 actual
+
+```text
+1bc2a1c test: detect technical visuals in legacy hero gates
+cf27d8e chore: stabilize browser QA asset setup
+69f5035 test: guard commercial heroes against technical fallbacks
+6decad8 docs: align release status with GSC pending count
+1fc9af1 docs: add Claude collaboration handoff
+4edfd24 fix: stabilize RC7 visual chrome and QA gates
+1157c4d docs: add full RINON RC.7 Codex handoff
+51782e9 docs: add Codex operating instructions for RINON RC.7
+4992528 qa: synchronize quarantine with canonical GSC ledger
+15236ed seo: add canonical live URL review ledger
+```
+
+### Coincidencia del lote P0 descrito
+
+```text
+Coincide en los puntos principales:
+- Logo robusto: SiteHeader, SiteFooter y MobileNav usan /brand/logo-rinon-horizontal-transparent.png directamente.
+- Isotipo .webp invalido eliminado del bloque s7-custom de app/page.tsx.
+- public/visuals/structures/pergola-mediterranea-conceptual.svg ya no existe.
+- Copy/labels corregidos en Empresas, Estructuras y QuoteForm.
+- Responsive/mobile sticky reforzado en app/styles/part-15.css.
+- QA served reforzado en scripts/check-served-build.mjs.
+- Existe qa:browser:remote en package.json.
+- Tests actualizados y ampliados; hoy son 52 tests browser, no 51.
+
+Tambien hay commits posteriores al primer lote P0:
+- handoff-to-claude.md fue agregado en 1fc9af1.
+- RELEASE_STATUS.md ya alinea 58 URLs GSC-pending en 6decad8.
+- Se agregaron guards de QA visual/comercial en 69f5035 y 1bc2a1c.
+```
+
+### QA actual ejecutado por Codex
+
+```text
+npm run qa:static
+Resultado: PASA.
+
+npm run build
+Primer intento sandbox: FALLA por descarga de Google Fonts/Raleway.
+Motivo literal: Failed to fetch `Raleway` from Google Fonts.
+Reintento con red aprobada: PASA.
+
+npm run qa:served
+Primer intento sandbox: FALLA por listen EPERM en 0.0.0.0:3210.
+Reintento fuera del sandbox: PASA.
+Resumen literal: RINON SERVED-BUILD GATE PASSED: 28 routes, 25 assets (2 CSS / 13 JS / 7 images).
+
+npm run qa:browser
+Primer intento sandbox: FALLA por listen EPERM en 0.0.0.0:3211.
+Reintento fuera del sandbox: PASA.
+Resumen literal: 52 passed (2.3m)
+
+npm run qa:remote -- https://rinon-v2.vercel.app
+Primer intento sandbox: FALLA por DNS ENOTFOUND rinon-v2.vercel.app.
+Reintento con red aprobada: PASA.
+Resumen literal: RINON SERVED-BUILD GATE PASSED: 28 routes, 25 assets (2 CSS / 13 JS / 9 images).
+
+npm run qa:browser:remote
+Primer intento sandbox: invalido; 52/52 fallaron por bloqueo de lanzamiento Chromium:
+bootstrap_check_in org.chromium.Chromium.MachPortRendezvousServer: Permission denied (1100)
+Reintento fuera del sandbox: FALLA real contra Vercel.
+Resumen literal: 8 failed, 44 passed (4.5m)
+```
+
+### Fallos reales actuales en npm run qa:browser:remote
+
+```text
+1) tests/commercial-evidence.spec.mjs:67:1 › commercial heroes never fall back to TechnicalVisual
+Assert/operacion exacta:
+const response=await page.goto(route,{waitUntil:"networkidle"});
+Esperado: navegacion completa dentro de 30000ms.
+Recibido: Test timeout of 30000ms exceeded while navigating to "https://rinon-v2.vercel.app/cotizar", waiting until "networkidle".
+
+2) tests/render.spec.mjs:29:1 › home renders RC7 brand, navigation and quality-gated structure visual
+Assert exacto:
+expect(chrome.logoLoaded).toBeTruthy();
+Esperado: true.
+Recibido: false.
+Notas del helper: logoLoaded = logo instanceof HTMLImageElement && logo.complete && logo.naturalWidth > 100.
+
+3) tests/render.spec.mjs:42:1 › critical commercial pages including expanded catalog render with CSS
+Assert exacto:
+expect(chrome.logoLoaded).toBeTruthy();
+Esperado: true.
+Recibido: false.
+
+4) tests/render.spec.mjs:50:1 › quote experience is a real three-step progressive wizard
+Assert/operacion exacta:
+await page.getByLabel(/Acepto que RINON use estos datos/).check();
+Esperado: encontrar y marcar el checkbox de consentimiento en paso 3.
+Recibido: Test timeout of 30000ms exceeded waiting for getByLabel(/Acepto que RINON use estos datos/).
+
+5) tests/render.spec.mjs:60:1 › mobile navigation is task-led, reachable and responsive without overflow
+Assert exacto:
+expect(navCss.top).toBe("sticky");
+Esperado: "sticky".
+Recibido: "absolute".
+
+6) tests/render.spec.mjs:68:1 › about and contact include usable location actions
+Assert exacto:
+expect(chrome.logoLoaded).toBeTruthy();
+Esperado: true.
+Recibido: false.
+
+7) tests/seo-cro.spec.mjs:86:1 › structures landing owns structural intent without pretending conceptual evidence is executed work
+Assert exacto:
+expect(text).toContain("visual conceptual");
+Esperado: substring "visual conceptual".
+Recibido: texto de main incluye "referencia arquitectónica · render aportado" y "referencia · no obra ejecutada", pero no incluye "visual conceptual".
+
+8) tests/seo-cro.spec.mjs:104:1 › enterprise landing is a B2B intent owner with structured answers and three closing paths
+Assert exacto:
+expect(text).toContain("Compra por volumen");
+Esperado: substring "Compra por volumen".
+Recibido: texto de main incluye "COMPRA POR VOLUMEN" en mayusculas y "Compra por unidad o volumen", pero no el substring exacto con esa capitalizacion.
+```
+
+### Interpretacion actual para Claude
+
+```text
+La hipotesis antigua "7 fallas remotas = staging desactualizado respecto de local" queda descartada como explicacion exacta.
+
+Estado actual:
+- Local esta verde: static, build, served y browser pasan.
+- HTTP remoto esta verde.
+- Browser remoto falla 8/52 contra Vercel.
+- Parte de las fallas son sensibilidad de asserts/copy/capitalizacion o espera networkidle.
+- Parte de las fallas siguen siendo riesgos reales de staging: logoLoaded false y mobile-nav-top position absolute en remoto.
+
+No activar produccion. No activar indexacion. No activar redirects. No activar leads reales.
+```
+
 Generado por Codex para Claude. Fecha local: 2026-08-27T19:34:05.057Z
 
 Regla de uso: Claude no tiene acceso al repo ni a comandos; este archivo incluye salidas literales y extracciones DOM para revisión/propuesta. No autoriza producción.
