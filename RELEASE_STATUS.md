@@ -25,12 +25,12 @@ Mode: **SAFE PRE-CUTOVER**
 - New intent owners are available for camas, camas balinesas, mesas, escritorios, Malla 3D, mallas separadoras, Soldadura MIG, Corte, Instalación and Reparaciones.
 - Pintura electrostática is a confirmed commercial service with bounded technical claims.
 - Migration, SEO/CRO, visual provenance, attachment, structured CRM, analytics, legal and production preflight contracts run inside the Vercel build.
-- **53** live-observed/current organic URLs are quarantined as `REVIEW / GSC-PENDING` before broad redirect families.
+- **58** live-observed/current organic URLs are quarantined as `REVIEW / GSC-PENDING` before broad redirect families.
 - Production preflight reads the machine-readable `VISUAL_CUTOVER_BLOCKERS` registry and refuses authorized cutover while final visual blockers remain.
 - User-provided cobertizo/pergola references are treated as reference-only assets; none is represented as a completed RINON project without independent provenance.
 
 ## Remaining pre-cutover work / external evidence
-- Reconcile the complete live crawl with an exported Google Search Console landing-page/query dataset and resolve all **53** `REVIEW / GSC-PENDING` URLs.
+- Reconcile the complete live crawl with an exported Google Search Console landing-page/query dataset and resolve all **58** `REVIEW / GSC-PENDING` URLs.
 - Resolve the two final visual blockers:
   1. `home-hero-final-master` — replace the constrained 720×730 temporary Home hero master.
   2. `structures-residential-final-master` — replace the generic industrial structures visual with the accepted premium residential cobertizo/pergola direction.
