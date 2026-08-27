@@ -3,8 +3,16 @@
 **Mode:** SAFE PRE-CUTOVER  
 **Release:** 1.0.0-rc.7  
 **Repository:** `FelipeValgreen/v2`  
-**Last fully validated functional migration build before collaboration docs:** commit `64a852c469625c6b0ea8634df443af4cab19ae79`, Vercel READY.  
+**Current main HEAD at handoff:** `703d38db45bbd82f408438765e687ad64039d843` (collaboration/documentation update).  
+**Last fully validated functional migration build before these docs-only commits:** `64a852c469625c6b0ea8634df443af4cab19ae79`, Vercel READY.  
 **Staging alias:** `https://rinon-v2.vercel.app`.
+
+## START HERE
+For a fresh Claude session, read `docs/CLAUDE_BOOTSTRAP_PROMPT.md` and follow it.
+
+The consolidated product contract is `docs/RINON_RC7_PRD.md`.
+
+Do not rely on this handoff alone; inspect current `main` after reading the repository contracts.
 
 ## CURRENT STATE
 RINON 2.0 is an isolated Next.js 16 / React 19 staging implementation. Production `rinon.cl` is intentionally untouched.
@@ -28,6 +36,15 @@ The public-site crawl/inventory work currently protects **36 live-observed URLs*
 
 Do not collapse those URLs based only on architecture preference.
 
+The migration source of truth is distributed deliberately across:
+- `lib/migration.ts`;
+- `docs/URL-MIGRATION-INVENTORY.md`;
+- `docs/SEO_MIGRATION_MATRIX.csv`;
+- `scripts/check-migration-contract.mjs`;
+- production preflight.
+
+If these disagree, treat it as a release defect and reconcile them rather than choosing one silently.
+
 ## VISUAL STATE
 The design system direction is industrial premium: graphite/black/white + RINON orange, Raleway, photography/evidence first, technical visuals secondary.
 
@@ -35,6 +52,8 @@ Known limitation:
 - `/estructuras-metalicas` and the corresponding Home chapter still use a governed conceptual structure visual pending a stronger contextual master.
 - User-provided architectural render `COBERTIZO SALA.jpg` is 2212×941 and is potentially useful only as a **reference/render**, never as verified RINON project evidence unless separately verified.
 - real workshop evidence must not be generated/faked.
+
+The visual registry requires auditable provenance. Do not weaken `sourceRef` / `verificationRef` requirements.
 
 ## WHAT CHATGPT HAS BEEN OPTIMIZING FOR
 `organic visibility × commercial intent × conversion × trust`
@@ -45,6 +64,8 @@ Key decisions already made:
 - portfolio `/proyectos` is not promoted as evidence unless cases are verifiable;
 - diagrams cannot be the automatic hero fallback for commercial pages;
 - CTA system uses quote + WhatsApp according to intent;
+- quote attachments remain private and admin-authenticated;
+- structured CRM fields are preferred over burying qualification only in `mensaje`;
 - staging remains noindex and production flags fail closed.
 
 ## REQUEST FOR CLAUDE — FIRST PASS
@@ -71,7 +92,7 @@ Priority order:
 Update `docs/AI_HANDOFF_CLAUDE.md` with:
 - severity-ranked findings;
 - `CHALLENGE` sections for decisions you dispute;
-- exact files/lines/components involved;
+- exact files/components involved;
 - fixes implemented or proposed;
 - commands/tests actually run;
 - branch/commit/PR if you changed code;
