@@ -98,7 +98,7 @@ test("structures landing owns structural intent without pretending conceptual ev
  const schema=await main.locator('script[type="application/ld+json"]').first().textContent();
  expect(schema).toContain('"@type":"Service"');
  expect(schema).toContain('"@type":"FAQPage"');
- expect(schema).toContain("Cobertizos y pérgolas");
+ expect(schema.toLowerCase()).toContain("cobertizos y pérgolas");
 });
 
 test("enterprise landing is a B2B intent owner with structured answers and three closing paths",async({page})=>{

@@ -15,10 +15,10 @@ const buyers=[
 ] as const;
 
 const proof=[
- ["VOLUMEN","Series, lotes y compras repetibles cuando cantidad y configuración están definidas."],
- ["BAJO PLANO","Piezas, soportes y conjuntos cuando la geometría y especificación vienen definidas."],
- ["PROYECTO","Cierres, estructuras y equipamiento asociados a una obra o necesidad de terreno."],
- ["RECURRENTE","Requerimientos que se repiten y pueden estandarizarse comercialmente."],
+ ["Compra por volumen","Series, lotes y compras repetibles cuando cantidad y configuración están definidas."],
+ ["Bajo plano","Piezas, soportes y conjuntos cuando la geometría y especificación vienen definidas."],
+ ["Proyecto / obra","Cierres, estructuras y equipamiento asociados a una obra o necesidad de terreno."],
+ ["Requerimiento recurrente","Requerimientos que se repiten y pueden estandarizarse comercialmente."],
 ] as const;
 
 const faqs=[

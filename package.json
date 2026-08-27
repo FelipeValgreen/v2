@@ -20,6 +20,7 @@
     "qa:static": "npm run typecheck && npm run qa:migration && npm run qa:seo-cro && npm run qa:visual-provenance && npm run qa:attachments && npm run qa:crm && npm run qa:analytics && npm run qa:legal && npm run preflight:production",
     "qa:served": "node scripts/check-served-build.mjs",
     "qa:remote": "node scripts/check-served-build.mjs",
+    "qa:browser:remote": "RINON_PLAYWRIGHT_BASE_URL=${RINON_PLAYWRIGHT_BASE_URL:-https://rinon-v2.vercel.app} playwright test",
     "qa:browser": "playwright test",
     "check:release": "npm run qa:static && npm run build && npm run qa:served && npm run qa:browser"
   },

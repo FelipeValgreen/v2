@@ -59,7 +59,7 @@ If `COBERTIZO SALA.jpg` is promoted before a stronger exterior master exists:
 | --- | --- | --- | --- |
 | `/visuals/reference-current/cama-institucional-gris-individual-y-camarote.jpg` | `current-site-approved` | DISABLED by default | Product/reference evidence only. Do not claim a named client/project. |
 | `/visuals/reference-current/camarote-desmontable-dormitorio-compartido.jpg` | `current-site-approved` | DISABLED by default | Product/reference evidence only. Do not claim a named client/project. |
-| `/visuals/structures/pergola-mediterranea-conceptual.svg` | `explanatory` | REPLACE / not referenced | Not acceptable as primary commercial proof or final Home structures visual. |
+| `/visuals/structures/pergola-mediterranea-conceptual.svg` | `explanatory` | REMOVED / known-bad | Was an SVG wrapper around a low-resolution raster and must not return as primary commercial proof or final Home structures visual. |
 
 Legacy reference imagery remains behind `RINON_ALLOW_LEGACY_REFERENCE_IMAGES=true` and is not part of the default RC.7 visual surface.
 

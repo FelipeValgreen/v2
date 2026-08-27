@@ -5,7 +5,7 @@ test("desktop navigation exposes the active product and service section",async({
  await page.goto("/estructuras-metalicas",{waitUntil:"networkidle"});
  await expect(page.getByRole("button",{name:/Productos/})).toHaveClass(/is-active/);
  await page.getByRole("button",{name:/Productos/}).click();
- await expect(page.getByRole("link",{name:/Estructuras metálicas/}).first()).toHaveAttribute("aria-current","page");
+ await expect(page.locator('#mega-products a[href="/estructuras-metalicas"]')).toHaveAttribute("aria-current","page");
  await page.goto("/pintura-electrostatica",{waitUntil:"networkidle"});
  await expect(page.getByRole("button",{name:/Servicios/})).toHaveClass(/is-active/);
  await page.getByRole("button",{name:/Servicios/}).click();

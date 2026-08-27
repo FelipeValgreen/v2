@@ -52,7 +52,7 @@ Desktop required order:
 `Productos ▼ | Proyectos a medida | Empresas | Servicios ▼ | Nosotros | Cotizar`.
 
 Rules:
-- header logo uses `/brand/logo-rinon-horizontal-white.png` where dark header styling applies;
+- header logo uses `/brand/logo-rinon-horizontal-transparent.png`; the asset must decode in Chromium and render on the dark header without the image optimizer;
 - direct static source, no image optimizer dependency for logo;
 - Products and Services are accessible buttons with `aria-expanded` and controlled mega panels;
 - mega menu items are real landing links, not inert labels;
