@@ -52,6 +52,20 @@ The quarantine currently covers these intent groups:
 
 Every one of these routes executes through the `REVIEW` guard **before** any broad family redirect. No wildcard 301 may override the ledger.
 
+### Critical audit anchors
+
+These representative URLs remain written explicitly here because production preflight uses them as audit anchors in addition to the canonical ledger:
+
+- `/portones-industriales`
+- `/mallas-separadoras-industriales`
+- `/cierre-perimetral-industrial`
+- `/cercos-metalicos-santiago`
+- `/reja-metalica-santiago`
+- `/soldadura-metalica-santiago`
+- `/pintura-electrostatica-zona-sur-santiago`
+
+Their presence here is **not** approval for a redirect. Live-observed anchors remain governed by `docs/GSC_PENDING_URLS.csv`; non-ledger aliases remain candidate-only until reconciliation.
+
 **Release rule:** all rows in `docs/GSC_PENDING_URLS.csv` must become explicitly approved KEEP/REBUILD/301 decisions before `MIGRATION_GSC_REVIEW_PENDING_COUNT=0` and before `RINON_URL_INVENTORY_COMPLETE=true` can be justified.
 
 ## 4. Lower-risk 301 candidates after protected exceptions
