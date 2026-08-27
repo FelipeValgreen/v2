@@ -1,7 +1,7 @@
 import {test,expect} from "@playwright/test";
 
 async function openContextStep(page){
- await page.goto("/cotizar?category=fabricacion",{waitUntil:"networkidle"});
+ await page.goto("/cotizar?category=fabricacion",{waitUntil:"domcontentloaded"});
  await expect(page.locator('[data-quote-step="1"]')).toBeVisible();
  await page.getByRole("button",{name:/Continuar/}).click();
  await expect(page.locator('[data-quote-step="2"]')).toBeVisible();

@@ -1,7 +1,7 @@
 import {test,expect} from "@playwright/test";
 
 test("quote wizard owns validation instead of hidden future fields",async({page})=>{
- await page.goto("/cotizar",{waitUntil:"networkidle"});
+ await page.goto("/cotizar",{waitUntil:"domcontentloaded"});
  await page.getByRole("button",{name:/Continuar/}).click();
  await expect(page.locator('[data-quote-step="1"]')).toBeVisible();
  await expect(page.locator(".quote-status")).toContainText("Completa los campos obligatorios");
@@ -9,7 +9,7 @@ test("quote wizard owns validation instead of hidden future fields",async({page}
 });
 
 test("pressing Enter can advance a prequalified first step",async({page})=>{
- await page.goto("/cotizar?category=fabricacion",{waitUntil:"networkidle"});
+ await page.goto("/cotizar?category=fabricacion",{waitUntil:"domcontentloaded"});
  await expect(page.locator('[data-quote-step="1"]')).toBeVisible();
  const useField=page.getByRole("textbox",{name:"Uso"});
  await useField.fill("Soporte metálico");

@@ -4,7 +4,7 @@ const routes=["/contacto","/nosotros"];
 
 for(const route of routes){
  test(`${route} exposes one auditable workshop location`,async({page})=>{
-  const response=await page.goto(route,{waitUntil:"networkidle"});
+  const response=await page.goto(route,{waitUntil:"domcontentloaded"});
   expect(response?.status()).toBe(200);
   await expect(page.locator('#ubicacion')).toHaveCount(1);
   await expect(page.locator('#ubicacion-title')).toHaveCount(1);
@@ -29,7 +29,7 @@ for(const route of routes){
 }
 
 test("contacto keeps quote, WhatsApp and phone paths measurable",async({page})=>{
- await page.goto('/contacto',{waitUntil:'networkidle'});
+ await page.goto('/contacto',{waitUntil:'domcontentloaded'});
  const main=page.locator('main[data-sgeo-owner="contacto"]');
  await expect(main).toHaveCount(1);
  expect(await main.locator('a[href^="/cotizar"][data-event="quote_start"]').count()).toBeGreaterThanOrEqual(3);
@@ -38,7 +38,7 @@ test("contacto keeps quote, WhatsApp and phone paths measurable",async({page})=>
 });
 
 test("nosotros keeps local trust and dual conversion paths",async({page})=>{
- await page.goto('/nosotros',{waitUntil:'networkidle'});
+ await page.goto('/nosotros',{waitUntil:'domcontentloaded'});
  const main=page.locator('main[data-sgeo-owner="nosotros"]');
  await expect(main).toHaveCount(1);
  await expect(main.locator('h1')).toHaveText(/Fabricamos en San Bernardo/i);
@@ -49,7 +49,7 @@ test("nosotros keeps local trust and dual conversion paths",async({page})=>{
 test("local trust pages do not overflow at mobile width",async({page})=>{
  await page.setViewportSize({width:390,height:900});
  for(const route of routes){
-  await page.goto(route,{waitUntil:'networkidle'});
+  await page.goto(route,{waitUntil:'domcontentloaded'});
   const metrics=await page.evaluate(()=>({scrollWidth:document.documentElement.scrollWidth,innerWidth:window.innerWidth}));
   expect(metrics.scrollWidth,`${route} mobile overflow`).toBeLessThanOrEqual(metrics.innerWidth+2);
   await expect(page.locator('#ubicacion')).toBeVisible();

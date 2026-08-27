@@ -1,32 +1,5 @@
 import {test,expect} from "@playwright/test";
-
-const routes=["/rejas-metalicas","/portones-metalicos","/mallas-3d","/mallas-separadoras"];
-const commercialHeroRoutes=[
- "/soluciones",
- "/camarotes",
- "/camarote-nido",
- "/camas-metalicas",
- "/camas-balinesas",
- "/mesas-metalicas",
- "/escritorios-metalicos",
- "/cierres-perimetrales",
- "/rejas-metalicas",
- "/portones-metalicos",
- "/mallas-3d",
- "/mallas-separadoras",
- "/estructuras-metalicas",
- "/fabricacion-metalica",
- "/mobiliario-institucional",
- "/soldadura-mig",
- "/corte-metalico",
- "/pintura-electrostatica",
- "/instalacion",
- "/reparaciones-metalicas",
- "/empresas",
- "/proyectos",
- "/contacto",
- "/cotizar",
-];
+import { commercialHeroRoutes, gotoReady, perimeterMoneyRoutes, route } from "./fixtures/routes.mjs";
 
 async function expectNoHeroTechnicalVisual(page){
  await expect(page.locator('.rinon-commercial-hero [data-visual-kind="technical-render"], .prd2-solution-hero [data-visual-kind="technical-render"], .v2-solution-hero [data-visual-kind="technical-render"], .rinon-quote-hero [data-visual-kind="technical-render"]')).toHaveCount(0);
@@ -34,8 +7,8 @@ async function expectNoHeroTechnicalVisual(page){
 }
 
 test("perimeter money pages use concrete evidence panels instead of hero diagrams",async({page})=>{
- for(const route of routes){
-  const response=await page.goto(route,{waitUntil:"networkidle"});
+ for(const routeEntry of perimeterMoneyRoutes){
+  const response=await gotoReady(page,routeEntry);
   expect(response?.status()).toBe(200);
   await expect(page.locator(".rinon-commercial-hero")).toBeVisible();
   await expect(page.locator(".rinon-commercial-hero .commercial-evidence-panel")).toBeVisible();
@@ -46,7 +19,7 @@ test("perimeter money pages use concrete evidence panels instead of hero diagram
 });
 
 test("generic commercial solution fallback never promotes a technical diagram to hero evidence",async({page})=>{
- const response=await page.goto("/pintura-electrostatica",{waitUntil:"networkidle"});
+ const response=await gotoReady(page,route("/pintura-electrostatica"));
  expect(response?.status()).toBe(200);
  await expect(page.locator(".prd2-solution-hero")).toBeVisible();
  const visualCount=await page.locator(".prd2-solution-hero .visual-evidence").count();
@@ -56,7 +29,7 @@ test("generic commercial solution fallback never promotes a technical diagram to
 test("evidence-led perimeter heroes stay responsive",async({page})=>{
  for(const width of [320,375,430,768,1024]){
   await page.setViewportSize({width,height:900});
-  await page.goto("/rejas-metalicas",{waitUntil:"networkidle"});
+  await gotoReady(page,route("/rejas-metalicas"));
   await expect(page.locator(".commercial-evidence-panel")).toBeVisible();
   const metrics=await page.evaluate(()=>({scrollWidth:document.documentElement.scrollWidth,innerWidth:window.innerWidth,heroWidth:document.querySelector(".rinon-commercial-hero")?.getBoundingClientRect().width??0}));
   expect(metrics.scrollWidth).toBeLessThanOrEqual(metrics.innerWidth+2);
@@ -65,8 +38,8 @@ test("evidence-led perimeter heroes stay responsive",async({page})=>{
 });
 
 test("commercial heroes never fall back to TechnicalVisual",async({page})=>{
- for(const route of commercialHeroRoutes){
-  const response=await page.goto(route,{waitUntil:"networkidle"});
+ for(const routeEntry of commercialHeroRoutes){
+  const response=await gotoReady(page,routeEntry);
   expect(response?.status()).toBe(200);
   await expectNoHeroTechnicalVisual(page);
  }

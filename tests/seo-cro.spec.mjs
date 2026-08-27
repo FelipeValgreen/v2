@@ -1,4 +1,5 @@
 import {test,expect} from "@playwright/test";
+import { COPY } from "./fixtures/copy.mjs";
 
 const expandedRoutes=[
  "/camas-metalicas","/camas-balinesas","/mesas-metalicas","/escritorios-metalicos",
@@ -27,7 +28,7 @@ const preCutoverRedirectAliases=[
 ];
 
 async function assertSeoShell(page,route){
- const response=await page.goto(route,{waitUntil:"networkidle"});
+ const response=await page.goto(route,{waitUntil:"domcontentloaded"});
  expect(response?.status(),`${route} status`).toBe(200);
  const expectedCanonical=`https://rinon.cl${route}`;
  await expect(page.locator('link[rel="canonical"]')).toHaveAttribute("href",expectedCanonical);
@@ -90,14 +91,10 @@ test("structures landing owns structural intent without pretending conceptual ev
  const main=page.locator('main[data-sgeo-owner="estructuras-metalicas"]');
  await expect(main).toHaveCount(1);
  const text=(await main.innerText()).toLowerCase();
- expect(text).toContain("cobertizos y pérgolas");
- expect(text).toContain("empresas y operación");
- expect(text).toContain("fabricar una estructura no equivale automáticamente a desarrollar su ingeniería");
- expect(text).toContain("visual conceptual");
- expect(text).toContain("no obra ejecutada");
+ for(const expected of COPY.seo.structures)expect(text).toContain(expected);
  const schema=await main.locator('script[type="application/ld+json"]').first().textContent();
- expect(schema).toContain('"@type":"Service"');
- expect(schema).toContain('"@type":"FAQPage"');
+ expect(schema).toContain(COPY.schema.service);
+ expect(schema).toContain(COPY.schema.faqPage);
  expect(schema.toLowerCase()).toContain("cobertizos y pérgolas");
 });
 
@@ -108,12 +105,10 @@ test("enterprise landing is a B2B intent owner with structured answers and three
  const main=page.locator('main[data-sgeo-owner="empresas"]');
  await expect(main).toHaveCount(1);
  const text=await main.innerText();
- expect(text).toContain("Compra por volumen");
- expect(text).toContain("RUTAS DE COMPRA");
- expect(text).toContain("Bajo plano");
+ for(const expected of COPY.seo.enterprise)expect(text).toContain(expected);
  const schema=await main.locator('script[type="application/ld+json"]').first().textContent();
- expect(schema).toContain('"@type":"Service"');
- expect(schema).toContain('"@type":"FAQPage"');
+ expect(schema).toContain(COPY.schema.service);
+ expect(schema).toContain(COPY.schema.faqPage);
  const closing=page.locator("#cotizar");
  expect(await closing.locator('a[href^="/cotizar"][data-event="quote_start"][data-cta-location="b2b_footer"]').count()).toBeGreaterThan(0);
  expect(await closing.locator('a[href*="wa.me/"][data-cta-location="b2b_footer"]').count()).toBeGreaterThan(0);
@@ -127,9 +122,7 @@ test("projects remains an evidence hub rather than a fake portfolio and keeps du
  const main=page.locator('main[data-sgeo-owner="proyectos"]');
  await expect(main).toHaveCount(1);
  const text=(await main.innerText()).toLowerCase();
- expect(text).toContain("sin atribuir clientes, cargas, resultados o especificaciones que no estén respaldadas");
- expect(text).toContain("regla de procedencia");
- expect(text).toContain("un cliente o proyecto se identifica solo cuando existe respaldo suficiente");
+ for(const expected of COPY.seo.projects)expect(text).toContain(expected);
  const closing=page.locator("#cotizar");
  expect(await closing.locator('a[href^="/cotizar"][data-event="quote_start"][data-cta-location="projects_footer"]').count()).toBeGreaterThan(0);
  expect(await closing.locator('a[href*="wa.me/"][data-cta-location="projects_footer"]').count()).toBeGreaterThan(0);
@@ -148,7 +141,7 @@ test("rejas and portones preserve a dual conversion choice at the decision point
 
 test("pre-cutover migration aliases remain disabled in staging",async({page})=>{
  for(const route of preCutoverRedirectAliases){
-  const response=await page.goto(route,{waitUntil:"networkidle"});
+  const response=await page.goto(route,{waitUntil:"domcontentloaded"});
   expect(response?.status(),`${route} must not redirect before authorized cutover`).toBe(404);
   const robots=await page.locator('meta[name="robots"]').first().getAttribute("content");
   expect(robots?.toLowerCase(),`${route} 404 robots`).toContain("noindex");
@@ -158,7 +151,7 @@ test("pre-cutover migration aliases remain disabled in staging",async({page})=>{
 test("representative organic landings remain usable at mobile width",async({page})=>{
  await page.setViewportSize({width:390,height:900});
  for(const route of ["/camarotes","/camas-metalicas","/cierres-perimetrales","/estructuras-metalicas","/rejas-metalicas","/portones-metalicos","/mallas-3d","/mallas-separadoras","/fabricacion-metalica","/empresas","/proyectos","/camarote-nido","/soldadura-mig"]){
-  await page.goto(route,{waitUntil:"networkidle"});
+  await page.goto(route,{waitUntil:"domcontentloaded"});
   const metrics=await page.evaluate(()=>({scrollWidth:document.documentElement.scrollWidth,innerWidth:window.innerWidth}));
   expect(metrics.scrollWidth,`${route} mobile overflow`).toBeLessThanOrEqual(metrics.innerWidth+2);
   const primary=page.locator('main a[href^="/cotizar"]').first();

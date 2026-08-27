@@ -1,7 +1,7 @@
 import {test,expect} from "@playwright/test";
 
 async function assertHub(page){
- const response=await page.goto("/soluciones",{waitUntil:"networkidle"});
+ const response=await page.goto("/soluciones",{waitUntil:"domcontentloaded"});
  expect(response?.status()).toBe(200);
  await expect(page.locator('link[rel="canonical"]')).toHaveAttribute("href","https://rinon.cl/soluciones");
  const robots=(await page.locator('meta[name="robots"]').getAttribute("content"))?.toLowerCase() ?? "";
