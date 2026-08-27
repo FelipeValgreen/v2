@@ -19,6 +19,7 @@ const proxy=read("proxy.ts");
 const envExample=read(".env.example");
 const envPreview=read(".env.preview.example");
 const urlInventory=read("docs/URL-MIGRATION-INVENTORY.md");
+const gscLedger=read("docs/GSC_PENDING_URLS.csv");
 const preflight=read("scripts/preflight-production.mjs");
 
 const preservedCommercial=["camarote-nido","camarote-triple","camarote-doble","cama-alta","camarote-titanic","camarote-1-5-plazas","camarote-desmontable","cama-dos-plazas-con-cajon","camarote-2-plazas","cama-institucional-metalica","cama-loft-metalica","cama-loft-con-escritorio","mobiliario-institucional"];
@@ -32,6 +33,12 @@ const observedLiveReview=observedBlock?[...observedBlock[1].matchAll(/"([^"]+)"/
 const uniqueObserved=new Set(observedLiveReview);
 check(uniqueObserved.size===observedLiveReview.length,"live-observed quarantine contains no duplicate URLs");
 check(observedLiveReview.length>=58,"live-observed quarantine protects at least 58 current organic URLs");
+
+const ledgerRoutes=gscLedger.trim().split(/\r?\n/).slice(1).map((line)=>line.split(",")[0]).filter(Boolean);
+check(new Set(ledgerRoutes).size===ledgerRoutes.length,"GSC pending ledger contains no duplicate URLs");
+check(ledgerRoutes.length===observedLiveReview.length,"GSC pending ledger row count matches migration quarantine");
+for(const route of observedLiveReview)check(ledgerRoutes.includes(route),`GSC pending ledger records ${route}`);
+for(const route of ledgerRoutes)check(uniqueObserved.has(route),`migration quarantine protects ledger URL ${route}`);
 
 for(const slug of preservedCommercial){
  check(legacyCommercial.includes(`slug: "${slug}"`),`preserved commercial page exists: /${slug}`);
@@ -48,9 +55,6 @@ for(const route of newOwners){
 }
 check(sitemap.includes("commercialExpansions"),"expanded catalog owners are included in sitemap generation");
 
-for(const route of observedLiveReview){
- check(urlInventory.includes(`\`${route}\``),`live-observed route is documented GSC-pending: ${route}`);
-}
 const declaredPending=Number(migration.match(/MIGRATION_GSC_REVIEW_PENDING_COUNT\s*=\s*(\d+)/)?.[1]??NaN);
 check(declaredPending===observedLiveReview.length,`machine-readable GSC pending count matches ${observedLiveReview.length} protected live URLs`);
 check(preflight.includes('check(gscPendingCount===0,"no live-observed GSC migration reviews remain unresolved")'),"authorized production preflight hard-blocks unresolved GSC URL reviews");
