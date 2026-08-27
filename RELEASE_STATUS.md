@@ -18,22 +18,22 @@ Mode: **SAFE PRE-CUTOVER**
 - Quote submissions support up to 3 private attachments, maximum 5 MB each, limited to JPEG/PNG/WebP/PDF.
 - Attachment upload is origin/size/MIME bounded, server-only, UUID-named, private in Supabase Storage and batch-rollback safe.
 - Admin attachment access is authenticated and streamed through a no-store route; no public Storage URL is exposed.
-- Lead intake stores 22 structured CRM/attribution fields while retaining a human-readable legacy summary.
+- Lead intake stores structured CRM/attribution fields while retaining a human-readable legacy summary.
 - Supabase public intake re-sanitizes an explicit field whitelist and keeps persistent intake rate limiting.
 - Production attribution preserves consented landing/referrer/UTM/Google/Meta identifiers and quote-funnel semantics.
 - Admin shows structured qualification, campaign attribution and private attachment access per lead.
 - New intent owners are available for camas, camas balinesas, mesas, escritorios, Malla 3D, mallas separadoras, Soldadura MIG, Corte, Instalación and Reparaciones.
 - Pintura electrostática is a confirmed commercial service with bounded technical claims.
 - Migration, SEO/CRO, visual provenance, attachment, structured CRM, analytics, legal and production preflight contracts run inside the Vercel build.
-- **53** live-observed/current organic URLs are quarantined as `REVIEW / GSC-PENDING` before broad redirect families.
+- **58** live-observed/current organic URLs are quarantined as `REVIEW / GSC-PENDING` before broad redirect families. The canonical ledger is `docs/GSC_PENDING_URLS.csv` and build QA requires exact parity with `lib/migration.ts`.
 - Production preflight reads the machine-readable `VISUAL_CUTOVER_BLOCKERS` registry and refuses authorized cutover while final visual blockers remain.
 - User-provided cobertizo/pergola references are treated as reference-only assets; none is represented as a completed RINON project without independent provenance.
 
 ## Remaining pre-cutover work / external evidence
-- Reconcile the complete live crawl with an exported Google Search Console landing-page/query dataset and resolve all **53** `REVIEW / GSC-PENDING` URLs.
+- Reconcile the complete live crawl with an exported Google Search Console landing-page/query dataset and resolve all **58** `REVIEW / GSC-PENDING` URLs from `docs/GSC_PENDING_URLS.csv`.
 - Resolve the two final visual blockers:
-  1. `home-hero-final-master` — replace the constrained 720×730 temporary Home hero master.
-  2. `structures-residential-final-master` — replace the generic industrial structures visual with the accepted premium residential cobertizo/pergola direction.
+  1. `home-hero-final-master` — replace the constrained 720×730 temporary Home hero master with an approved final master.
+  2. `structures-residential-final-master` — replace/approve the current archive render reference with a final premium residential cobertizo/pergola master suitable for release.
 - Where available, promote verified RINON photography for Nosotros/workshop, Empresas/B2B, welding and powder coating; evidence-panel fallbacks remain acceptable until authentic evidence exists.
 - Complete final visual acceptance across desktop/tablet/mobile after final masters are installed.
 - Obtain formal approval of the legal content and authorized production values for legal representative, legal address and privacy contact. These values must not be inferred from the workshop/public operating address; set `RINON_LEGAL_APPROVED=true` only after that approval.
