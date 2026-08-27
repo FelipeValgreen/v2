@@ -1,12 +1,17 @@
 import {test,expect} from "@playwright/test";
 
+async function expectNoTechnicalHero(page,scope){
+ await expect(page.locator(`${scope} [data-visual-kind="technical-render"]`)).toHaveCount(0);
+ await expect(page.locator(`${scope} .v2-tech-stage`)).toHaveCount(0);
+}
+
 test("projects page opens with commercial evidence instead of a technical diagram",async({page})=>{
  const response=await page.goto("/proyectos",{waitUntil:"networkidle"});
  expect(response?.status()).toBe(200);
  await expect(page.getByRole("heading",{name:"Fabricación que se puede explicar."})).toBeVisible();
  await expect(page.locator(".v2-solution-hero .commercial-evidence-panel")).toBeVisible();
  await expect(page.getByText("QUÉ DEFINE UN PROYECTO")).toBeVisible();
- await expect(page.locator(".v2-solution-hero .technical-visual")).toHaveCount(0);
+ await expectNoTechnicalHero(page,".v2-solution-hero");
 });
 
 test("governed conceptual evidence never exceeds its declared source width",async({page})=>{
