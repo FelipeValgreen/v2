@@ -1,8 +1,17 @@
 # RINON 2.0 — URL Migration Inventory
 
-**Status:** cutover baseline · 2026-08-23.  
+**Status:** cutover baseline · 2026-08-27.  
 **Rule:** every known public URL requires an explicit migration decision.  
 **Completeness:** deliberately incomplete until a full live crawl is reconciled with exported Google Search Console landing-page + query data. Until then `RINON_URL_INVENTORY_COMPLETE=false` is mandatory.
+
+## Sources of truth
+
+- `lib/migration.ts` — executable migration resolver and quarantine set.
+- `docs/GSC_PENDING_URLS.csv` — **canonical ledger of every live-observed URL that still requires Search Console reconciliation**.
+- `docs/SEO_MIGRATION_MATRIX.csv` — broader planning matrix for durable owners, rebuilds and candidate consolidations.
+- this document — policy, intent families and cutover procedure.
+
+Build QA requires exact parity between the live-observed quarantine in `lib/migration.ts` and every row of `docs/GSC_PENDING_URLS.csv`. Do not duplicate that complete list manually in this document.
 
 ## Decision legend
 
@@ -22,92 +31,61 @@ When Search Console evidence is unavailable, **default to preserving** a proven 
 
 `/camas-metalicas`, `/camas-balinesas`, `/mesas-metalicas`, `/escritorios-metalicos`, `/mallas-separadoras`, `/soldadura-mig`, `/corte-metalico`, `/instalacion`, `/reparaciones-metalicas`.
 
-## 3. Live-observed commercial URLs — REVIEW / GSC-PENDING
+## 3. Live-observed URLs — REVIEW / GSC-PENDING
 
-The following **53 URLs** were directly observed as live/indexable or prominently linked from the current public site. They are quarantined before all broad redirect families in `lib/migration.ts`.
+Current protected count: **58**.
 
-### Camarotes / camas — 29
+The complete canonical list and candidate owner for each route lives in:
 
-| Current URL | Candidate owner | Protection reason |
-|---|---|---|
-| `/literas` | `/camarotes` | Live synonym intent. |
-| `/camarotes-baratos` | `/camarotes` | Price/value intent and claim risk. |
-| `/camarotes-precio` | `/camarotes` | Price-intent page. |
-| `/camarotes-faenas` | `/camarotes` | B2B/use-case intent. |
-| `/camarotes-salmoneras` | `/camarotes` | Sector intent with technical claim risk. |
-| `/camarotes-mineria` | `/camarotes` | Mining/compliance intent. |
-| `/camarotes-metalicos` | `/camarotes` | Strong generic transactional synonym. |
-| `/fabricante-camarotes-chile` | `/camarotes` | Manufacturer/commercial intent. |
-| `/camarotes-al-por-mayor` | `/camarotes` | Volume/B2B intent. |
-| `/camarotes-para-internados` | `/camarotes` | Institutional + safety intent. |
-| `/camarotes-para-hospitales` | `/camarotes` | Healthcare/institutional intent. |
-| `/camarotes-militares` | `/camarotes` | Live institutional/military intent with unsupported certification/technical claims on the current page. |
-| `/camarotes-providencia` | `/camarotes` | Geographic landing. |
-| `/camarotes-las-condes` | `/camarotes` | Geographic landing. |
-| `/camarotes-maipu` | `/camarotes` | Geographic landing. |
-| `/camarotes-nunoa` | `/camarotes` | Geographic landing. |
-| `/camarotes-la-florida` | `/camarotes` | Geographic landing. |
-| `/camarotes-pudahuel` | `/camarotes` | Geographic landing. |
-| `/camarotes-santiago-centro` | `/camarotes` | Geographic landing. |
-| `/camarotes-penalolen` | `/camarotes` | Geographic landing. |
-| `/camarotes-quilicura` | `/camarotes` | Geographic landing. |
-| `/camarotes-puente-alto` | `/camarotes` | Geographic landing. |
-| `/camarotes-san-bernardo` | `/camarotes` | Local landing near operating location. |
-| `/camarotes-renca` | `/camarotes` | Geographic landing. |
-| `/camarotes-estacion-central` | `/camarotes` | Geographic landing. |
-| `/camarotes-lo-barnechea` | `/camarotes` | Geographic landing. |
-| `/camarote-con-escritorio-economico` | `/camarote-con-escritorio` | Product variant. |
-| `/camarote-con-escritorio-full` | `/camarote-con-escritorio` | Premium product variant. |
-| `/camarote-con-escritorio-full-2-plazas` | `/camarote-con-escritorio` | Distinct product/model intent and strong claims. |
+`docs/GSC_PENDING_URLS.csv`
 
-### Rejas / cierres / mallas / portones — 16
+The quarantine currently covers these intent groups:
 
-| Current URL | Candidate owner | Protection reason |
-|---|---|---|
-| `/reja-metalica-santiago` | `/rejas-metalicas` | Primary geographic intent. |
-| `/rejas-metalicas-pudahuel` | `/rejas-metalicas` | Geographic/industrial intent. |
-| `/rejas-metalicas-maipu` | `/rejas-metalicas` | Geographic intent. |
-| `/rejas-metalicas-cerrillos` | `/rejas-metalicas` | Geographic/industrial intent. |
-| `/rejas-metalicas-precio` | `/rejas-metalicas` | Price intent. |
-| `/rejas-metalicas-para-casas` | `/rejas-metalicas` | Live residential/frontis intent with safety-height content. |
-| `/rejas-decorativas` | `/rejas-metalicas` | Design-led intent. |
-| `/rejas-para-exteriores` | `/rejas-metalicas` | Exterior/durability intent. |
-| `/rejas-para-terraza` | `/rejas-metalicas` | Terrace/safety intent. |
-| `/rejas-para-balcon` | `/rejas-metalicas` | Balcony/safety intent. |
-| `/portones-industriales` | `/portones-metalicos` | Industrial buyer intent. |
-| `/cercos-para-empresas` | `/cierres-perimetrales` | Explicit B2B intent. |
-| `/cercos-para-parcelas` | `/cierres-perimetrales` | Parcel/residential-land intent. |
-| `/cercos-perimetrales-concepcion` | `/cierres-perimetrales` | Regional intent. |
-| `/cercos-perimetrales-antofagasta` | `/cierres-perimetrales` | Live north/mining geographic intent and high claim risk. |
-| `/mallas-separadoras-industriales` | `/mallas-separadoras` | Industrial/interior separation intent. |
+- generic, price, B2B, institutional and geographic camarote/litera pages;
+- three live camarote-con-escritorio variants;
+- geographic, price, residential and use-specific reja pages;
+- industrial portón intent;
+- B2B/parcel/regional cercos;
+- industrial mallas separadoras;
+- Santiago welding intent;
+- multiple local powder-coating pages.
 
-### Soldadura / pintura electrostática — 8
+Every one of these routes executes through the `REVIEW` guard **before** any broad family redirect. No wildcard 301 may override the ledger.
 
-`/soldadura-metalica-santiago`, `/pintura-electrostatica-zona-sur-santiago`, `/pintura-electrostatica-colina`, `/pintura-electrostatica-las-condes`, `/pintura-electrostatica-providencia`, `/pintura-electrostatica-santiago-centro`, `/pintura-electrostatica-maipu`, `/pintura-electrostatica-talagante`.
+**Release rule:** all rows in `docs/GSC_PENDING_URLS.csv` must become explicitly approved KEEP/REBUILD/301 decisions before `MIGRATION_GSC_REVIEW_PENDING_COUNT=0` and before `RINON_URL_INVENTORY_COMPLETE=true` can be justified.
 
-**Release rule:** all 53 rows must become approved KEEP/REBUILD/301 decisions before `RINON_URL_INVENTORY_COMPLETE=true`.
+## 4. Lower-risk 301 candidates after protected exceptions
 
-## 4. Known 301 candidates after protected exceptions
+The resolver still contains candidate family mappings for lower-risk aliases. These are not approval to redirect in production; they become actionable only after final reconciliation.
 
 ### Camarotes
-`/litera-metalica`, `/camarote-de-acero`, `/literas-militares`, `/venta-mayor-camarotes-metalicos` → candidate `/camarotes`.
+
+Generic synonyms and unprotected modifiers may consolidate to `/camarotes` only after the quarantine has been resolved.
 
 ### Cierres / cercos
-`/cierre-perimetral-industrial`, `/cercos-perimetrales-empresas`, `/cercos-metalicos-santiago`, `/cercos-metalicos-valparaiso`, `/cercos-metalicos-ohiggins`, `/cercos-metalicos-maule`, `/cercos-metalicos`, `/cierre-de-terrenos`, `/fabricante-cercos-metalicos`, `/fabricante-cierres-perimetrales`, `/proveedor-cierres-perimetrales`, `/cierres-metalicos-industriales`, `/cierres-perimetrales-por-mayor`, `/cierres-perimetrales-para-empresas`, `/presupuesto-cierre-perimetral`, `/presupuesto-cerco-perimetral` → candidate `/cierres-perimetrales`.
+
+Unprotected `cercos-perimetrales-*`, `cercos-metalicos-*`, `cercos-para-*` and related commercial aliases may consolidate to `/cierres-perimetrales` when intent equivalence is confirmed.
 
 ### Mallas
-`/mallas-separadoras-bodegas`, `/mallas-separadoras-plantas` → candidate `/mallas-separadoras`; `/mallas-3d` stays KEEP 200.
+
+Unprotected `/mallas-separadoras-*` aliases may consolidate to `/mallas-separadoras`; `/mallas-3d` remains an independent owner.
 
 ### Rejas
-After protected exceptions: `/rejas-metalicas-las-condes`, `/rejas-metalicas-providencia`, `/rejas-metalicas-nunoa`, `/rejas-metalicas-san-bernardo`, `/reja-tubular`, `/rejas-tubulares`, `/rejas-de-fierro`, `/rejas-galvanizadas`, `/rejas-de-seguridad`, `/instalacion-de-rejas`, `/reja-para-jardin`, `/rejas-para-ventanas`, `/rejas-para-puertas`, `/rejas-para-locales-comerciales`, `/rejas-para-galpones`, `/rejas-para-colegios`, `/fabricante-rejas-metalicas-chile` → candidate `/rejas-metalicas`.
+
+Unprotected geographic/material/use aliases may consolidate to `/rejas-metalicas` only after live-observed exceptions are resolved.
 
 ### Portones
-`/fabricante-portones-metalicos-chile`, `/puertas-peatonales` → candidate `/portones-metalicos`; `/portones-industriales` remains protected.
+
+Unprotected model/sector aliases may consolidate to `/portones-metalicos`; automation/motor claims are never inherited automatically.
 
 ### Fabricación / estructuras / servicios
-`/estructuras-metalicas-a-pedido`, `/fabricante-estructuras-metalicas-chile`, `/escaleras-metalicas`, `/barandas-metalicas` → candidate `/estructuras-metalicas`; `/metalurgica-rinon` → candidate `/fabricacion-metalica`; `/pintura-electrostatica-santiago` → candidate `/pintura-electrostatica`.
 
-`/barreras-peatonales` remains explicit REVIEW → candidate `/cierres-perimetrales`.
+- structures aliases → candidate `/estructuras-metalicas`
+- `/metalurgica-rinon` → candidate `/fabricacion-metalica`
+- welding aliases → candidate `/soldadura-mig`
+- powder-coating geographic aliases → candidate `/pintura-electrostatica`
+
+`/barreras-peatonales` remains explicit REVIEW until offer + GSC evidence support a decision.
 
 ## 5. Approved editorial redirects — flag gated
 
@@ -118,21 +96,25 @@ After protected exceptions: `/rejas-metalicas-las-condes`, `/rejas-metalicas-pro
 - `/blog/proveedor-camarotes-empresas` → `/recursos/proveedor-camarotes-empresas`
 - `/blog/como-elegir-reja-metalica-frontis` → `/recursos/como-elegir-reja-metalica-frontis`
 
+These remain disabled until authorized cutover.
+
 ## 6. Claim-risk editorial URLs — REVIEW
 
 `/blog/cuanto-cuesta-camarote-chile`, `/blog/cuanto-cuesta-cierre-perimetral-chile`, `/blog/cuanto-cuesta-porton-automatico-chile`, `/blog/altura-reja-casa-seguridad`, `/blog/camarote-nino-6-anos`, `/blog/camarote-para-adulto-mayor`, `/blog/pintura-electrostatica-que-es`, `/blog/camarotes-mineria-que-exige-cada-faena`.
 
-No broad redirect is approved for these pages.
+No broad redirect is approved for these pages because price, safety, technical or compliance claims may be stale or unsupported.
 
 ## Cutover completion procedure
 
 1. Export Google Search Console landing pages + queries for the pre-migration comparison window.
 2. Crawl complete live `rinon.cl`: URL, status, canonical, title, H1 and internal inlinks.
-3. Reconcile crawl + GSC + this inventory.
-4. Review every URL with clicks, impressions, backlinks or material commercial intent, including all 53 protected URLs.
-5. Resolve every `REVIEW / GSC-PENDING` item.
-6. Verify each approved 301 destination is a 200 intent-equivalent owner.
-7. Run migration, SEO/CRO, visual, served-build and browser gates on the exact release candidate.
-8. Authorize cutover/indexation separately.
+3. Reconcile crawl + GSC + `docs/GSC_PENDING_URLS.csv` + this inventory.
+4. Review every URL with clicks, impressions, backlinks or material commercial intent.
+5. Resolve every row in `docs/GSC_PENDING_URLS.csv` to an approved release decision and update `lib/migration.ts` accordingly.
+6. Require `MIGRATION_GSC_REVIEW_PENDING_COUNT=0` and exact ledger parity.
+7. Verify each approved 301 destination is a 200 intent-equivalent owner and produces no chain/loop.
+8. Run migration, SEO/CRO, visual, attachment, CRM, served-build and browser gates on the exact release candidate.
+9. Only then may `RINON_URL_INVENTORY_COMPLETE=true` be considered.
+10. Authorize cutover/indexation separately.
 
-**No completed Search Console reconciliation + no `RINON_URL_INVENTORY_COMPLETE=true` means no authorized production cutover.**
+**No completed Search Console reconciliation + no zero pending count + no `RINON_URL_INVENTORY_COMPLETE=true` means no authorized production cutover.**
