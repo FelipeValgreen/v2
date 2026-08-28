@@ -23,7 +23,11 @@ test("generic commercial solution fallback never promotes a technical diagram to
  expect(response?.status()).toBe(200);
  await expect(page.locator(".prd2-solution-hero")).toBeVisible();
  const visualCount=await page.locator(".prd2-solution-hero .visual-evidence").count();
- if(visualCount===0){await expect(page.locator(".prd2-solution-hero .evidence-panel-only .commercial-evidence-panel")).toBeVisible();await expectNoHeroTechnicalVisual(page)}
+ if(visualCount===0){
+  const fallbackCount=await page.locator(".prd2-solution-hero .evidence-panel-only .commercial-evidence-panel, .prd2-solution-hero .fabrication-spec").count();
+  expect(fallbackCount).toBeGreaterThan(0);
+  await expectNoHeroTechnicalVisual(page)
+ }
 });
 
 test("evidence-led perimeter heroes stay responsive",async({page})=>{

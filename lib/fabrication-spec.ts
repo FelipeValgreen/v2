@@ -41,6 +41,45 @@ const specs: Record<string, FabricationSpec> = {
     footnote:
       "La cotización define medidas, perfiles, anclajes y terminación. Fabricar una estructura no equivale a desarrollar su ingeniería: cuando el proyecto la requiere, se coordina aparte.",
   },
+  "/soldadura-mig": {
+    eyebrow: "QUÉ SOLDADURA PODEMOS EVALUAR",
+    items: [
+      { name: "Uniones MIG", note: "Piezas y conjuntos metálicos dentro de un trabajo definido." },
+      { name: "Armado", note: "Ensamble de partes cuando la geometría y el material son evaluables." },
+      { name: "Reparación", note: "Recuperación sujeta al estado real de la pieza y su función." },
+      { name: "Modificación", note: "Adaptaciones de medida, apoyo o configuración existente." },
+      { name: "Lotes", note: "Trabajos repetibles cuando cantidad y preparación están claras." },
+      { name: "Bajo plano", note: "Soldadura integrada a una fabricación con plano, croquis o referencia." },
+    ],
+    footnote:
+      "La cotización define material, preparación, geometría, cantidad y terminación. No se comunica soldadura certificada, WPS, PQR ni calificación de soldador sin respaldo específico.",
+  },
+  "/corte-metalico": {
+    eyebrow: "QUÉ CORTE PODEMOS EVALUAR",
+    items: [
+      { name: "Dimensionado", note: "Piezas preparadas según medidas confirmadas." },
+      { name: "Piezas repetidas", note: "Series cortas o lotes cuando la geometría se puede repetir." },
+      { name: "Componentes", note: "Partes para estructuras, soportes, bases o conjuntos." },
+      { name: "Croquis", note: "Cortes desde dibujo simple cuando las medidas son legibles." },
+      { name: "Plano", note: "Preparación de piezas cuando el antecedente técnico está definido." },
+      { name: "Fabricación", note: "Corte integrado al flujo de soldadura, armado o terminación." },
+    ],
+    footnote:
+      "La cotización confirma material, espesor, geometría, tolerancia y cantidad. No se publican dimensiones máximas, espesores universales ni capacidades de máquina sin respaldo específico.",
+  },
+  "/pintura-electrostatica": {
+    eyebrow: "QUÉ PINTURA PODEMOS EVALUAR",
+    items: [
+      { name: "Piezas metálicas", note: "Elementos compatibles con la operación vigente del servicio." },
+      { name: "Series", note: "Lotes sujetos a cantidad, manipulación y secuencia de trabajo." },
+      { name: "Preparación", note: "Estado superficial revisado antes de confirmar recepción." },
+      { name: "Geometría", note: "Forma y zonas críticas evaluadas antes de comprometer acabado." },
+      { name: "Color", note: "Disponibilidad y terminación se confirman al cotizar." },
+      { name: "Reacabado", note: "Recuperación de piezas solo si el estado permite evaluar el proceso." },
+    ],
+    footnote:
+      "El servicio queda sujeto a pieza, dimensión, preparación, color, cantidad y alcance. No se publican dimensiones útiles, preparación garantizada, capacidad, garantía ni durabilidad universal.",
+  },
 };
 
 export function getFabricationSpec(slug: string): FabricationSpec | null {

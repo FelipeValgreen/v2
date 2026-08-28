@@ -7,6 +7,7 @@ import { solutionJsonLd } from "@/lib/seo";
 import { getSolutionReleaseNotice, isSolutionLaunchEnabled } from "@/lib/capabilities";
 import { CommercialEvidencePanel } from "@/components/CommercialEvidencePanel";
 import { getVisuals, getReferencePhotos } from "@/lib/visuals";
+import { getFabricationSpec } from "@/lib/fabrication-spec";
 import { ProductReferenceGallery } from "@/components/ProductReferenceGallery";
 import { RequirementFlow } from "@/components/RequirementFlow";
 import { SolutionFeatureBand } from "@/components/SolutionFeatureBand";
@@ -22,6 +23,7 @@ export function SolutionPage({ solution }: { solution: Solution }) {
   const quoteLabel = launchEnabled ? "Cotizar requerimiento" : "Consultar disponibilidad";
   const visuals = getVisuals(solution.slug);
   const hasVisual = visuals.length > 0;
+  const hasFabricationSpec = Boolean(getFabricationSpec(solution.slug));
   const primaryVisualIsConceptual = visuals[0]?.provenance === "conceptual";
   const hasXRay = ["/camarotes","/cierres-perimetrales","/estructuras-metalicas"].includes(solution.slug);
   const visualTheme = solution.slug === "/camarotes" ? "theme-product"
@@ -47,8 +49,8 @@ export function SolutionPage({ solution }: { solution: Solution }) {
           </div>
           <div className="solution-meta-line" aria-label="Principios de evaluación"><span>Requerimiento primero</span><span>Cantidad y uso importan</span><span>Alcance antes de fabricar</span></div>
         </div>
-        <div className={`prd2-solution-media ${hasVisual?"has-photo":"evidence-panel-only"}`}>
-          {hasVisual?<VisualEvidence slug={solution.slug} fallback={solution.evidence}/>:<CommercialEvidencePanel title="QUÉ PODEMOS EVALUAR" items={fallbackEvidence} note="La configuración, capacidad, plazo y alcance final se confirman para cada cotización."/>}
+        <div className={`prd2-solution-media ${hasVisual||hasFabricationSpec?"has-photo":"evidence-panel-only"}`}>
+          {hasVisual||hasFabricationSpec?<VisualEvidence slug={solution.slug} fallback={solution.evidence}/>:<CommercialEvidencePanel title="QUÉ PODEMOS EVALUAR" items={fallbackEvidence} note="La configuración, capacidad, plazo y alcance final se confirman para cada cotización."/>}
           {hasVisual?<div className="prd2-solution-media-caption"><span>{primaryVisualIsConceptual?"VISUAL CONCEPTUAL":"REFERENCIA DE PRODUCTO"}</span><b>{primaryVisualIsConceptual?"Dirección de producto · no obra ejecutada":"Producto · detalle · contexto"}</b></div>:null}
         </div>
       </div>
