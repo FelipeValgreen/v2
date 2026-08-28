@@ -10,13 +10,27 @@
 @media(max-width:720px){.resource-related-head{grid-template-columns:1fr;gap:12px}.resource-related-links a{grid-template-columns:1fr auto;gap:10px}.resource-related-links small{grid-column:1/-1}}
 
 /* V5.5 remediation — Hero brand signature: Rhino Geometry, not decorative UI.
-   PENDIENTE DE ASSET: la firma usaba /brand/isotipo-rinoceronte-transparent.webp
-   como mask. Ese archivo estaba corrupto (sin cabecera RIFF/WEBP), por lo que el
-   pseudo-elemento quedaba totalmente enmascarado y no pintaba nada en el navegador.
-   Se elimina la regla en vez de sustituir el rinoceronte por una forma genérica:
-   reponer el isotipo es una decisión de marca con dueño, no un efecto colateral
-   de la limpieza de assets. Ver AGENTS.md > Brand ("modular rhino geometry"). */
+   Restaurada sobre /brand/rinon-isotipo.svg. El asset anterior era un .webp
+   corrupto sin cabecera RIFF/WEBP: la mask fallaba y el pseudo-elemento no
+   pintaba nada. Ver CODEX_HANDOFF.md P0.1. */
+.s7-hero:after{
+  content:"";
+  position:absolute;
+  z-index:1;
+  right:-4vw;
+  top:8%;
+  width:min(48vw,720px);
+  aspect-ratio:471/246;
+  background:linear-gradient(135deg,rgba(204,205,210,.20),rgba(245,130,32,.13));
+  -webkit-mask:url("/brand/rinon-isotipo.svg") center/contain no-repeat;
+  mask:url("/brand/rinon-isotipo.svg") center/contain no-repeat;
+  opacity:.28;
+  pointer-events:none;
+  mix-blend-mode:screen;
+}
 .s7-hero-vignette{z-index:1}.s7-hero-inner{z-index:2}.s7-hero-image{z-index:0}
+@media(max-width:900px){.s7-hero:after{right:-18vw;top:48%;width:76vw;opacity:.18}}
+@media(max-width:560px){.s7-hero:after{right:-28vw;top:56%;width:95vw;opacity:.13}}
 
 /* V6 — solutions SILO hub */
 .v2-link-stack{display:grid;gap:0;margin-top:24px;border-top:1px solid rgba(34,39,42,.18)}

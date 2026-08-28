@@ -6,7 +6,7 @@ export function SiteHeader() {
   return <header className="prd2-header">
     <div className="container prd2-header-inner">
       <Link className="prd2-brand" href="/" aria-label="RINON inicio">
-        <img src="/brand/logo-rinon-horizontal-transparent.png" alt="RINON Soluciones Metálicas" width="205" height="56" fetchPriority="high" />
+        <img src="/brand/rinon-lockup-horizontal-inverse.svg" alt="RINON Soluciones Metálicas" width="176" height="42" fetchPriority="high" />
       </Link>
       <DesktopMegaNav />
       <div className="prd2-header-actions">

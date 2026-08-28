@@ -55,7 +55,7 @@ export const organizationJsonLd = [{
   legalName: "Tolipoli SpA",
   taxID: "77.795.508-K",
   url: SEO_BASE_URL,
-  logo: `${SEO_BASE_URL}/brand/logo-rinon-horizontal-transparent.png`,
+  logo: `${SEO_BASE_URL}/brand/logo-rinon-horizontal.png`,
   ...(organizationPhone ? { telephone: organizationPhone } : {}),
   address: {
     "@type": "PostalAddress",

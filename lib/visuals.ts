@@ -31,8 +31,11 @@ export type VisualAsset = VerifiedRinonVisual | ReferenceVisual;
 export const VISUAL_CUTOVER_BLOCKERS=[
   "home-hero-final-master",
   "structures-residential-final-master",
-  "brand-logo-final-master",
-  "brand-isotype-final-master",
+  // El lockup, el isotipo y el apple-touch-icon vectoriales entregados por el
+  // dueño ya están instalados y verificados. Queda por aprobar la variante
+  // monocromática sobre fondo oscuro, derivada mecánicamente del lockup
+  // (#161616 → #FFFFFF) siguiendo la convención del apple-touch-icon original.
+  "brand-lockup-inverse-approval",
 ] as const;
 
 const referenceBase = "/visuals/reference-current";

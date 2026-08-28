@@ -104,7 +104,16 @@ The fix that switched `SiteHeader.tsx`, `SiteFooter.tsx` and mobile navigation t
 
 Consequence: the assertion `complete && naturalWidth > 100` cannot detect this class of damage, because `naturalWidth` is read from `IHDR`, which survives. Every build since RC.6 has been publishing a broken wordmark.
 
-The repository currently has **no valid horizontal RINON logo**. This needs an original asset from the owner; it cannot be reconstructed from what is committed. Registered as `brand-logo-final-master` and `brand-isotype-final-master` in `VISUAL_CUTOVER_BLOCKERS`.
+**Resolved.** The owner supplied vector masters, which are now the identity source of truth:
+
+- `public/brand/rinon-lockup-horizontal.svg` (1760×420) — lockup for light surfaces.
+- `public/brand/rinon-lockup-horizontal-inverse.svg` — same lockup with `#161616` → `#FFFFFF`, for the dark header, footer and mobile navigation. Mechanical derivation following the convention of the supplied `apple-touch-icon.svg`; pending owner approval as `brand-lockup-inverse-approval`.
+- `public/brand/rinon-isotipo.svg` (471×246) — restores the two rhino brand devices in `part-03.css` and `part-09.css`.
+- `public/brand/apple-touch-icon.svg` — and `apple-touch-icon-180.png` / `logo-rinon-horizontal.png` rasterized deterministically from the vectors, because iOS touch icons and social/schema consumers do not accept SVG.
+
+Vector is the right carrier here: it is text, so git versions it without the binary-truncation risk that damaged every committed PNG, and it scales to any density. Every corrupt raster has been removed.
+
+Lesson for future assets: `public/visuals` already reconstructs from `.asset-chunks` base64 with sha256 verification precisely because binary transfer proved unreliable. The brand rasters bypassed that path and arrived truncated. Route any future binary identity asset through the same mechanism, or keep it vector.
 
 The stale public alias `https://rinon-v2.vercel.app` also served an older build during diagnostics, which explained remote failures where the HTML still referenced the white logo or old mobile-nav CSS.
 

@@ -8,7 +8,7 @@ export function SiteFooter(){
  return <footer className="s6-footer">
   <div className="container s6-footer-main s6-footer-main-v2">
    <div className="s6-footer-brand">
-    <img src="/brand/logo-rinon-horizontal-transparent.png" alt="RINON Soluciones Metálicas" width="220" height="60"/>
+    <img src="/brand/rinon-lockup-horizontal-inverse.svg" alt="RINON Soluciones Metálicas" width="176" height="42"/>
     <p>Productos, proyectos a medida y servicios metálicos desde San Bernardo.</p>
     <Link className="s6-footer-quote" href="/cotizar" data-event="quote_start" data-cta-location="footer">Cotizar ↗</Link>
    </div>

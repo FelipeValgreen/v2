@@ -1,6 +1,6 @@
 export const COPY = {
   assets: {
-    brandLogo: "/brand/logo-rinon-horizontal-transparent.png",
+    brandLogo: "/brand/rinon-lockup-horizontal-inverse.svg",
     archiveCamarote: "/visuals/archive/camarote-product-reference.webp",
     homeHero: "/visuals/home-hero-conceptual-welding.webp",
   },
