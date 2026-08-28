@@ -102,6 +102,14 @@ Hero/chapter image quality:
 
 The current `pergola-mediterranea-conceptual.svg` is known-bad: it embeds a 420×185 JPEG and must be replaced, not tuned with CSS.
 
+### Assets de identidad
+No commitear binarios de marca directo sin verificación. Dos vías admitidas: SVG vectorial oficial, o el mecanismo `.asset-chunks` + base64 + sha256 que ya usa `public/visuals`.
+
+Causa histórica: `public/visuals` tiene reconstrucción por chunks precisamente porque el traspaso binario no era fiable. Los rasters de marca se saltaron ese camino y llegaron truncados — `logo-rinon-horizontal-white.png`, `logo-rinon-horizontal-transparent.png`, `apple-touch-icon-180.png` e `isotipo-rinoceronte-transparent.webp`. Todos pasaban HTTP 200 y `file`.
+
+### Cuando falta un asset
+Si un asset de marca o de evidencia falta o está dañado, se retira su uso. No se sustituye por una forma genérica inventada. Reponer un elemento de identidad es una decisión con dueño, no un efecto colateral de una limpieza.
+
 ## Brand
 Keep the existing RINON identity direction:
 - dark industrial/premium base;
@@ -201,6 +209,16 @@ Required validation layers:
 For large images, verify intrinsic resolution is appropriate relative to rendered size. `naturalWidth > 100` is not a quality criterion.
 
 Always keep staging noindex.
+
+### Contratos de assets de marca
+- `qa:brand-assets` es estructural y NO usa navegador. Corre dentro de `npm run build`, por lo tanto también en Vercel. No moverlo a `qa:static` solamente: esa fue la configuración original y con ella un `npm run build` seguía publicando un asset corrupto.
+- `qa:brand-assets:render` es el que usa Chromium real y corre en `qa:static`.
+- `complete && naturalWidth > 100` NO es criterio de integridad. `naturalWidth` sale del IHDR, que sobrevive intacto aunque el stream IDAT esté truncado; Chromium reporta las dimensiones declaradas y pinta scanlines parciales. Un logotipo que renderiza basura pasa esa aserción. No borrar el comentario de `tests/render.spec.mjs` que lo explica.
+
+### QA remoto
+- `qa:browser:remote` exige `RINON_PLAYWRIGHT_BASE_URL` explícito (guard: `scripts/check-remote-target.mjs`). No restaurar un default.
+- No usar `https://rinon-v2.vercel.app` como medición: ese alias sigue al target Production y queda stale hasta una promoción autorizada. Obtener la URL con `vercel ls rinon-v2`.
+- La primera corrida contra un deployment recién `Ready` puede dar falsos rojos por propagación. Ocurrió en RC.7: 64 fallos HTTP y 4 de navegador en la primera pasada; verde contra el mismo deployment ya caliente. Repetir la corrida antes de abrir diagnóstico de producto.
 
 ## Parallel-agent working model
 Codex supports parallel work; use isolated worktrees/branches when useful.
