@@ -16,8 +16,8 @@ The machine-readable source of truth is `VISUAL_CUTOVER_BLOCKERS` in `lib/visual
 
 | Blocker ID | Requirement | Current state |
 |---|---|---|
-| `home-hero-final-master` | Replace the constrained 720×730 Home welding master with an accepted high-resolution master or an equally strong approved composition. | PENDING |
-| `structures-residential-final-master` | Replace the generic industrial structures visual with the accepted premium residential cobertizo/pergola direction. | PENDING |
+| `home-hero-final-master` | Replace the constrained 720×730 Home welding master with an accepted high-resolution master or an equally strong approved composition. See `docs/HOME_HERO_VISUAL_BRIEF.md`. | PENDING |
+| `structures-residential-final-master` | Replace the temporary Structures visual with a premium residential cobertizo/pergola master that actually shows a metal structure. The retired interior render failed because it showed furniture/decor, not a structure. See `docs/STRUCTURES_VISUAL_BRIEF.md`. | PENDING |
 
 Production preflight must fail in AUTHORIZED CUTOVER mode while either blocker remains.
 

@@ -8,7 +8,9 @@ Current provenance: **conceptual** — never present as an executed RINON projec
 
 ## 1. Objective
 
-Replace the current generic/dark industrial structure image with a premium contextual visual that makes the category immediately understandable to a Chilean user while preserving the broader commercial meaning of the landing.
+Replace the current temporary structures visual with a premium contextual visual that makes the category immediately understandable to a Chilean user while preserving the broader commercial meaning of the landing.
+
+The previous replacement attempt failed for a simpler reason than the original blocker stated: the retired asset was an interior render — dining table, chairs and planted wall — under copy that promised cobertizos, pérgolas, escaleras and plataformas. It was not primarily a mismatch between industrial and residential art direction. It failed because the image did **not contain a metal structure in frame**. Do not revive that asset or any crop of it as the final Structures visual.
 
 The focal scene is a **high-quality metal carport / cobertizo integrated into a contemporary Mediterranean-style residence in the Chicureo visual context**. The image must communicate fabrication quality, clean geometry, proportion and architectural integration — not luxury for its own sake.
 
@@ -17,7 +19,7 @@ This is an art-direction visual. It does **not** prove that RINON executed the d
 ## 2. Required composition
 
 - Horizontal composition suited to the existing Product Theatre crop.
-- Target master ratio close to `16:9`; final production WebP must be at least `1200 × 675` and crop safely to the current theatre container.
+- Master source minimum: **2400 x 1600 px**. If the delivered crop is closer to `16:9`, the production WebP must be at least **1800 x 1000 px** and crop safely to the current theatre container.
 - Residence visible enough to establish context, but the **metal structure is the subject**.
 - One or two car bays; realistic Chilean residential proportions.
 - Structure attached to or immediately beside the residence.
@@ -64,6 +66,8 @@ Do **not** infer or display certified loads, structural calculations, welding ce
 
 Reject the image if it contains any of the following:
 
+- no metal structure visible in frame;
+- an interior-design scene where furniture, plants, dining area or decor are the subject;
 - generic warehouse or industrial shed as the main context;
 - obvious AI artifacts, duplicate columns, bent beams or inconsistent geometry;
 - text, logos, watermarks or signage;
@@ -75,6 +79,8 @@ Reject the image if it contains any of the following:
 - fake technical annotations;
 - exaggerated cantilevers or unsupported roof planes;
 - a visual that could reasonably be interpreted as documented RINON project evidence.
+- identifiable client property, work site, faena, address, license plate, company logo or private project context without written approval.
+- implied certified load capacity, structural engineering, welding certification, code compliance, warranty or universal durability.
 
 ## 6. Master generation direction
 
@@ -112,6 +118,7 @@ The final visual cannot be added as an ad-hoc external URL. It must follow the r
 Visual status becomes **APPROVED** only when all are true:
 
 - scene reads immediately as a premium metal cobertizo / carport;
+- the metal structure, not furniture or architecture alone, is the unmistakable subject;
 - context feels plausibly Chilean and appropriate to RINON's market;
 - fabrication geometry is credible at normal viewing size;
 - no AI artifact is visible at 100% inspection;
