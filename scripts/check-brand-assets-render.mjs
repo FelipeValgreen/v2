@@ -20,6 +20,7 @@ const mimeByExt = new Map([
   [".jpeg", "image/jpeg"],
   [".png", "image/png"],
   [".webp", "image/webp"],
+  [".svg", "image/svg+xml"],
 ]);
 
 const assets = readdirSync(brandDir)

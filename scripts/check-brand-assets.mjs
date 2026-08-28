@@ -15,7 +15,7 @@ import { crc32 } from "node:zlib";
 import { extname, join } from "node:path";
 
 const brandDir = "public/brand";
-const supported = new Set([".png", ".webp", ".jpg", ".jpeg"]);
+const supported = new Set([".png", ".webp", ".jpg", ".jpeg", ".svg"]);
 
 const fail = (asset, reason) => ({ asset, reason });
 
@@ -120,11 +120,42 @@ function readJpeg(buffer) {
   return { error: "sin segmento SOF (dimensiones no declaradas)" };
 }
 
+// SVG es la forma preferida para la identidad: es texto, git lo versiona sin el
+// riesgo de truncamiento binario que dañó los PNG, y escala a cualquier densidad.
+// Pero un SVG puede ser una cáscara alrededor de un raster pequeño — el defecto
+// documentado en CODEX_HANDOFF.md P0.2 (pergola-mediterranea-conceptual.svg
+// envolvía un JPEG de 420×185). Este check exige geometría vectorial real.
+const vectorElements = /<(path|polygon|polyline|rect|circle|ellipse|line|use|text)\b/i;
+
+function readSvg(buffer) {
+  const source = buffer.toString("utf8");
+  if (!/<svg[\s>]/i.test(source)) return { error: "sin elemento <svg>" };
+
+  const embedded = source.match(/data:image\/(png|jpe?g|webp|gif);base64,/gi);
+  if (embedded) {
+    return { error: `contiene ${embedded.length} raster embebido(s); la identidad debe ser vectorial` };
+  }
+  if (/<image\b/i.test(source)) {
+    return { error: "contiene <image>; la identidad debe ser vectorial" };
+  }
+  if (!vectorElements.test(source)) return { error: "sin geometría vectorial" };
+
+  const viewBox = source.match(/viewBox\s*=\s*["']\s*[-\d.]+[,\s]+[-\d.]+[,\s]+([\d.]+)[,\s]+([\d.]+)/i);
+  if (viewBox) return { width: Number(viewBox[1]), height: Number(viewBox[2]) };
+
+  const width = source.match(/\bwidth\s*=\s*["']([\d.]+)/i);
+  const height = source.match(/\bheight\s*=\s*["']([\d.]+)/i);
+  if (width && height) return { width: Number(width[1]), height: Number(height[1]) };
+
+  return { error: "sin viewBox ni width/height" };
+}
+
 const readers = new Map([
   [".png", readPng],
   [".webp", readWebp],
   [".jpg", readJpeg],
   [".jpeg", readJpeg],
+  [".svg", readSvg],
 ]);
 
 const assets = readdirSync(brandDir)
