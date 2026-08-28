@@ -19,7 +19,9 @@ test("governed conceptual evidence never exceeds its declared source width",asyn
  await page.setViewportSize({width:1440,height:1000});
  await gotoReady(page,route("/"));
  const governed=page.locator('.evidence-photo[data-source-width]');
- expect(await governed.count()).toBeGreaterThanOrEqual(3);
+ // Dos figuras gobernadas en Home: camarotes (archivo 1200) y cierres (conceptual 900).
+ // Estructuras dejó de aportar una tercera al pasar a ficha de fabricación.
+ expect(await governed.count()).toBeGreaterThanOrEqual(2);
  for(let index=0;index<await governed.count();index++){
   const figure=governed.nth(index);
   const image=figure.locator("img");

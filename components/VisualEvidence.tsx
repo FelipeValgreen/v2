@@ -1,8 +1,21 @@
 import Image from "next/image";
 import { getVisuals } from "@/lib/visuals";
+import { getFabricationSpec } from "@/lib/fabrication-spec";
+import { FabricationSpecPanel } from "@/components/FabricationSpec";
 
 export function VisualEvidence({ slug, fallback, mode="default" }: { slug: string; fallback: string[]; mode?:"default"|"theatre" }) {
   const visuals = getVisuals(slug);
+
+  // La fotografía manda: si existe evidencia fotográfica (verificada o de
+  // archivo) se usa esa. Cuando no existe, una ficha de lo que RINON fabrica
+  // responde la pregunta del bloque mejor que un conceptual genérico, que
+  // además arriesga leerse como obra ejecutada. Ver lib/fabrication-spec.ts.
+  const hasPhotographicEvidence = visuals.some(
+    (asset) => asset.provenance === "verified-rinon" || asset.provenance === "user-drive-reference",
+  );
+  const spec = getFabricationSpec(slug);
+  if (!hasPhotographicEvidence && spec) return <FabricationSpecPanel spec={spec} mode={mode} />;
+
   if (!visuals.length) {
     return <div className="evidence-guide" data-visual-kind="technical-guide">
       <div className="evidence-grid-mark" aria-hidden="true"><span/><span/><span/><span/><span/><span/></div>

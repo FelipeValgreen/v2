@@ -1,0 +1,29 @@
+/* Ficha de fabricación — módulo de evidencia sin fotografía.
+   Hereda el lenguaje de .evidence-guide: mismo fondo #202326, misma marca
+   geométrica naranja y la misma escala tipográfica del capítulo. */
+.fabrication-spec{position:relative;overflow:hidden;min-height:440px;background:#202326;color:#fff;padding:44px 56px 40px 62px;display:flex;flex-direction:column;justify-content:space-between;gap:30px}
+.fabrication-spec.is-theatre{height:100%;min-height:100%}
+.fabrication-spec-mark{position:absolute;right:-80px;top:-80px;width:230px;height:230px;border:38px solid rgba(245,130,32,.2);transform:rotate(45deg);pointer-events:none}
+.fabrication-spec-body{position:relative;z-index:2;display:flex;flex-direction:column;gap:26px}
+.fabrication-spec-head{display:flex;align-items:baseline;gap:14px}
+.fabrication-spec-head span{font-size:10px;letter-spacing:.16em;font-weight:900;color:#F58220}
+.fabrication-spec-head i{flex-grow:1;height:1px;background:rgba(255,255,255,.14)}
+.fabrication-spec-grid{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:26px 34px}
+.fabrication-spec-grid li{display:flex;flex-direction:column;gap:7px;border-top:1px solid rgba(255,255,255,.14);padding-top:13px}
+.fabrication-spec-grid span{font-size:9px;font-weight:900;letter-spacing:.1em;color:#F58220}
+.fabrication-spec-grid b{font-size:17px;font-weight:850;letter-spacing:-.02em}
+.fabrication-spec-grid small{font-size:11px;line-height:1.5;color:#aeb2b4}
+.fabrication-spec-foot{position:relative;z-index:2;margin:0;border-top:1px solid rgba(255,255,255,.14);padding:16px 0 0 16px;font-size:11px;line-height:1.55;color:#aeb2b4;max-width:600px}
+.fabrication-spec-foot:before{content:"";position:absolute;left:0;top:16px;bottom:0;width:2px;background:#F58220}
+@media(max-width:1100px){
+ .fabrication-spec{padding:38px 34px 34px 38px;gap:26px}
+ .fabrication-spec-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:22px 26px}
+ .fabrication-spec-mark{right:-100px;top:-100px}
+}
+@media(max-width:640px){
+ .fabrication-spec{padding:30px 22px 28px 24px;min-height:0}
+ .fabrication-spec-grid{grid-template-columns:1fr;gap:0}
+ .fabrication-spec-grid li{padding:13px 0;border-top:1px solid rgba(255,255,255,.14)}
+ .fabrication-spec-grid b{font-size:16px}
+ .fabrication-spec-mark{display:none}
+}

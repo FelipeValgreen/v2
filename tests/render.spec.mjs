@@ -45,7 +45,11 @@ test("home renders RC7 brand, navigation and quality-gated structure visual",asy
  await expect(page.locator(".s7-hero-image img")).not.toHaveJSProperty("naturalWidth",0);
  const rendered=await page.evaluate(()=>{const h1=document.querySelector(".s7-hero h1"),hero=document.querySelector(".s7-hero"),image=document.querySelector(".s7-hero-image img");if(!h1||!hero||!image)return null;return{styleSheetCount:document.styleSheets.length,h1FontSize:parseFloat(getComputedStyle(h1).fontSize),heroHeight:hero.getBoundingClientRect().height,headerHeight:document.querySelector(".prd2-header")?.getBoundingClientRect().height??0,imageLoaded:image instanceof HTMLImageElement&&image.complete&&image.naturalWidth>200}});
  expect(rendered).not.toBeNull();expect(rendered.styleSheetCount).toBeGreaterThanOrEqual(2);expect(rendered.h1FontSize).toBeGreaterThan(45);expect(rendered.heroHeight).toBeGreaterThan(550);expect(rendered.headerHeight).toBeGreaterThan(55);expect(rendered.imageLoaded).toBeTruthy();
- await assertNoUpscaledImage(page,".s7-chapter-graphite .evidence-photo img");
+ await assertNoUpscaledImage(page,".s7-chapter-dark .evidence-photo img");
+ // El capítulo de estructuras ya no lleva imagen: sin fotografía verificada declara
+ // qué fabrica RINON. Ver lib/fabrication-spec.ts y tests/fabrication-spec.spec.mjs.
+ await expect(page.locator(".s7-chapter-graphite .fabrication-spec")).toBeVisible();
+ await expect(page.locator(".s7-chapter-graphite .evidence-photo")).toHaveCount(0);
  const productsButton=page.getByRole("button",{name:/Productos/});await productsButton.click();await expect(page.locator("#mega-products")).toBeVisible();await expect(page.getByRole("link",{name:/Camas balinesas/}).first()).toBeVisible();await expect(page.getByText(COPY.home.productsSection)).toBeVisible();
  await page.keyboard.press("Escape");await expect(page.locator("#mega-products")).toBeHidden();await expect(productsButton).toBeFocused();
  await expect(page.getByRole("link",{name:COPY.home.projectLink}).first()).toBeVisible();
