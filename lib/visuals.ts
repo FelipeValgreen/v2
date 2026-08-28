@@ -65,19 +65,13 @@ const archiveReferenceAssets: Record<string, VisualAsset[]> = {
       sourceHeight: 900,
     },
   ],
-  "/estructuras-metalicas": [
-    {
-      src: "/visuals/archive/structures-residential-reference.webp",
-      alt: "Render de referencia de un espacio residencial cubierto para orientar una solución de cobertizo o pérgola",
-      kind: "render",
-      provenance: "user-drive-reference",
-      label: "Referencia arquitectónica · render aportado",
-      note: "Render de referencia proveniente del archivo del usuario. Ayuda a explicar contexto e integración espacial; no corresponde a una obra ejecutada por RINON ni define la solución estructural final.",
-      sourceRef: "User archive · COBERTIZO SALA.jpg · derived RINON-VIS-P0-STRUCTURE-RESIDENTIAL-REFERENCE",
-      sourceWidth: 1200,
-      sourceHeight: 510,
-    },
-  ],
+  // /estructuras-metalicas no tiene referencia de archivo utilizable.
+  // structures-residential-reference.webp (COBERTIZO SALA.jpg) es un render de
+  // interiorismo: mesa de comedor, sillas y muro vegetal. No contiene ninguna
+  // estructura metálica, así que contradecía el enunciado del bloque
+  // ("cobertizos, pérgolas, escaleras, plataformas"). Ningún encuadre lo salva.
+  // Hasta que exista un visual que muestre la estructura, la ruta cae al visual
+  // conceptual, que sí muestra estructura metálica y queda etiquetado como tal.
 };
 
 const conceptualAssets: Record<string, VisualAsset[]> = {
