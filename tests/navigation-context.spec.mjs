@@ -33,6 +33,7 @@ test("mobile navigation marks the current task family without overflow",async({p
  await page.setViewportSize({width:390,height:844});
  await page.goto("/soldadura-mig",{waitUntil:"domcontentloaded"});
  await expect(page.locator(".mobile-nav-toggle")).toBeVisible();
+ await expect(page.locator(".mobile-nav-toggle")).toHaveAttribute("data-nav-ready","true");
  await page.locator(".mobile-nav-toggle").click();
  await expect(page.locator("#mobile-navigation")).toBeVisible();
  await expect(page.locator(".mobile-nav-services summary")).toHaveClass(/is-active/);

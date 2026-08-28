@@ -7,11 +7,15 @@ import {whatsappUrl} from "@/lib/whatsapp";
 
 export function MobileNav(){
  const [open,setOpen]=useState(false); const pathname=usePathname(); const active=navigationSection(pathname); const toggleRef=useRef<HTMLButtonElement>(null); const panelRef=useRef<HTMLDivElement>(null); const whatsapp=whatsappUrl();
+ // El botón se sirve en el HTML pero no abre nada hasta que hidrata. Exponer ese
+ // límite lo hace observable en QA remoto, donde la latencia real lo destapa.
+ const [ready,setReady]=useState(false);
+ useEffect(()=>setReady(true),[]);
  useEffect(()=>setOpen(false),[pathname]);
  useEffect(()=>{if(!open)return;const prev=document.body.style.overflow;document.body.style.overflow="hidden";window.requestAnimationFrame(()=>panelRef.current?.querySelector<HTMLElement>("a,button,summary")?.focus());const onKey=(e:KeyboardEvent)=>{if(e.key==="Escape"){setOpen(false);window.requestAnimationFrame(()=>toggleRef.current?.focus())}};document.addEventListener("keydown",onKey);return()=>{document.removeEventListener("keydown",onKey);document.body.style.overflow=prev}},[open]);
  function trapFocus(event:ReactKeyboardEvent<HTMLDivElement>){if(event.key!=="Tab")return;const f=Array.from(panelRef.current?.querySelectorAll<HTMLElement>('a,button,summary,[tabindex]:not([tabindex="-1"])')??[]).filter(n=>!n.hasAttribute("disabled"));if(!f.length)return;const first=f[0],last=f[f.length-1];if(event.shiftKey&&document.activeElement===first){event.preventDefault();last.focus()}else if(!event.shiftKey&&document.activeElement===last){event.preventDefault();first.focus()}}
  return <div className="mobile-nav-wrap prd2-mobile-nav">
-  <button ref={toggleRef} type="button" className="mobile-nav-toggle" aria-haspopup="dialog" aria-expanded={open} aria-controls="mobile-navigation" aria-label={open?"Cerrar menú":"Abrir menú"} onClick={()=>setOpen(value=>!value)}><span aria-hidden="true">Menú</span></button>
+  <button ref={toggleRef} type="button" className="mobile-nav-toggle" data-nav-ready={ready?"true":"false"} aria-haspopup="dialog" aria-expanded={open} aria-controls="mobile-navigation" aria-label={open?"Cerrar menú":"Abrir menú"} onClick={()=>setOpen(value=>!value)}><span aria-hidden="true">Menú</span></button>
   {open?<div ref={panelRef} role="dialog" aria-modal="true" aria-label="Navegación" className="mobile-nav-panel" id="mobile-navigation" onKeyDown={trapFocus}>
    <div className="mobile-nav-top"><Link href="/" onClick={()=>setOpen(false)} aria-label="RINON inicio"><img src="/brand/rinon-lockup-horizontal-inverse.svg" alt="RINON Soluciones Metálicas" width="176" height="42"/></Link><button type="button" className="mobile-nav-close" onClick={()=>{setOpen(false);window.requestAnimationFrame(()=>toggleRef.current?.focus())}} aria-label="Cerrar menú">×</button></div>
    <div className="mobile-nav-sections">
