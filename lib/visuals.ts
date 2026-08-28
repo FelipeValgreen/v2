@@ -31,6 +31,8 @@ export type VisualAsset = VerifiedRinonVisual | ReferenceVisual;
 export const VISUAL_CUTOVER_BLOCKERS=[
   "home-hero-final-master",
   "structures-residential-final-master",
+  "brand-logo-final-master",
+  "brand-isotype-final-master",
 ] as const;
 
 const referenceBase = "/visuals/reference-current";
