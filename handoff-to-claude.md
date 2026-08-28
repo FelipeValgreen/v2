@@ -147,14 +147,18 @@ Recibido: texto de main incluye "COMPRA POR VOLUMEN" en mayusculas y "Compra por
 ### Interpretacion actual para Claude
 
 ```text
-La hipotesis antigua "7 fallas remotas = staging desactualizado respecto de local" queda descartada como explicacion exacta.
+Correccion posterior: la hipotesis antigua "staging desactualizado respecto de local" NO queda descartada. Si explica fallas reales del alias publico, especialmente logo/CSS/mobile-nav/copy afectado por build viejo.
 
 Estado actual:
 - Local esta verde: static, build, served y browser pasan.
 - HTTP remoto esta verde.
 - Browser remoto falla 8/52 contra Vercel.
 - Parte de las fallas son sensibilidad de asserts/copy/capitalizacion o espera networkidle.
-- Parte de las fallas siguen siendo riesgos reales de staging: logoLoaded false y mobile-nav-top position absolute en remoto.
+- Parte de las fallas del alias publico se explican por deployment stale: `rinon-v2.vercel.app` servia un build anterior a 4edfd24. Marcadores: HTML con `/brand/logo-rinon-horizontal-white.png`; CSS mobile con `.mobile-nav-top{position:sticky}` sin prefijo `.prd2-mobile-nav`.
+- Causa raiz de P0.1: `public/brand/logo-rinon-horizontal-white.png` era un PNG corrupto. HTTP 200 y `file` no bastaban; Chromium decodificaba `complete:true` pero `naturalWidth:0`, y `createImageBitmap` fallaba.
+- P0.1 SIGUE ABIERTO. `/brand/logo-rinon-horizontal-transparent.png` tambien esta danado: su chunk IDAT declara 19181 bytes y solo hay 14544, el stream zlib esta incompleto e inflate falla. Chromium reporta 880x168 leyendo el IHDR intacto y pinta basura visual. Mismo defecto en `apple-touch-icon-180.png` (8599 declarados vs 8532 reales). Solo `favicon-64.png` esta sano.
+- Por eso la asercion `complete && naturalWidth > 100` no detecta este dano: naturalWidth sale del IHDR, que sobrevive. El repositorio hoy no tiene ningun logo horizontal valido; hace falta el asset original del duenio.
+- Assets de marca corruptos eliminados: `logo-rinon-horizontal-white.png` y `isotipo-rinoceronte-transparent.webp` (este ultimo sin cabecera RIFF/WEBP). Sus usos en CSS decorativo se retiraron sin sustituirlos por formas genericas.
 
 No activar produccion. No activar indexacion. No activar redirects. No activar leads reales.
 ```

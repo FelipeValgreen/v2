@@ -95,12 +95,22 @@ Keep the brand, improve evidence and usability.
 ### P0.1 Header/footer logo rendering
 User screenshots show the RINON logo as broken in the deployed browser.
 
-Source currently uses `next/image` in `SiteHeader.tsx`, `SiteFooter.tsx` and mobile navigation.
+Root cause update from RC.7 diagnostics:
+`public/brand/logo-rinon-horizontal-white.png` was a corrupt PNG. It could return HTTP 200 and expose an IHDR that file-type tools read as `880 x 168`, but Chromium could not decode it: `complete:true`, `naturalWidth:0`, and `createImageBitmap` failed with `InvalidStateError`.
 
-The static source asset itself exists and can return correctly, but deployed browser rendering is not reliable enough.
+The fix that switched `SiteHeader.tsx`, `SiteFooter.tsx` and mobile navigation to `/brand/logo-rinon-horizontal-transparent.png` was directionally right — this was never a `next/image` optimization bug — but it did **not** resolve P0.1.
+
+**P0.1 remains open.** `logo-rinon-horizontal-transparent.png` is also damaged. Its `IDAT` chunk declares 19181 bytes while only 14544 are present, so the zlib stream is incomplete and `inflateSync` fails with `unexpected end of file`. Chromium is permissive: it reports the intact `IHDR` dimensions (880×168) and renders whatever scanlines it can, which is visual garbage. `apple-touch-icon-180.png` has the same defect (8599 declared vs 8532 present). Only `favicon-64.png` is intact.
+
+Consequence: the assertion `complete && naturalWidth > 100` cannot detect this class of damage, because `naturalWidth` is read from `IHDR`, which survives. Every build since RC.6 has been publishing a broken wordmark.
+
+The repository currently has **no valid horizontal RINON logo**. This needs an original asset from the owner; it cannot be reconstructed from what is committed. Registered as `brand-logo-final-master` and `brand-isotype-final-master` in `VISUAL_CUTOVER_BLOCKERS`.
+
+The stale public alias `https://rinon-v2.vercel.app` also served an older build during diagnostics, which explained remote failures where the HTML still referenced the white logo or old mobile-nav CSS.
 
 Required RC.7 outcome:
 - use a robust direct/unoptimized identity path where appropriate;
+- remove corrupt identity assets that are no longer referenced;
 - confirm actual painting in the remote browser;
 - test image `complete`, `naturalWidth`, visible dimensions and absence of failed requests.
 

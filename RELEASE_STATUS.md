@@ -31,9 +31,11 @@ Mode: **SAFE PRE-CUTOVER**
 
 ## Remaining pre-cutover work / external evidence
 - Reconcile the complete live crawl with an exported Google Search Console landing-page/query dataset and resolve all **58** `REVIEW / GSC-PENDING` URLs.
-- Resolve the two final visual blockers:
+- Resolve the four final visual blockers:
   1. `home-hero-final-master` — replace the constrained 720×730 temporary Home hero master.
   2. `structures-residential-final-master` — replace the generic industrial structures visual with the accepted premium residential cobertizo/pergola direction.
+  3. `brand-logo-final-master` — the repository has no valid horizontal RINON logo. `logo-rinon-horizontal-white.png` was undecodable and has been removed; `logo-rinon-horizontal-transparent.png`, currently used in header and footer, has an incomplete IDAT stream and renders as visual garbage. `apple-touch-icon-180.png` shares the defect. Requires original assets from the owner.
+  4. `brand-isotype-final-master` — `isotipo-rinoceronte-transparent.webp` had no RIFF/WEBP header and has been removed. Its two decorative CSS uses were withdrawn rather than replaced with generic geometry; the rhino device is unavailable until a valid isotype is supplied.
 - Where available, promote verified RINON photography for Nosotros/workshop, Empresas/B2B, welding and powder coating; evidence-panel fallbacks remain acceptable until authentic evidence exists.
 - Complete final visual acceptance across desktop/tablet/mobile after final masters are installed.
 - Obtain formal approval of the legal content and authorized production values for legal representative, legal address and privacy contact. These values must not be inferred from the workshop/public operating address; set `RINON_LEGAL_APPROVED=true` only after that approval.
