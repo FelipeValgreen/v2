@@ -216,7 +216,9 @@ Always keep staging noindex.
 - `complete && naturalWidth > 100` NO es criterio de integridad. `naturalWidth` sale del IHDR, que sobrevive intacto aunque el stream IDAT esté truncado; Chromium reporta las dimensiones declaradas y pinta scanlines parciales. Un logotipo que renderiza basura pasa esa aserción. No borrar el comentario de `tests/render.spec.mjs` que lo explica.
 
 ### QA remoto
-- `qa:browser:remote` exige `RINON_PLAYWRIGHT_BASE_URL` explícito (guard: `scripts/check-remote-target.mjs`). No restaurar un default.
+- Para validar un deployment remoto, usar `RINON_REMOTE_BASE_URL` como variable común. `qa:remote` también acepta argumento posicional y el alias legado `RINON_QA_BASE_URL`; `qa:browser:remote` acepta el alias legado `RINON_PLAYWRIGHT_BASE_URL`.
+- `qa:browser:remote` exige URL explícita (guard: `scripts/check-remote-target.mjs`). No restaurar un default.
+- `qa:remote` puede correr contra el build local servido, pero siempre debe imprimir el target efectivo antes de reportar PASS. Un PASS anónimo no es evidencia auditable.
 - No usar `https://rinon-v2.vercel.app` como medición: ese alias sigue al target Production y queda stale hasta una promoción autorizada. Obtener la URL con `vercel ls rinon-v2`.
 - La primera corrida contra un deployment recién `Ready` puede dar falsos rojos por propagación. Ocurrió en RC.7: 64 fallos HTTP y 4 de navegador en la primera pasada; verde contra el mismo deployment ya caliente. Repetir la corrida antes de abrir diagnóstico de producto.
 

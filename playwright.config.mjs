@@ -1,7 +1,7 @@
 import { defineConfig } from "@playwright/test";
 
 const port = 3211;
-const externalBase = process.env.RINON_PLAYWRIGHT_BASE_URL?.replace(/\/$/, "") || "";
+const externalBase = (process.env.RINON_REMOTE_BASE_URL || process.env.RINON_PLAYWRIGHT_BASE_URL || "").replace(/\/$/, "");
 const localBase = `http://127.0.0.1:${port}`;
 const navigationTimeout = externalBase ? 45000 : 30000;
 
