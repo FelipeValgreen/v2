@@ -4,6 +4,10 @@ import { criticalCommercialRoutes, gotoReady, route, routes } from "./fixtures/r
 
 async function assertNoFailedLocalAssets(page){const failures=[];page.on("response",response=>{const url=new URL(response.url());if((url.hostname==="127.0.0.1"||url.hostname.endsWith("vercel.app"))&&response.status()>=400)failures.push(`${response.status()} ${url.pathname}`)});return failures}
 
+// OJO: logoLoaded (complete && naturalWidth > 100) NO prueba que el logo se vea bien.
+// naturalWidth sale del IHDR, que sobrevive intacto aunque el stream IDAT esté
+// incompleto; Chromium pinta las scanlines que alcanzó y reporta 880x168 igual.
+// La integridad del asset la valida npm run qa:brand-assets, no esta aserción.
 async function assertBrandChrome(page){
  await expect(page.locator(".prd2-header")).toBeVisible();
  await expect(page.locator(".s6-footer")).toBeVisible();

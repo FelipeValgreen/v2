@@ -1,14 +1,25 @@
 import {test,expect} from "@playwright/test";
 
+// Un solo click: el botón es un toggle y reintentar el click puede cerrar el panel
+// que acababa de abrirse. La espera la hace la aserción, que ya reintenta sola
+// hasta que la hidratación monta el mega menú.
+async function openDesktopMenu(page,name,panel){
+ const button=page.getByRole("button",{name});
+ await expect(button).toBeVisible();
+ await expect(button).toBeEnabled();
+ await button.click();
+ await expect(page.locator(panel)).toBeVisible();
+}
+
 test("desktop navigation exposes the active product and service section",async({page})=>{
  await page.setViewportSize({width:1440,height:1000});
  await page.goto("/estructuras-metalicas",{waitUntil:"domcontentloaded"});
  await expect(page.getByRole("button",{name:/Productos/})).toHaveClass(/is-active/);
- await page.getByRole("button",{name:/Productos/}).click();
+ await openDesktopMenu(page,/Productos/,"#mega-products");
  await expect(page.locator('#mega-products a[href="/estructuras-metalicas"]')).toHaveAttribute("aria-current","page");
  await page.goto("/pintura-electrostatica",{waitUntil:"domcontentloaded"});
  await expect(page.getByRole("button",{name:/Servicios/})).toHaveClass(/is-active/);
- await page.getByRole("button",{name:/Servicios/}).click();
+ await openDesktopMenu(page,/Servicios/,"#mega-services");
  await expect(page.locator('#mega-services a[aria-current="page"]')).toContainText("Pintura electrostática");
 });
 
@@ -21,7 +32,9 @@ test("legacy product routes still orient the user toward Productos",async({page}
 test("mobile navigation marks the current task family without overflow",async({page})=>{
  await page.setViewportSize({width:390,height:844});
  await page.goto("/soldadura-mig",{waitUntil:"domcontentloaded"});
+ await expect(page.locator(".mobile-nav-toggle")).toBeVisible();
  await page.locator(".mobile-nav-toggle").click();
+ await expect(page.locator("#mobile-navigation")).toBeVisible();
  await expect(page.locator(".mobile-nav-services summary")).toHaveClass(/is-active/);
  const metrics=await page.evaluate(()=>({scrollWidth:document.documentElement.scrollWidth,innerWidth:window.innerWidth}));
  expect(metrics.scrollWidth).toBeLessThanOrEqual(metrics.innerWidth+2);
