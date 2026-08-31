@@ -1,0 +1,9 @@
+/* Acceso permanente a WhatsApp. Solo desde 1101px: por debajo aparece
+   CommercialDock, que ya incluye WhatsApp, y mostrar ambos duplicaría. */
+.whatsapp-float{display:none}
+@media(min-width:1101px){
+ .whatsapp-float{position:fixed;right:24px;bottom:24px;z-index:55;display:inline-flex;align-items:center;justify-content:center;width:56px;height:56px;border-radius:50%;background:#25D366;color:#0b0c0d;box-shadow:0 10px 30px rgba(0,0,0,.32);transition:transform .16s ease,box-shadow .16s ease}
+ .whatsapp-float:hover,.whatsapp-float:focus-visible{transform:translateY(-2px);box-shadow:0 16px 38px rgba(0,0,0,.4)}
+ .whatsapp-float:focus-visible{outline:3px solid #F58220;outline-offset:3px}
+}
+@media(prefers-reduced-motion:reduce){.whatsapp-float{transition:none}.whatsapp-float:hover,.whatsapp-float:focus-visible{transform:none}}

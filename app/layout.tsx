@@ -8,6 +8,7 @@ import { ProductionTracking } from "@/components/ProductionTracking";
 import { CookieConsent } from "@/components/CookieConsent";
 import { JsonLd } from "@/components/JsonLd";
 import { CommercialDock } from "@/components/CommercialDock";
+import { WhatsAppFloat } from "@/components/WhatsAppFloat";
 import { MotionController } from "@/components/MotionController";
 import { SEO_BASE_URL, isIndexableSite, organizationJsonLd } from "@/lib/seo";
 
@@ -55,5 +56,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <div id="main-content">{children}</div>
     <SiteFooter />
     <CommercialDock />
+    <WhatsAppFloat />
   </body></html>;
 }
