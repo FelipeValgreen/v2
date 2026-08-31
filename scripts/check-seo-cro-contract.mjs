@@ -9,7 +9,7 @@ const contractPath="docs/SEO-MIGRATION-CRO-CONTRACT.md";
 check(existsSync(contractPath),"SEO migration + CRO contract exists");
 const contract=existsSync(contractPath)?read(contractPath):"";
 const seo=read("lib/seo.ts");
-const robots=read("app/robots.ts");
+const robots=read("app/robots.txt/route.ts");
 const solutionPage=read("components/SolutionPage.tsx");
 const expansionPage=read("components/CommercialExpansionPage.tsx");
 const legacyPage=read("app/[legacy]/page.tsx");
@@ -29,7 +29,7 @@ check(contract.includes("Post-migration monitoring"),"post-migration organic and
 check(seo.includes('export const SEO_BASE_URL = "https://rinon.cl"'),"canonical production base remains rinon.cl");
 check(seo.includes('process.env.RINON_INDEXABLE === "true"'),"indexation remains explicit opt-in");
 check(seo.includes("alternates: { canonical: canonicalUrl(pathname) }"),"route metadata emits canonical URLs");
-check(robots.includes("isIndexableSite")&&robots.includes('disallow: "/"'),"staging robots remain fail-closed");
+check(robots.includes("isIndexableSite")&&robots.includes("Disallow: /"),"staging robots remain fail-closed");
 
 check(solutionPage.includes("<h1>{solution.title}</h1>"),"primary solution template owns one explicit H1");
 check(solutionPage.includes('href={quoteHref}')&&solutionPage.includes("WhatsAppCTA"),"primary solution template exposes quote + WhatsApp conversion paths");

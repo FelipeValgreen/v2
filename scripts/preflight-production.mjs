@@ -4,7 +4,7 @@ function read(path){if(!existsSync(path)){failures.push(`missing required file: 
 function check(condition,message){if(condition)console.log(`✓ ${message}`);else{failures.push(message);console.error(`✗ ${message}`)}}
 function envTrue(name){return process.env[name]==="true"}
 
-const seo=read("lib/seo.ts");const robots=read("app/robots.ts");const proxy=read("proxy.ts");const blogPage=read("app/blog/[slug]/page.tsx");const leads=read("lib/leads.ts");const publicIntake=read("lib/public-intake.ts");const contactRoute=read("app/api/contacto/route.ts");const sitemap=read("app/sitemap.ts");const capabilities=read("lib/capabilities.ts");const navigation=read("lib/navigation.ts");const migration=read("lib/migration.ts");const visuals=read("lib/visuals.ts");const urlInventory=read("docs/URL-MIGRATION-INVENTORY.md");
+const seo=read("lib/seo.ts");const robots=read("app/robots.txt/route.ts");const proxy=read("proxy.ts");const blogPage=read("app/blog/[slug]/page.tsx");const leads=read("lib/leads.ts");const publicIntake=read("lib/public-intake.ts");const contactRoute=read("app/api/contacto/route.ts");const sitemap=read("app/sitemap.ts");const capabilities=read("lib/capabilities.ts");const navigation=read("lib/navigation.ts");const migration=read("lib/migration.ts");const visuals=read("lib/visuals.ts");const urlInventory=read("docs/URL-MIGRATION-INVENTORY.md");
 const cutoverAuthorized=envTrue("RINON_CUTOVER_AUTHORIZED");const mode=cutoverAuthorized?"AUTHORIZED CUTOVER":"SAFE PRE-CUTOVER";console.log(`RINON production preflight · ${mode}`);
 const pendingMatch=migration.match(/MIGRATION_GSC_REVIEW_PENDING_COUNT\s*=\s*(\d+)/);const gscPendingCount=pendingMatch?Number(pendingMatch[1]):Number.NaN;
 const visualMatch=visuals.match(/VISUAL_CUTOVER_BLOCKERS\s*=\s*\[([\s\S]*?)\]\s*as const/);const visualBlockers=visualMatch?[...visualMatch[1].matchAll(/"([^"]+)"/g)].map(match=>match[1]):null;
@@ -12,7 +12,8 @@ const visualMatch=visuals.match(/VISUAL_CUTOVER_BLOCKERS\s*=\s*\[([\s\S]*?)\]\s*
 check(seo.includes('export const SEO_BASE_URL = "https://rinon.cl"'),"canonical production base is https://rinon.cl");
 check(seo.includes('process.env.RINON_INDEXABLE === "true"'),"indexation is fail-closed behind RINON_INDEXABLE");
 check(robots.includes("if (!isIndexableSite())"),"robots.txt follows the indexation gate");
-check(robots.includes('disallow: "/"'),"non-indexable environments block all crawlers");
+check(robots.includes("Disallow: /"),"non-indexable environments block all crawlers");
+check(robots.includes("Content-Signal:"),"robots.txt declares AI content usage preferences");
 check(proxy.includes('process.env.RINON_ENABLE_MIGRATION_REDIRECTS !== "true"'),"commercial migration redirects are fail-closed");
 check(blogPage.includes('process.env.RINON_ENABLE_BLOG_REDIRECTS === "true"'),"legacy blog redirects are fail-closed");
 check(contactRoute.includes("isLeadWriteConfigured()"),"public contact writes require lead-write configuration");
