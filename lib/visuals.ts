@@ -17,7 +17,7 @@ type VerifiedRinonVisual = VisualBase & {
 };
 
 type ReferenceVisual = VisualBase & {
-  provenance: "current-site-approved" | "user-drive-reference" | "conceptual";
+  provenance: "current-site-approved" | "user-drive-reference" | "sister-brand-product" | "conceptual";
   verificationRef?: never;
 };
 
@@ -44,6 +44,11 @@ const referenceBase = "/visuals/reference-current";
  * Visual provenance is intentionally conservative:
  * - verified-rinon: only when RINON ownership/project attribution is independently verified;
  *   TypeScript requires an explicit verificationRef before that provenance can be used.
+ * - sister-brand-product: catalogue photography of the same physical product, published by
+ *   Buenos Pal Catre (buenospalcatre.cl), the owner's sister brand and the same company.
+ *   It documents the product, never a client, project or installation site. Only unbranded
+ *   frames are used: the 2020-2021 studio series carries a buenospalcatre.cl watermark and
+ *   is therefore not usable here.
  * - user-drive-reference: product or architectural reference imagery found in the user's archive;
  *   never attributed to a client/project without further evidence.
  * - current-site-approved: reference imagery inherited from the current public site.
@@ -72,6 +77,38 @@ const archiveReferenceAssets: Record<string, VisualAsset[]> = {
   // ("cobertizos, pérgolas, escaleras, plataformas"). Ningún encuadre lo salva.
   // Hasta que exista un visual que muestre la estructura, la ruta cae al visual
   // conceptual, que sí muestra estructura metálica y queda etiquetado como tal.
+};
+
+const catalogProductAssets: Record<string, VisualAsset[]> = {
+  "/camarote-con-escritorio": [
+    {
+      src: "/visuals/catalog/camarote-escritorio-ambiente.webp",
+      alt: "Camarote metálico negro con escritorio y estantes instalado en un dormitorio",
+      kind: "photo",
+      provenance: "sister-brand-product",
+      label: "Producto de catálogo · marca hermana",
+      note: "Fotografía de catálogo del mismo producto, publicada por Buenos Pal Catre. Documenta el producto y su escala en un dormitorio; no identifica cliente, obra ni instalación contratada.",
+      sourceRef: "buenospalcatre.cl · Camarote Con Escritorio y Estante · RINON-VIS-P1-DESK-BUNK-CATALOG",
+      sourceWidth: 1200,
+      sourceHeight: 1600,
+    },
+  ],
+  // /cama-loft-con-escritorio se sirve por la plantilla legacy-commercial, que
+  // todavía no consume VisualEvidence. Hay foto de catálogo disponible para esa
+  // familia; queda pendiente cablear esa plantilla antes de registrarla.
+  "/camas-metalicas": [
+    {
+      src: "/visuals/catalog/cama-industrial-ambiente.webp",
+      alt: "Cama metálica industrial de dos plazas con base flotante en un dormitorio",
+      kind: "photo",
+      provenance: "sister-brand-product",
+      label: "Producto de catálogo · marca hermana",
+      note: "Fotografía de catálogo del mismo producto, publicada por Buenos Pal Catre. Documenta terminación y proporción; no identifica cliente ni obra.",
+      sourceRef: "buenospalcatre.cl · Cama Matrimonial dos plazas FLOTANTE · RINON-VIS-P1-INDUSTRIAL-BED-CATALOG",
+      sourceWidth: 1280,
+      sourceHeight: 1600,
+    },
+  ],
 };
 
 const conceptualAssets: Record<string, VisualAsset[]> = {
@@ -147,6 +184,10 @@ export function getArchiveReferenceVisuals(slug: string): VisualAsset[] {
   return archiveReferenceAssets[slug] ?? [];
 }
 
+function getCatalogProductVisuals(slug: string): VisualAsset[] {
+  return catalogProductAssets[slug] ?? [];
+}
+
 export function getConceptualVisuals(slug: string): VisualAsset[] {
   return conceptualAssets[slug] ?? [];
 }
@@ -157,7 +198,22 @@ export function getLegacyReferenceVisuals(slug: string): VisualAsset[] {
 }
 
 export function getVisuals(slug: string): VisualAsset[] {
-  return [...getArchiveReferenceVisuals(slug), ...getLegacyReferenceVisuals(slug), ...getConceptualVisuals(slug)];
+  return [...getArchiveReferenceVisuals(slug), ...getCatalogProductVisuals(slug), ...getLegacyReferenceVisuals(slug), ...getConceptualVisuals(slug)];
+}
+
+/**
+ * La fotografía manda. Una categoría tiene evidencia fotográfica cuando existe
+ * una foto verificada, una referencia de archivo utilizable o una fotografía de
+ * catálogo de la marca hermana. Sin eso, la página declara qué fabrica RINON
+ * (lib/fabrication-spec.ts) en vez de rellenar el hueco con un conceptual.
+ */
+export function hasPhotographicEvidence(slug: string): boolean {
+  return getVisuals(slug).some(
+    (asset) =>
+      asset.provenance === "verified-rinon" ||
+      asset.provenance === "user-drive-reference" ||
+      asset.provenance === "sister-brand-product",
+  );
 }
 
 export function getReferencePhotos(slug: string): VisualAsset[] {

@@ -18,6 +18,7 @@ export const ROUTES = [
   { path: "/cama-institucional-metalica", ready },
   { path: "/cama-loft-metalica", ready },
   { path: "/cama-loft-con-escritorio", ready },
+  { path: "/camarote-con-escritorio", ready },
   { path: "/camas-metalicas", ready },
   { path: "/camas-balinesas", ready },
   { path: "/mesas-metalicas", ready },

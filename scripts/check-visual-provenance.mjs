@@ -31,7 +31,11 @@ pass(`visual registry exposes ${assetBlocks.length} auditable assets`);
 
 for(const [index,block] of assetBlocks.entries()){
  const src=block.match(/src:\s*([`\"])(.*?)\1/s)?.[2] ?? `asset-${index+1}`;
- if(!/provenance:\s*"(?:verified-rinon|current-site-approved|user-drive-reference|conceptual)"/.test(block)) fail(`${src} declares an allowed provenance`);
+ if(!/provenance:\s*"(?:verified-rinon|current-site-approved|user-drive-reference|sister-brand-product|conceptual)"/.test(block)) fail(`${src} declares an allowed provenance`);
+ if(/provenance:\s*"sister-brand-product"/.test(block)){
+  if(!/buenospalcatre\.cl/.test(block)) fail(`${src} sister-brand asset must name its catalogue source`);
+  if(!/no identifica cliente/.test(block)) fail(`${src} sister-brand asset must state it does not identify a client or project`);
+ }
  else pass(`${src} declares provenance`);
  if(!/sourceRef:\s*"[^\"]+"/.test(block)) fail(`${src} declares sourceRef`);
  else pass(`${src} declares sourceRef`);
