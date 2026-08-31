@@ -14,7 +14,7 @@ public/visuals/home-hero-conceptual-welding.webp
 .DS_Store
 
 # macOS/iCloud Drive conflict copies; do not commit generated or binary duplicates.
-* 2.*
+* [0-9].*
 
 npm-debug.log*
 yarn-debug.log*
