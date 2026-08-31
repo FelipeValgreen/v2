@@ -12,6 +12,10 @@ public/visuals/home-hero-conceptual-welding.webp
 .env.*.local
 .vercel/
 .DS_Store
+
+# macOS/iCloud Drive conflict copies; do not commit generated or binary duplicates.
+* 2.*
+
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
