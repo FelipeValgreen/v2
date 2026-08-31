@@ -14,6 +14,8 @@ export function DesktopMegaNav(){
   const wrapRef=useRef<HTMLDivElement>(null);
   const productTriggerRef=useRef<HTMLButtonElement>(null);
   const serviceTriggerRef=useRef<HTMLButtonElement>(null);
+  const [ready,setReady]=useState(false);
+  useEffect(()=>setReady(true),[]);
   useEffect(()=>setOpen(null),[pathname]);
   useEffect(()=>{
     const onPointer=(event:MouseEvent)=>{if(open&&!wrapRef.current?.contains(event.target as Node))setOpen(null)};
@@ -29,10 +31,10 @@ export function DesktopMegaNav(){
   const closeMenu=()=>setOpen(null);
   return <div className="prd2-desktop-nav-shell" ref={wrapRef}>
     <nav className="prd2-desktop-nav" aria-label="Principal">
-      <button ref={productTriggerRef} type="button" aria-haspopup="true" className={[open==="products"?"is-open":"",active==="products"?"is-active":""].filter(Boolean).join(" ")} aria-expanded={open==="products"} aria-controls="mega-products" onClick={()=>setOpen(open==="products"?null:"products")}>Productos <span aria-hidden="true">⌄</span></button>
+      <button ref={productTriggerRef} type="button" aria-haspopup="true" data-nav-ready={ready?"true":"false"} className={[open==="products"?"is-open":"",active==="products"?"is-active":""].filter(Boolean).join(" ")} aria-expanded={open==="products"} aria-controls="mega-products" onClick={()=>setOpen(open==="products"?null:"products")}>Productos <span aria-hidden="true">⌄</span></button>
       <Link className={active==="project"?"is-active":undefined} aria-current={isExactNavPath(pathname,projectNavItem.href)?"page":undefined} href={projectNavItem.href}>{projectNavItem.label}</Link>
       <Link className={active==="company"?"is-active":undefined} aria-current={isExactNavPath(pathname,companyNavItem.href)?"page":undefined} href={companyNavItem.href}>{companyNavItem.label}</Link>
-      <button ref={serviceTriggerRef} type="button" aria-haspopup="true" className={[open==="services"?"is-open":"",active==="services"?"is-active":""].filter(Boolean).join(" ")} aria-expanded={open==="services"} aria-controls="mega-services" onClick={()=>setOpen(open==="services"?null:"services")}>Servicios <span aria-hidden="true">⌄</span></button>
+      <button ref={serviceTriggerRef} type="button" aria-haspopup="true" data-nav-ready={ready?"true":"false"} className={[open==="services"?"is-open":"",active==="services"?"is-active":""].filter(Boolean).join(" ")} aria-expanded={open==="services"} aria-controls="mega-services" onClick={()=>setOpen(open==="services"?null:"services")}>Servicios <span aria-hidden="true">⌄</span></button>
       <Link className={active==="about"?"is-active":undefined} aria-current={isExactNavPath(pathname,aboutNavItem.href)?"page":undefined} href={aboutNavItem.href}>{aboutNavItem.label}</Link>
     </nav>
     {open==="products"?<div className="prd2-mega-menu prd2-mega-products" id="mega-products" role="region" aria-label="Productos RINON">

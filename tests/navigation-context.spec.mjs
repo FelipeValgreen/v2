@@ -7,6 +7,7 @@ async function openDesktopMenu(page,name,panel){
  const button=page.getByRole("button",{name});
  await expect(button).toBeVisible();
  await expect(button).toBeEnabled();
+ await expect(button).toHaveAttribute("data-nav-ready","true");
  await button.click();
  await expect(page.locator(panel)).toBeVisible();
 }
