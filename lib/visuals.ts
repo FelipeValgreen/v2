@@ -88,9 +88,19 @@ const catalogProductAssets: Record<string, VisualAsset[]> = {
       sourceHeight: 1600,
     },
   ],
-  // /cama-loft-con-escritorio se sirve por la plantilla legacy-commercial, que
-  // todavía no consume VisualEvidence. Hay foto de catálogo disponible para esa
-  // familia; queda pendiente cablear esa plantilla antes de registrarla.
+  "/cama-loft-con-escritorio": [
+    {
+      src: "/visuals/catalog/cama-loft-escritorio-ambiente.webp",
+      alt: "Cama loft metálica con escritorio bajo la estructura en un dormitorio",
+      kind: "photo",
+      provenance: "sister-brand-product",
+      label: "Producto de catálogo · marca hermana",
+      note: "Fotografía de catálogo del mismo producto, publicada por Buenos Pal Catre. Documenta la configuración loft con escritorio; no identifica cliente ni proyecto.",
+      sourceRef: "buenospalcatre.cl · Cama Loft Con Escritorio · RINON-VIS-P1-LOFT-DESK-CATALOG",
+      sourceWidth: 1200,
+      sourceHeight: 1600,
+    },
+  ],
   "/camas-metalicas": [
     {
       src: "/visuals/catalog/cama-industrial-ambiente.webp",

@@ -2,8 +2,10 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { CommercialEvidencePanel } from "@/components/CommercialEvidencePanel";
+import { VisualEvidence } from "@/components/VisualEvidence";
 import { WhatsAppCTA } from "@/components/WhatsAppCTA";
 import { routeMetadata } from "@/lib/seo";
+import { hasPhotographicEvidence } from "@/lib/visuals";
 import { getLegacyCommercialLanding, legacyCommercialSlugs } from "@/lib/legacy-commercial";
 
 export function generateStaticParams() {
@@ -20,6 +22,7 @@ export default async function LegacyCommercialPage({ params }: { params: Promise
   const { legacy } = await params;
   const landing = getLegacyCommercialLanding(legacy);
   if (!landing) notFound();
+  const slug=`/${landing.slug}`;
   const heroEvidence=landing.points.slice(0,4).map((point)=>({label:point.title,body:point.body}));
   const quoteCategory=new URL(landing.quoteHref,"https://rinon.cl").searchParams.get("category") ?? "general";
 
@@ -37,7 +40,7 @@ export default async function LegacyCommercialPage({ params }: { params: Promise
           </div>
           <div className="solution-meta-line"><span>Configuración confirmada al cotizar</span><span>Cantidad y destino</span><span>Alcance vigente</span></div>
         </div>
-        <CommercialEvidencePanel title="QUÉ CONVIENE CONFIRMAR" items={heroEvidence} note="Esta URL conserva una intención comercial histórica; medidas, precios y especificaciones se confirman con el requerimiento vigente."/>
+        {hasPhotographicEvidence(slug)?<VisualEvidence slug={slug} fallback={landing.points.map((point)=>point.title)}/>:<CommercialEvidencePanel title="QUÉ CONVIENE CONFIRMAR" items={heroEvidence} note="Esta URL conserva una intención comercial histórica; medidas, precios y especificaciones se confirman con el requerimiento vigente."/>}
       </div>
     </section>
 
