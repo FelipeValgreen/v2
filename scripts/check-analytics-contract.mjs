@@ -21,6 +21,8 @@ check(api.includes("ANALYTICS_EVENTS.includes(eventName)"),"public analytics rou
 check(tracking.includes("persistIfInternal(eventName)"),"semantic CRO events persist internally after consent");
 check(tracking.includes('eventName!=="contact_whatsapp"&&eventName!=="contact_phone"'),"click tracking avoids duplicate contact persistence");
 check(tracking.includes('sendAnalyticsEvent("generate_lead")'),"successful lead submission persists generate_lead");
+check(tracking.includes("googleAnalyticsId")&&tracking.includes("googletagmanager.com/gtag/js?id="),"GA4 loader accepts an injected measurement ID");
+check(read("app/layout.tsx").includes('process.env.VERCEL_ENV === "production"')&&read("app/layout.tsx").includes("NEXT_PUBLIC_GA_ID?.trim()"),"GA4 measurement ID is fail-closed behind explicit production env and defined ID");
 check(analytics.includes("quote_starts")&&analytics.includes("quote_submits")&&analytics.includes("start_to_submit_rate"),"analytics summary type exposes quote funnel metrics");
 check(Boolean(migrationName),"analytics funnel RPC migration is versioned");
 for(const token of ["quote_start","quote_submit","maps_click","waze_click","start_to_submit_rate","submit_to_lead_rate"])check(migration.includes(token),`analytics RPC migration includes ${token}`);

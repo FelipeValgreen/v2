@@ -21,6 +21,9 @@ const raleway = Raleway({
 
 const indexable = isIndexableSite();
 const productionTracking = process.env.RINON_PRODUCTION_TRACKING_ENABLED === "true";
+const gaId = process.env.NEXT_PUBLIC_GA_ID?.trim();
+const gaMeasurementId = gaId && process.env.VERCEL_ENV === "production" ? gaId : undefined;
+const mountsProductionTracking = productionTracking || Boolean(gaMeasurementId);
 
 export const metadata: Metadata = {
   metadataBase: new URL(SEO_BASE_URL),
@@ -52,7 +55,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <JsonLd data={organizationJsonLd} />
     <SiteHeader />
     <MotionController />
-    {productionTracking ? <><ProductionTracking /><CookieConsent /></> : !indexable ? <StagingTracking /> : null}
+    {mountsProductionTracking ? <><ProductionTracking googleAnalyticsId={gaMeasurementId} /><CookieConsent /></> : !indexable ? <StagingTracking /> : null}
     <div id="main-content">{children}</div>
     <SiteFooter />
     <CommercialDock />

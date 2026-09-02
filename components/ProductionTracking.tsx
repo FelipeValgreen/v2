@@ -51,11 +51,16 @@ function persistIfInternal(eventName: string) {
   if (INTERNAL_ANALYTICS_EVENT_SET.has(eventName)) sendAnalyticsEvent(eventName as InternalAnalyticsEvent);
 }
 
-export function ProductionTracking() {
+type ProductionTrackingProps = {
+  googleAnalyticsId?: string;
+};
+
+export function ProductionTracking({ googleAnalyticsId }: ProductionTrackingProps) {
   const rawGtmId = process.env.NEXT_PUBLIC_GTM_ID;
   const rawClarityId = process.env.NEXT_PUBLIC_CLARITY_ID;
   const gtmId = rawGtmId && /^GTM-[A-Z0-9]+$/i.test(rawGtmId) ? rawGtmId : undefined;
   const clarityId = rawClarityId && /^[a-z0-9]+$/i.test(rawClarityId) ? rawClarityId : undefined;
+  const gaId = googleAnalyticsId && /^G-[A-Z0-9]+$/i.test(googleAnalyticsId) ? googleAnalyticsId : undefined;
   const pathname = usePathname(); const [enabled, setEnabled] = useState(false);
   useEffect(() => { const syncConsent = () => setEnabled(hasAnalyticsConsent()); syncConsent(); window.addEventListener("rinon-cookie-consent", syncConsent); return () => window.removeEventListener("rinon-cookie-consent", syncConsent); }, []);
   useEffect(() => { if (!enabled) return; storeAttribution(); sendAnalyticsEvent("page_view"); }, [enabled, pathname]);
@@ -102,6 +107,7 @@ export function ProductionTracking() {
   },[enabled]);
   if (!enabled) return null;
   return <>
+    {gaId ? <><Script id="google-analytics-loader" src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`} strategy="afterInteractive" /><Script id="google-analytics-config" strategy="afterInteractive">{`window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js', new Date());gtag('config', '${gaId}');`}</Script></> : null}
     {gtmId ? <><Script id="gtm-data-layer" strategy="afterInteractive">{`window.dataLayer=window.dataLayer||[];window.dataLayer.push({'gtm.start':new Date().getTime(),event:'gtm.js'});`}</Script><Script id="google-tag-manager" src={`https://www.googletagmanager.com/gtm.js?id=${gtmId}`} strategy="afterInteractive" /></> : null}
     {clarityId ? <Script id="microsoft-clarity" strategy="afterInteractive">{`(function(c,l,a,r,i,t,y){c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);})(window,document,"clarity","script","${clarityId}");`}</Script> : null}
   </>;

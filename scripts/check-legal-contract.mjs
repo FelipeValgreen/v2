@@ -17,7 +17,8 @@ check(!privacy.includes("Mientras ese flujo no esté validado"),"privacy draft n
 check(privacy.includes("UTM")||privacy.includes("utm_source"),"privacy draft documents consented campaign attribution");
 check(cookies.includes("Google Tag Manager")&&cookies.includes("Microsoft Clarity"),"cookie draft documents the supported optional external tools");
 check(cookies.includes("no hay consentimiento")&&tracking.includes("if (!enabled) return null"),"cookie copy and runtime both keep optional tracking consent-gated");
-check(layout.includes("productionTracking ? <><ProductionTracking /><CookieConsent /></>"),"production tracking is mounted through the consent-aware production layer");
+check(layout.includes("mountsProductionTracking")&&layout.includes("ProductionTracking googleAnalyticsId={gaMeasurementId}")&&layout.includes("<CookieConsent />"),"production tracking is mounted through the consent-aware production layer");
+check(layout.includes('process.env.VERCEL_ENV === "production"')&&layout.includes("NEXT_PUBLIC_GA_ID?.trim()"),"GA4 legal gate is fail-closed to explicit production runtime plus defined ID");
 check(dataRequest.includes("{indexable:false}"),"privacy request page is permanently noindex");
 check(terms.includes("no crea por sí solo una orden de fabricación"),"terms keep web requests distinct from binding fabrication orders");
 check(preflight.includes('check(envTrue("RINON_LEGAL_APPROVED")'),"authorized cutover requires explicit legal approval");
