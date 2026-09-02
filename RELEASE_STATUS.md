@@ -22,6 +22,8 @@ Mode: **SAFE PRE-CUTOVER**
 - Lead intake stores 22 structured CRM/attribution fields while retaining a human-readable legacy summary.
 - Supabase public intake re-sanitizes an explicit field whitelist and keeps persistent intake rate limiting.
 - Production attribution preserves consented landing/referrer/UTM/Google/Meta identifiers and quote-funnel semantics.
+- GA4 support now exists behind a fail-closed production gate: `NEXT_PUBLIC_GA_ID` must be defined and `VERCEL_ENV` must equal `production`; preview/local stay dark.
+- Search Console verification now supports `NEXT_PUBLIC_GSC_VERIFICATION`, but preview/local continue serving the historical token by default until explicit property mapping is completed.
 - Admin shows structured qualification, campaign attribution and private attachment access per lead.
 - New intent owners are available for camas, camas balinesas, mesas, escritorios, Malla 3D, mallas separadoras, Soldadura MIG, Corte, Instalación and Reparaciones.
 - Pintura electrostática is a confirmed commercial service with bounded technical claims.
@@ -41,6 +43,8 @@ Mode: **SAFE PRE-CUTOVER**
 - Complete final visual acceptance across desktop/tablet/mobile after final masters are installed.
 - Obtain formal approval of the legal content and authorized production values for legal representative, legal address and privacy contact. These values must not be inferred from the workshop/public operating address; set `RINON_LEGAL_APPROVED=true` only after that approval.
 - Obtain explicit production cutover authorization before changing domain/indexation/redirect/write/tracking flags.
+- Identify which Search Console property corresponds to each verification token before replacing the current token. The new token must stay unactivated until the property with the **58** `GSC-pending` URLs is confirmed.
+- Obtain exact Google Business Profile values for `image`, `geo`, `openingHoursSpecification` and `sameAs`. Do not infer or synthesize these fields.
 
 ## Safe preproduction defaults
 - Indexation disabled (`RINON_INDEXABLE=false`).

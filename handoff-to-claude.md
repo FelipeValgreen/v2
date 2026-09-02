@@ -1,5 +1,86 @@
 # handoff-to-claude.md
 
+## ACTUALIZACION VIGENTE — Codex 2026-09-02
+
+Esta actualizacion reemplaza cualquier referencia previa a la ruta local equivocada y deja evidencia literal del lote GA4/GSC ejecutado hoy.
+
+### Ruta y repo verificados
+
+```text
+Ruta real usada: /Users/valgreen/code/rinon-v2
+Ruta anterior en handoff: /Users/valgreen/Documents/CLIENTES/RINON/rinon-v2
+Estado de la ruta anterior: no existe en esta maquina
+Branch actual: codex/rc7
+```
+
+### Lote ejecutado
+
+```text
+Commit GA4: f9c5a28 feat: add fail-closed GA4 gate
+Commit GSC: a840a45 feat: add GSC env fallback support
+```
+
+### Resultado
+
+```text
+npm run qa:static -> PASS
+npm run build -> PASS
+npm run qa:browser -> PASS (63 passed)
+RINON_REMOTE_BASE_URL=https://rinon-v2-fpdvu66wr-filipovalverde-5673s-projects.vercel.app npm run qa:browser:remote -> PASS (63 passed)
+```
+
+### Preview exacto usado para aceptacion
+
+```text
+URL: https://rinon-v2-fpdvu66wr-filipovalverde-5673s-projects.vercel.app
+Created: 2026-09-02 17:10:54 CLT
+Status: Ready
+No usar rinon-v2.vercel.app para este lote; medir solo contra la URL exacta del deployment.
+```
+
+### Verificacion GSC servida por preview
+
+```text
+/ -> DG5fIXNQgMGRpHGC0RwK-R3QvIyx20qjrQQdMRqCymQ
+/cotizar -> DG5fIXNQgMGRpHGC0RwK-R3QvIyx20qjrQQdMRqCymQ
+/rejas-metalicas -> DG5fIXNQgMGRpHGC0RwK-R3QvIyx20qjrQQdMRqCymQ
+Token nuevo NO servido: lCFMIIVsso0tKtwMRjnZWQs1l2FbYnlJPWpqxsqjj_Y
+```
+
+### Evidencia literal de red para GA4/GTM
+
+Filtro aplicado:
+
+```text
+hostname === googletagmanager.com OR hostname === google-analytics.com OR hostname === region1.google-analytics.com OR hostname endsWith .google-analytics.com
+```
+
+Conteos:
+
+```text
+ROUTE /
+DOCUMENT 200 x-vercel-cache=HIT age=142
+MATCH_COUNT 0
+
+ROUTE /cotizar
+DOCUMENT 200 x-vercel-cache=HIT age=144
+MATCH_COUNT 0
+
+ROUTE /rejas-metalicas
+DOCUMENT 200 x-vercel-cache=HIT age=146
+MATCH_COUNT 0
+```
+
+### Bloqueado por
+
+```text
+- Reemplazo del token GSC bloqueado hasta identificar que propiedad usa cada token y cual contiene las 58 URLs GSC-pending.
+- LocalBusiness bloqueado: faltan valores exactos de Google Business Profile para image, geo, openingHoursSpecification y sameAs.
+- Vercel mostro warning de plataforma por engines.node=24.x frente a Node 22; no bloqueo este lote, pero queda como seguimiento.
+```
+
+Referencia mas detallada: docs/GA4_GSC_PREVIEW_VERIFICATION_2026-09-02.md
+
 ## ACTUALIZACION VIGENTE — Codex 2026-08-27
 
 Esta seccion corrige el estado del paquete generado previamente. Claude debe usar esta actualizacion como estado actual y tratar las secciones antiguas inferiores como contexto literal historico cuando difieran.
