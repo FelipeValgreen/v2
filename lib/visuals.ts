@@ -65,6 +65,19 @@ const archiveReferenceAssets: Record<string, VisualAsset[]> = {
       sourceHeight: 900,
     },
   ],
+  "/camas-balinesas": [
+    {
+      src: "/visuals/archive/cama-balinesa-product-reference.webp",
+      alt: "Cama balinesa con estructura metálica negra, cortinas claras y respaldo inclinado en exterior",
+      kind: "photo",
+      provenance: "user-drive-reference",
+      label: "Referencia de producto · archivo",
+      note: "Fotografía aportada por el dueño para mostrar la categoría camas balinesas. No se atribuye a cliente, obra ni instalación específica.",
+      sourceRef: "User-supplied attachment · IMG_5388.HEIC · RINON-VIS-P1-BALINESE-BED-ARCHIVE",
+      sourceWidth: 1800,
+      sourceHeight: 1350,
+    },
+  ],
   // /estructuras-metalicas no tiene referencia de archivo utilizable.
   // structures-residential-reference.webp (COBERTIZO SALA.jpg) es un render de
   // interiorismo: mesa de comedor, sillas y muro vegetal. No contiene ninguna

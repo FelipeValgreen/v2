@@ -37,3 +37,27 @@ test("catalogue photography never claims a client, project or executed work", as
     await expect(page.locator("main"), entry.path).not.toContainText("EVIDENCIA RINON VERIFICADA");
   }
 });
+
+test("user-supplied product photography replaces the fallback on camas balinesas", async ({ page }) => {
+  await gotoReady(page, route("/camas-balinesas"));
+  const figure = page.locator('.evidence-photo[data-visual-provenance="user-drive-reference"]').first();
+  await expect(figure).toBeVisible();
+  await expect(figure.locator("figcaption")).toContainText("REFERENCIA DE PRODUCTO · ARCHIVO");
+  await expect(figure.locator("figcaption")).toContainText("No se atribuye a cliente, obra ni instalación específica.");
+
+  const image = figure.locator("img");
+  await expect(image).toHaveJSProperty("complete", true);
+  await expect(image).not.toHaveJSProperty("naturalWidth", 0);
+
+  const metrics = await figure.evaluate((node) => {
+    const img = node.querySelector("img");
+    return { natural: img.naturalWidth, rendered: node.getBoundingClientRect().width, src: img.currentSrc };
+  });
+  expect(metrics.natural).toBeGreaterThanOrEqual(1800);
+  expect(metrics.rendered, "/camas-balinesas upscale").toBeLessThanOrEqual(metrics.natural + 2);
+  expect(metrics.src).toContain("/visuals/archive/cama-balinesa-product-reference.webp");
+
+  const text = await page.locator("main").innerText();
+  expect(text.toLowerCase()).not.toContain("evidencia rinon verificada");
+  expect(text.toLowerCase()).not.toContain("obra ejecutada");
+});
