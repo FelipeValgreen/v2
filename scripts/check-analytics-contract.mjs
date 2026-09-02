@@ -23,6 +23,7 @@ check(tracking.includes('eventName!=="contact_whatsapp"&&eventName!=="contact_ph
 check(tracking.includes('sendAnalyticsEvent("generate_lead")'),"successful lead submission persists generate_lead");
 check(tracking.includes("googleAnalyticsId")&&tracking.includes("googletagmanager.com/gtag/js?id="),"GA4 loader accepts an injected measurement ID");
 check(read("app/layout.tsx").includes('process.env.VERCEL_ENV === "production"')&&read("app/layout.tsx").includes("NEXT_PUBLIC_GA_ID?.trim()"),"GA4 measurement ID is fail-closed behind explicit production env and defined ID");
+check(read("app/layout.tsx").includes("NEXT_PUBLIC_GSC_VERIFICATION?.trim() || currentGscVerificationToken"),"GSC verification falls back to the current token when env is absent");
 check(analytics.includes("quote_starts")&&analytics.includes("quote_submits")&&analytics.includes("start_to_submit_rate"),"analytics summary type exposes quote funnel metrics");
 check(Boolean(migrationName),"analytics funnel RPC migration is versioned");
 for(const token of ["quote_start","quote_submit","maps_click","waze_click","start_to_submit_rate","submit_to_lead_rate"])check(migration.includes(token),`analytics RPC migration includes ${token}`);

@@ -24,8 +24,9 @@ const dedicatedCommercialRoutes=[
 ];
 
 const preCutoverRedirectAliases=[
- "/cercos-metalicos-santiago","/portones-industriales","/mallas-separadoras-industriales","/soldadura-metalica-santiago",
+  "/cercos-metalicos-santiago","/portones-industriales","/mallas-separadoras-industriales","/soldadura-metalica-santiago",
 ];
+const currentGscVerificationToken="DG5fIXNQgMGRpHGC0RwK-R3QvIyx20qjrQQdMRqCymQ";
 
 async function assertSeoShell(page,route){
  const response=await page.goto(route,{waitUntil:"domcontentloaded"});
@@ -40,6 +41,8 @@ async function assertSeoShell(page,route){
  expect(title.trim().length,`${route} title`).toBeGreaterThan(15);
  const description=await page.locator('meta[name="description"]').getAttribute("content");
  expect(description?.trim().length??0,`${route} description`).toBeGreaterThan(45);
+ const verification=await page.locator('meta[name="google-site-verification"]').getAttribute("content");
+ expect(verification,`${route} GSC verification token`).toBe(currentGscVerificationToken);
  const text=await page.locator("main").innerText();
  expect(text,`${route} mojibake`).not.toMatch(/Ã.|Â.|â€|�/u);
 }
