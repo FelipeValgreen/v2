@@ -46,6 +46,13 @@ Mode: **SAFE PRE-CUTOVER**
 - Identify which Search Console property corresponds to each verification token before replacing the current token. The new token must stay unactivated until the property with the **58** `GSC-pending` URLs is confirmed.
 - Obtain exact Google Business Profile values for `image`, `geo`, `openingHoursSpecification` and `sameAs`. Do not infer or synthesize these fields.
 
+## Pending non-technical decisions
+- **Terminaciones line:** The commercial presentation treats finishes/surface treatments as one of four lines with its own sheet, while the site currently says "Tres mundos" and leaves the broader route in the footer. This affects taxonomy, navigation and the future destination of `/tratamiento-superficies`.
+- **60+ years of trajectory:** The strongest trust asset is not visible on any page yet. Decide where and how to state it before production copy is finalized.
+- **Own workshop photography:** Final workshop/product imagery blocks `home-hero-final-master` and `structures-residential-final-master`, and explains why Home still uses reference labels in the main evidence block.
+- **Coverage outside Región Metropolitana:** `/cercos-perimetrales-concepcion` and `/cercos-perimetrales-antofagasta` cannot be decided while schema declares `areaServed: "Región Metropolitana de Santiago"`. Confirm whether RINON serves those regions before mapping them.
+- **Contact email:** Decide between continuing with `rinonspa@gmail.com` or moving B2B/contact flows to an `@rinon.cl` address.
+
 ## Safe preproduction defaults
 - Indexation disabled (`RINON_INDEXABLE=false`).
 - Commercial migration redirects disabled.
