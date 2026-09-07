@@ -21,6 +21,12 @@ const proof=[
  ["Requerimiento recurrente","Requerimientos que se repiten y pueden estandarizarse comercialmente."],
 ] as const;
 
+const b2bPreservedLinks=[
+  {href:"/cama-institucional-metalica",label:"Cama metálica para compras institucionales."},
+  {href:"/camarote-desmontable",label:"Camarote metálico desmontable."},
+  {href:"/camarote-triple",label:"Camarote metálico de tres niveles."},
+] as const;
+
 const faqs=[
   {q:"¿Pueden cotizar compras por volumen?",a:"Sí. Para evaluar un lote conviene indicar producto o referencia, cantidad, destino y fecha objetivo. La capacidad y el plazo se confirman para el requerimiento concreto."},
   {q:"¿Trabajan a partir de planos o especificaciones de empresa?",a:"Sí, pueden evaluarse piezas, soportes, estructuras y conjuntos bajo plano o especificación cuando la geometría, materiales y requisitos aplicables están suficientemente definidos."},
@@ -42,6 +48,7 @@ export default function Page(){return <main className="v5-editorial-page rinon-e
   <section className="v2-solution-section"><div className="container"><div className="section-head"><div><div className="v2-eyebrow">PARA UNA PRIMERA REVISIÓN</div><h2>Cuatro datos permiten empezar.</h2></div><p>No necesitas preparar una licitación completa para conversar. Con estos antecedentes podemos identificar rápidamente qué falta.</p></div><div className="v2-step-grid"><article><span>01 · REFERENCIA</span><h3>Qué necesitas</h3><p>Producto, plano, fotografía, muestra o descripción funcional.</p></article><article><span>02 · CANTIDAD</span><h3>Qué volumen</h3><p>Unidades o metraje aproximado para dimensionar fabricación.</p></article><article><span>03 · DESTINO</span><h3>Dónde se entrega</h3><p>Ubicación para evaluar logística y montaje cuando corresponda.</p></article><article><span>04 · FECHA</span><h3>Cuándo lo necesitas</h3><p>Plazo objetivo sujeto a revisión contra alcance y capacidad.</p></article></div></div></section>
 
   <section className="v2-solution-section soft"><div className="container"><div className="section-head"><div><div className="v2-eyebrow">RUTAS DE COMPRA</div><h2>Entra por la necesidad que ya tienes definida.</h2></div><p>Estas rutas mantienen separada la intención de producto, cierre y proyecto a medida para evitar cotizaciones ambiguas.</p></div><div className="v2-resource-grid"><Link href="/camarotes"><span>ALOJAMIENTO</span><h3>Camas y camarotes</h3><p>Compra por unidad o volumen con configuración confirmada al cotizar.</p><b>Ver productos →</b></Link><Link href="/cierres-perimetrales"><span>PERÍMETRO</span><h3>Cierres y accesos</h3><p>Cierres, mallas, rejas y portones para terrenos, obras y recintos.</p><b>Ver cierres →</b></Link><Link href="/estructuras-metalicas"><span>ESTRUCTURAS</span><h3>Estructuras metálicas</h3><p>Cobertizos, escaleras, plataformas, soportes y conjuntos especiales.</p><b>Ver estructuras →</b></Link><Link href="/fabricacion-metalica"><span>A MEDIDA</span><h3>Fabricación bajo requerimiento</h3><p>Parte desde plano, foto, muestra, croquis o una necesidad funcional.</p><b>Ver fabricación →</b></Link></div></div></section>
+  <section className="v2-solution-section" aria-labelledby="empresas-rutas-preservadas"><div className="container"><div className="section-head"><div><div className="v2-eyebrow">RUTAS PRESERVADAS</div><h2 id="empresas-rutas-preservadas">Páginas específicas para compras institucionales.</h2></div></div><div className="v2-resource-grid">{b2bPreservedLinks.map(item=><Link key={item.href} href={item.href}><span>{item.href}</span><h3>{item.label}</h3></Link>)}</div></div></section>
 
   <section id="faq" className="v2-solution-section"><div className="container"><div className="section-head"><div><div className="v2-eyebrow">PREGUNTAS FRECUENTES</div><h2>Antes de enviar un requerimiento B2B.</h2></div><p>La cotización vigente define capacidad, plazo, logística, montaje y documentación aplicables a cada compra.</p></div><div className="faq-grid">{faqs.map(item=><details key={item.q}><summary>{item.q}</summary><p>{item.a}</p></details>)}</div></div></section>
 

@@ -20,6 +20,12 @@ const metalBedsPreservedLinks = [
   ["/cama-loft-metalica", "Cama loft metálica."],
 ];
 
+const b2bPreservedLinks = [
+  ["/cama-institucional-metalica", "Cama metálica para compras institucionales."],
+  ["/camarote-desmontable", "Camarote metálico desmontable."],
+  ["/camarote-triple", "Camarote metálico de tres niveles."],
+];
+
 test("camarotes hub links preserved organic product variants", async ({ page }) => {
   await page.goto("/camarotes", { waitUntil: "domcontentloaded" });
   const section = page.locator("section", { has: page.getByRole("heading", { name: "Páginas específicas de camas y camarotes." }) });
@@ -35,6 +41,16 @@ test("metal beds page links preserved bed variants", async ({ page }) => {
   const section = page.locator("section", { has: page.getByRole("heading", { name: "Páginas específicas de camas metálicas." }) });
   await expect(section).toBeVisible();
   for (const [href, label] of metalBedsPreservedLinks) {
+    const link = section.getByRole("link", { name: new RegExp(label.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")) });
+    await expect(link).toHaveAttribute("href", href);
+  }
+});
+
+test("enterprise page links preserved institutional product routes", async ({ page }) => {
+  await page.goto("/empresas", { waitUntil: "domcontentloaded" });
+  const section = page.locator("section", { has: page.getByRole("heading", { name: "Páginas específicas para compras institucionales." }) });
+  await expect(section).toBeVisible();
+  for (const [href, label] of b2bPreservedLinks) {
     const link = section.getByRole("link", { name: new RegExp(label.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")) });
     await expect(link).toHaveAttribute("href", href);
   }
