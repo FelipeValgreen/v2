@@ -11,9 +11,10 @@ Fuente base: `docs/GSC_PENDING_URLS.csv`, 58 filas con estado `LIVE-OBSERVED GSC
 - URLs originalmente clasificadas como parciales/no claras: 43.
 - URLs sin candidato tecnico en el inventario actual: 0.
 - Decidibles ahora por criterio documentado: 32.
-- Requieren export GSC: 9.
-- Bloqueadas por dueno: 2.
-- Pendiente de ubicacion: 1.
+- Requieren export GSC como bloqueo primario: 10.
+- Bloqueadas por decision de cobertura: 2.
+- Bloqueadas por decision del dueno: 1.
+- Sin bloqueo adicional despues del criterio documentado: 30.
 
 Linea critica: 0 de las 58 conserva su ruta. El cutover es una migracion completa de URLs, no un reemplazo de sitio. Sin redirects correctos, las 58 pierden historial de golpe.
 
@@ -110,79 +111,79 @@ Estas requieren redirect si el dueno aprueba consolidar la intencion en la ruta 
 
 Estas no se deben convertir en redirects automaticos todavia. Requieren datos GSC, definicion del dueno o decision de ubicacion.
 
-| URL origen | Decisión | Destino | Justificación | ¿requiere dato GSC? |
-|---|---|---|---|---|
-| `/camarotes-faenas` | NO CONSOLIDAR sin datos | Por definir | Intencion B2B/sectorial valiosa; puede implicar especificacion, volumen y condiciones de entrega propias. | Si |
-| `/camarotes-salmoneras` | NO CONSOLIDAR sin datos | Por definir | Intencion sectorial exacta para cliente B2B; no es solo sinonimo de camarote. | Si |
-| `/camarotes-mineria` | NO CONSOLIDAR sin datos | Por definir | Intencion sectorial con exigencias potencialmente propias; no inferir certificaciones ni condiciones de faena. | Si |
-| `/camarotes-para-internados` | NO CONSOLIDAR sin datos | Por definir | Intencion institucional y de volumen; puede requerir pagina o seccion especifica. | Si |
-| `/camarotes-para-hospitales` | NO CONSOLIDAR sin datos | Por definir | Intencion institucional sensible; no consolidar sin saber valor organico y alcance real. | Si |
-| `/camarotes-militares` | NO CONSOLIDAR sin datos | Por definir | Intencion institucional/licitacion; puede tener requisitos propios y valor alto. | Si |
-| `/rejas-decorativas` | PRESERVAR | Por definir, pagina propia enlazada desde `/rejas-metalicas` | Producto/intencion distinta a reja perimetral generica. | Solo para priorizar |
-| `/rejas-para-terraza` | PRESERVAR | Por definir, pagina propia enlazada desde `/rejas-metalicas` | Uso distinto y mas residencial; no es solo comuna ni sinonimo. | Solo para priorizar |
-| `/rejas-para-balcon` | PRESERVAR | Por definir, pagina propia enlazada desde `/rejas-metalicas` | Uso distinto, con restricciones y lenguaje propio. | Solo para priorizar |
-| `/cercos-perimetrales-concepcion` | BLOQUEADO POR DUENO | Por definir | El schema declara `areaServed: Región Metropolitana de Santiago`; hay que confirmar si RINON atiende Concepcion. | No: decision de cobertura |
-| `/cercos-perimetrales-antofagasta` | BLOQUEADO POR DUENO | Por definir | El schema declara `areaServed: Región Metropolitana de Santiago`; hay que confirmar si RINON atiende Antofagasta. | No: decision de cobertura |
-| `/camarotes-san-bernardo` | PRESERVAR CONTENIDO, ubicacion por definir | Por definir: landing propia o `/nosotros#ubicacion` | San Bernardo es la ubicacion real del taller; tiene informacion local defendible. | No: decision del dueno |
+| URL origen | Decisión | Destino | Justificación | ¿requiere dato GSC? | Tipo de bloqueo |
+|---|---|---|---|---|---|
+| `/camarotes-faenas` | NO CONSOLIDAR sin datos | Por definir | Intencion B2B/sectorial valiosa; puede implicar especificacion, volumen y condiciones de entrega propias. | Si | dato_gsc |
+| `/camarotes-salmoneras` | NO CONSOLIDAR sin datos | Por definir | Intencion sectorial exacta para cliente B2B; no es solo sinonimo de camarote. | Si | dato_gsc |
+| `/camarotes-mineria` | NO CONSOLIDAR sin datos | Por definir | Intencion sectorial con exigencias potencialmente propias; no inferir certificaciones ni condiciones de faena. | Si | dato_gsc |
+| `/camarotes-para-internados` | NO CONSOLIDAR sin datos | Por definir | Intencion institucional y de volumen; puede requerir pagina o seccion especifica. | Si | dato_gsc |
+| `/camarotes-para-hospitales` | NO CONSOLIDAR sin datos | Por definir | Intencion institucional sensible; no consolidar sin saber valor organico y alcance real. | Si | dato_gsc |
+| `/camarotes-militares` | NO CONSOLIDAR sin datos | Por definir | Intencion institucional/licitacion; puede tener requisitos propios y valor alto. | Si | dato_gsc |
+| `/rejas-decorativas` | PRESERVAR | Por definir, pagina propia enlazada desde `/rejas-metalicas` | Producto/intencion distinta a reja perimetral generica. | Solo para priorizar | dato_gsc |
+| `/rejas-para-terraza` | PRESERVAR | Por definir, pagina propia enlazada desde `/rejas-metalicas` | Uso distinto y mas residencial; no es solo comuna ni sinonimo. | Solo para priorizar | dato_gsc |
+| `/rejas-para-balcon` | PRESERVAR | Por definir, pagina propia enlazada desde `/rejas-metalicas` | Uso distinto, con restricciones y lenguaje propio. | Solo para priorizar | dato_gsc |
+| `/cercos-perimetrales-concepcion` | BLOQUEADO POR COBERTURA | Por definir | El schema declara `areaServed: Región Metropolitana de Santiago`; hay que confirmar si RINON atiende Concepcion. | No: decision de cobertura | decision_cobertura |
+| `/cercos-perimetrales-antofagasta` | BLOQUEADO POR COBERTURA | Por definir | El schema declara `areaServed: Región Metropolitana de Santiago`; hay que confirmar si RINON atiende Antofagasta. | No: decision de cobertura | decision_cobertura |
+| `/camarotes-san-bernardo` | PRESERVAR CONTENIDO, ubicacion por definir | Por definir: landing propia o `/nosotros#ubicacion` | San Bernardo es la ubicacion real del taller; tiene informacion local defendible. | No: decision del dueno | decision_dueño |
 
 ## Decisiones documentadas sobre las 43 antiguas de Lista C
 
 Estas decisiones quedan documentadas, no ejecutadas. Ningun redirect se implementa en este lote.
 
-| URL origen | Decisión | Destino | Justificación | ¿requiere dato GSC? |
-|---|---|---|---|---|
-| `/camarotes-providencia` | CONSOLIDAR · 301 | `/camarotes` | Producto identico y despacho a toda la RM; 13 comunas casi iguales serian patron doorway. | No |
-| `/camarotes-las-condes` | CONSOLIDAR · 301 | `/camarotes` | Producto identico y despacho a toda la RM; comuna no cambia el producto. | No |
-| `/camarotes-maipu` | CONSOLIDAR · 301 | `/camarotes` | Producto identico y despacho a toda la RM; comuna no cambia el producto. | No |
-| `/camarotes-nunoa` | CONSOLIDAR · 301 | `/camarotes` | Producto identico y despacho a toda la RM; comuna no cambia el producto. | No |
-| `/camarotes-la-florida` | CONSOLIDAR · 301 | `/camarotes` | Producto identico y despacho a toda la RM; comuna no cambia el producto. | No |
-| `/camarotes-pudahuel` | CONSOLIDAR · 301 | `/camarotes` | Producto identico y despacho a toda la RM; comuna no cambia el producto. | No |
-| `/camarotes-santiago-centro` | CONSOLIDAR · 301 | `/camarotes` | Producto identico y despacho a toda la RM; comuna no cambia el producto. | No |
-| `/camarotes-penalolen` | CONSOLIDAR · 301 | `/camarotes` | Producto identico y despacho a toda la RM; comuna no cambia el producto. | No |
-| `/camarotes-quilicura` | CONSOLIDAR · 301 | `/camarotes` | Producto identico y despacho a toda la RM; comuna no cambia el producto. | No |
-| `/camarotes-puente-alto` | CONSOLIDAR · 301 | `/camarotes` | Producto identico y despacho a toda la RM; comuna no cambia el producto. | No |
-| `/camarotes-renca` | CONSOLIDAR · 301 | `/camarotes` | Producto identico y despacho a toda la RM; comuna no cambia el producto. | No |
-| `/camarotes-estacion-central` | CONSOLIDAR · 301 | `/camarotes` | Producto identico y despacho a toda la RM; comuna no cambia el producto. | No |
-| `/camarotes-lo-barnechea` | CONSOLIDAR · 301 | `/camarotes` | Producto identico y despacho a toda la RM; comuna no cambia el producto. | No |
-| `/camarotes-san-bernardo` | PRESERVAR CONTENIDO | Por definir | Es donde esta el taller: retiro, direccion y cercania son datos reales. Definir si vive como landing propia o seccion de `/nosotros#ubicacion`. | No |
-| `/pintura-electrostatica-colina` | CONSOLIDAR · 301 | `/pintura-electrostatica` | La pieza viaja al taller; la distancia importa, pero no justifica una pagina por comuna sin evidencia diferenciada. | No |
-| `/pintura-electrostatica-las-condes` | CONSOLIDAR · 301 | `/pintura-electrostatica` | La pieza viaja al taller; comuna no cambia el servicio confirmado. | No |
-| `/pintura-electrostatica-providencia` | CONSOLIDAR · 301 | `/pintura-electrostatica` | La pieza viaja al taller; comuna no cambia el servicio confirmado. | No |
-| `/pintura-electrostatica-santiago-centro` | CONSOLIDAR · 301 | `/pintura-electrostatica` | La pieza viaja al taller; comuna no cambia el servicio confirmado. | No |
-| `/pintura-electrostatica-maipu` | CONSOLIDAR · 301 | `/pintura-electrostatica` | La pieza viaja al taller; comuna no cambia el servicio confirmado. | No |
-| `/pintura-electrostatica-talagante` | CONSOLIDAR · 301 | `/pintura-electrostatica` | La pieza viaja al taller; comuna no cambia el servicio confirmado. | No |
-| `/pintura-electrostatica-la-pintana` | CONSOLIDAR · 301 | `/pintura-electrostatica` | La pieza viaja al taller; comuna no cambia el servicio confirmado. | No |
-| `/pintura-electrostatica-la-cisterna` | CONSOLIDAR · 301 | `/pintura-electrostatica` | La pieza viaja al taller; comuna no cambia el servicio confirmado. | No |
-| `/pintura-electrostatica-zona-sur-santiago` | EVALUAR PRESERVAR | Por definir | Zona sur puede reflejar proximidad real al taller y una busqueda distinta a comuna aislada. | Si |
-| `/camarotes-faenas` | NO CONSOLIDAR sin datos | Por definir | Grupo B2B valioso; coincide con compra por volumen y posible especificacion propia. | Si |
-| `/camarotes-salmoneras` | NO CONSOLIDAR sin datos | Por definir | Grupo B2B valioso; sector con contexto propio. | Si |
-| `/camarotes-mineria` | NO CONSOLIDAR sin datos | Por definir | Grupo B2B valioso; no inferir requisitos de faena sin respaldo. | Si |
-| `/camarotes-para-internados` | NO CONSOLIDAR sin datos | Por definir | Grupo institucional/de volumen; puede merecer contenido propio. | Si |
-| `/camarotes-para-hospitales` | NO CONSOLIDAR sin datos | Por definir | Grupo institucional sensible; requiere datos antes de decidir. | Si |
-| `/camarotes-militares` | NO CONSOLIDAR sin datos | Por definir | Grupo institucional/de compra formal; requiere datos antes de decidir. | Si |
-| `/rejas-decorativas` | PRESERVAR | Pagina propia por definir, enlazada desde `/rejas-metalicas` | Intencion distinta a reja perimetral: producto y criterio de decision propios. | Solo para priorizar |
-| `/rejas-para-terraza` | PRESERVAR | Pagina propia por definir, enlazada desde `/rejas-metalicas` | Uso residencial/especifico distinto a cierre perimetral generico. | Solo para priorizar |
-| `/rejas-para-balcon` | PRESERVAR | Pagina propia por definir, enlazada desde `/rejas-metalicas` | Uso especifico con lenguaje y restricciones propias. | Solo para priorizar |
-| `/rejas-metalicas-pudahuel` | CONSOLIDAR · 301 | `/rejas-metalicas` | Comuna no cambia el producto; evitar patron doorway. | No |
-| `/rejas-metalicas-maipu` | CONSOLIDAR · 301 | `/rejas-metalicas` | Comuna no cambia el producto; evitar patron doorway. | No |
-| `/rejas-metalicas-cerrillos` | CONSOLIDAR · 301 | `/rejas-metalicas` | Comuna no cambia el producto; evitar patron doorway. | No |
-| `/rejas-metalicas-puente-alto` | CONSOLIDAR · 301 | `/rejas-metalicas` | Comuna no cambia el producto; evitar patron doorway. | No |
-| `/rejas-metalicas-precio` | CONSOLIDAR · 301 | `/rejas-metalicas` | Trafico de comparacion/precio; la cotizacion define alcance, no una landing de precio. | No |
-| `/camarotes-baratos` | CONSOLIDAR · 301 | `/camarotes` | "Baratos" contradice posicionamiento de marca y no define producto distinto. | No |
-| `/camarotes-precio` | CONSOLIDAR · 301 | `/camarotes` | Trafico de comparacion/precio; la cotizacion define alcance. | No |
-| `/camarote-con-escritorio-economico` | CONSOLIDAR · 301 | `/camarote-con-escritorio` | Variante comercial/precio sin producto propio aprobado. | No |
-| `/camarote-con-escritorio-full-2-plazas` | CONSOLIDAR · 301 | `/camarote-con-escritorio` | Variante del mismo owner; plazas y configuracion se confirman en cotizacion. | No |
-| `/cercos-perimetrales-concepcion` | BLOQUEADO POR DUENO | Por definir | Area servida declarada es RM; confirmar si RINON atiende Concepcion o si esta URL debe retirarse/consolidarse. | No |
-| `/cercos-perimetrales-antofagasta` | BLOQUEADO POR DUENO | Por definir | Area servida declarada es RM; confirmar si RINON atiende Antofagasta o si esta URL debe retirarse/consolidarse. | No |
+| URL origen | Decisión | Destino | Justificación | ¿requiere dato GSC? | Tipo de bloqueo |
+|---|---|---|---|---|---|
+| `/camarotes-providencia` | CONSOLIDAR · 301 | `/camarotes` | Producto identico y despacho a toda la RM; 13 comunas casi iguales serian patron doorway. | No | ninguno |
+| `/camarotes-las-condes` | CONSOLIDAR · 301 | `/camarotes` | Producto identico y despacho a toda la RM; comuna no cambia el producto. | No | ninguno |
+| `/camarotes-maipu` | CONSOLIDAR · 301 | `/camarotes` | Producto identico y despacho a toda la RM; comuna no cambia el producto. | No | ninguno |
+| `/camarotes-nunoa` | CONSOLIDAR · 301 | `/camarotes` | Producto identico y despacho a toda la RM; comuna no cambia el producto. | No | ninguno |
+| `/camarotes-la-florida` | CONSOLIDAR · 301 | `/camarotes` | Producto identico y despacho a toda la RM; comuna no cambia el producto. | No | ninguno |
+| `/camarotes-pudahuel` | CONSOLIDAR · 301 | `/camarotes` | Producto identico y despacho a toda la RM; comuna no cambia el producto. | No | ninguno |
+| `/camarotes-santiago-centro` | CONSOLIDAR · 301 | `/camarotes` | Producto identico y despacho a toda la RM; comuna no cambia el producto. | No | ninguno |
+| `/camarotes-penalolen` | CONSOLIDAR · 301 | `/camarotes` | Producto identico y despacho a toda la RM; comuna no cambia el producto. | No | ninguno |
+| `/camarotes-quilicura` | CONSOLIDAR · 301 | `/camarotes` | Producto identico y despacho a toda la RM; comuna no cambia el producto. | No | ninguno |
+| `/camarotes-puente-alto` | CONSOLIDAR · 301 | `/camarotes` | Producto identico y despacho a toda la RM; comuna no cambia el producto. | No | ninguno |
+| `/camarotes-renca` | CONSOLIDAR · 301 | `/camarotes` | Producto identico y despacho a toda la RM; comuna no cambia el producto. | No | ninguno |
+| `/camarotes-estacion-central` | CONSOLIDAR · 301 | `/camarotes` | Producto identico y despacho a toda la RM; comuna no cambia el producto. | No | ninguno |
+| `/camarotes-lo-barnechea` | CONSOLIDAR · 301 | `/camarotes` | Producto identico y despacho a toda la RM; comuna no cambia el producto. | No | ninguno |
+| `/camarotes-san-bernardo` | PRESERVAR CONTENIDO | Por definir | Es donde esta el taller: retiro, direccion y cercania son datos reales. Definir si vive como landing propia o seccion de `/nosotros#ubicacion`. | No | decision_dueño |
+| `/pintura-electrostatica-colina` | CONSOLIDAR · 301 | `/pintura-electrostatica` | La pieza viaja al taller; la distancia importa, pero no justifica una pagina por comuna sin evidencia diferenciada. | No | ninguno |
+| `/pintura-electrostatica-las-condes` | CONSOLIDAR · 301 | `/pintura-electrostatica` | La pieza viaja al taller; comuna no cambia el servicio confirmado. | No | ninguno |
+| `/pintura-electrostatica-providencia` | CONSOLIDAR · 301 | `/pintura-electrostatica` | La pieza viaja al taller; comuna no cambia el servicio confirmado. | No | ninguno |
+| `/pintura-electrostatica-santiago-centro` | CONSOLIDAR · 301 | `/pintura-electrostatica` | La pieza viaja al taller; comuna no cambia el servicio confirmado. | No | ninguno |
+| `/pintura-electrostatica-maipu` | CONSOLIDAR · 301 | `/pintura-electrostatica` | La pieza viaja al taller; comuna no cambia el servicio confirmado. | No | ninguno |
+| `/pintura-electrostatica-talagante` | CONSOLIDAR · 301 | `/pintura-electrostatica` | La pieza viaja al taller; comuna no cambia el servicio confirmado. | No | ninguno |
+| `/pintura-electrostatica-la-pintana` | CONSOLIDAR · 301 | `/pintura-electrostatica` | La pieza viaja al taller; comuna no cambia el servicio confirmado. | No | ninguno |
+| `/pintura-electrostatica-la-cisterna` | CONSOLIDAR · 301 | `/pintura-electrostatica` | La pieza viaja al taller; comuna no cambia el servicio confirmado. | No | ninguno |
+| `/pintura-electrostatica-zona-sur-santiago` | EVALUAR PRESERVAR | Por definir | Zona sur puede reflejar proximidad real al taller y una busqueda distinta a comuna aislada. | Si | dato_gsc |
+| `/camarotes-faenas` | NO CONSOLIDAR sin datos | Por definir | Grupo B2B valioso; coincide con compra por volumen y posible especificacion propia. | Si | dato_gsc |
+| `/camarotes-salmoneras` | NO CONSOLIDAR sin datos | Por definir | Grupo B2B valioso; sector con contexto propio. | Si | dato_gsc |
+| `/camarotes-mineria` | NO CONSOLIDAR sin datos | Por definir | Grupo B2B valioso; no inferir requisitos de faena sin respaldo. | Si | dato_gsc |
+| `/camarotes-para-internados` | NO CONSOLIDAR sin datos | Por definir | Grupo institucional/de volumen; puede merecer contenido propio. | Si | dato_gsc |
+| `/camarotes-para-hospitales` | NO CONSOLIDAR sin datos | Por definir | Grupo institucional sensible; requiere datos antes de decidir. | Si | dato_gsc |
+| `/camarotes-militares` | NO CONSOLIDAR sin datos | Por definir | Grupo institucional/de compra formal; requiere datos antes de decidir. | Si | dato_gsc |
+| `/rejas-decorativas` | PRESERVAR | Pagina propia por definir, enlazada desde `/rejas-metalicas` | Intencion distinta a reja perimetral: producto y criterio de decision propios. | Solo para priorizar | dato_gsc |
+| `/rejas-para-terraza` | PRESERVAR | Pagina propia por definir, enlazada desde `/rejas-metalicas` | Uso residencial/especifico distinto a cierre perimetral generico. | Solo para priorizar | dato_gsc |
+| `/rejas-para-balcon` | PRESERVAR | Pagina propia por definir, enlazada desde `/rejas-metalicas` | Uso especifico con lenguaje y restricciones propias. | Solo para priorizar | dato_gsc |
+| `/rejas-metalicas-pudahuel` | CONSOLIDAR · 301 | `/rejas-metalicas` | Comuna no cambia el producto; evitar patron doorway. | No | ninguno |
+| `/rejas-metalicas-maipu` | CONSOLIDAR · 301 | `/rejas-metalicas` | Comuna no cambia el producto; evitar patron doorway. | No | ninguno |
+| `/rejas-metalicas-cerrillos` | CONSOLIDAR · 301 | `/rejas-metalicas` | Comuna no cambia el producto; evitar patron doorway. | No | ninguno |
+| `/rejas-metalicas-puente-alto` | CONSOLIDAR · 301 | `/rejas-metalicas` | Comuna no cambia el producto; evitar patron doorway. | No | ninguno |
+| `/rejas-metalicas-precio` | CONSOLIDAR · 301 | `/rejas-metalicas` | Trafico de comparacion/precio; la cotizacion define alcance, no una landing de precio. | No | ninguno |
+| `/camarotes-baratos` | CONSOLIDAR · 301 | `/camarotes` | "Baratos" contradice posicionamiento de marca y no define producto distinto. | No | ninguno |
+| `/camarotes-precio` | CONSOLIDAR · 301 | `/camarotes` | Trafico de comparacion/precio; la cotizacion define alcance. | No | ninguno |
+| `/camarote-con-escritorio-economico` | CONSOLIDAR · 301 | `/camarote-con-escritorio` | Variante comercial/precio sin producto propio aprobado. | No | ninguno |
+| `/camarote-con-escritorio-full-2-plazas` | CONSOLIDAR · 301 | `/camarote-con-escritorio` | Variante del mismo owner; plazas y configuracion se confirman en cotizacion. | No | ninguno |
+| `/cercos-perimetrales-concepcion` | BLOQUEADO POR COBERTURA | Por definir | Area servida declarada es RM; confirmar si RINON atiende Concepcion o si esta URL debe retirarse/consolidarse. | No | decision_cobertura |
+| `/cercos-perimetrales-antofagasta` | BLOQUEADO POR COBERTURA | Por definir | Area servida declarada es RM; confirmar si RINON atiende Antofagasta o si esta URL debe retirarse/consolidarse. | No | decision_cobertura |
 
 ## Resumen de decision de la Lista C
 
-- Decidibles ahora por criterio: 32.
-- Requieren export GSC: 9 (6 sectoriales de camarotes, 3 tipologias de reja; `pintura-electrostatica-zona-sur-santiago` tambien queda marcada para evaluar preservar con dato GSC).
-- Bloqueadas por dueno: 2 (`/cercos-perimetrales-concepcion`, `/cercos-perimetrales-antofagasta`).
-- Pendiente de ubicacion: 1 (`/camarotes-san-bernardo`).
+- Tipo de bloqueo `ninguno`: 30.
+- Tipo de bloqueo `dato_gsc`: 10 (6 sectoriales de camarotes, 3 tipologias de reja y `/pintura-electrostatica-zona-sur-santiago`).
+- Tipo de bloqueo `decision_cobertura`: 2 (`/cercos-perimetrales-concepcion`, `/cercos-perimetrales-antofagasta`).
+- Tipo de bloqueo `decision_dueño`: 1 (`/camarotes-san-bernardo`).
 
-Nota de conteo: la instruccion del lote pide reportar 9 URLs con export GSC (6 sectoriales + 3 tipologias de reja), pero tambien marca `/pintura-electrostatica-zona-sur-santiago` como "evaluar preservar (requiere dato GSC)". Por eso la tabla conserva ese requisito en la fila, sin mezclarlo con el conteo principal pedido.
+Nota de conteo: con la separacion por tipo de bloqueo, la discrepancia queda explicada. El conteo no cierra en 9 si `/pintura-electrostatica-zona-sur-santiago` se mantiene como bloqueo por dato GSC; cierra en 10. El numero 9 solo cuenta 6 sectoriales de camarotes + 3 tipologias de reja.
 
 ## Verificaciones adicionales
 
@@ -243,3 +244,7 @@ Origen actual:
 Conclusion: la discrepancia observada venia de un deploy/cache anterior. En el deploy actual no hay discrepancia entre Home y `/empresas`; ambas paginas usan el JSON-LD global con el mismo `@id` y el mismo PNG raster.
 
 No se corrigio en este lote.
+
+### 5. Exclusión deliberada de `/tratamiento-superficies`
+
+Decision registrada el 2026-09-07: `/tratamiento-superficies` queda sin enlazar por instruccion explicita. No es una omision del inventario ni un error de IA. La ruta depende de la decision no tecnica sobre la linea "Terminaciones" y no debe ser enlazada automaticamente desde este lote.

@@ -45,6 +45,7 @@ Mode: **SAFE PRE-CUTOVER**
 - Obtain explicit production cutover authorization before changing domain/indexation/redirect/write/tracking flags.
 - Identify which Search Console property corresponds to each verification token before replacing the current token. The new token must stay unactivated until the property with the **58** `GSC-pending` URLs is confirmed.
 - Obtain exact Google Business Profile values for `image`, `geo`, `openingHoursSpecification` and `sameAs`. Do not infer or synthesize these fields.
+- Production schema asset gap before cutover: `https://rinon.cl/brand/logo-rinon-horizontal.png` currently returns HTTP 404 on the live site. The RC.7 code correctly points Organization JSON-LD to the future canonical raster, but until cutover the production domain does not serve that asset, just as canonical and `og:url` already point at `rinon.cl` ahead of the authorized release. Do not change the schema value in preview; resolve by cutover/deployment alignment.
 
 ## Pending non-technical decisions
 - **Terminaciones line:** The commercial presentation treats finishes/surface treatments as one of four lines with its own sheet, while the site currently says "Tres mundos" and leaves the broader route in the footer. This affects taxonomy, navigation and the future destination of `/tratamiento-superficies`.

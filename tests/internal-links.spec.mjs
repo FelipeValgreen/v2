@@ -1,36 +1,11 @@
 import { test, expect } from "@playwright/test";
-
-const camarotesPreservedLinks = [
-  ["/cama-alta", "Cama alta metálica."],
-  ["/camarote-1-5-plazas", "Camarote con cama ampliada."],
-  ["/camarote-2-plazas", "Camarote con cama inferior de dos plazas."],
-  ["/camarote-desmontable", "Camarote metálico desmontable."],
-  ["/camarote-doble", "Camarote con cama inferior ampliada."],
-  ["/camarote-nido", "Camarote nido metálico."],
-  ["/camarote-titanic", "Camarote Titanic."],
-  ["/camarote-triple", "Camarote metálico de tres niveles."],
-  ["/cama-loft-metalica", "Cama loft metálica."],
-];
-
-const metalBedsPreservedLinks = [
-  ["/cama-alta", "Cama alta metálica."],
-  ["/cama-dos-plazas-con-cajon", "Cama metálica con cajón inferior."],
-  ["/cama-institucional-metalica", "Cama metálica para compras institucionales."],
-  ["/cama-loft-con-escritorio", "Cama loft con escritorio."],
-  ["/cama-loft-metalica", "Cama loft metálica."],
-];
-
-const b2bPreservedLinks = [
-  ["/cama-institucional-metalica", "Cama metálica para compras institucionales."],
-  ["/camarote-desmontable", "Camarote metálico desmontable."],
-  ["/camarote-triple", "Camarote metálico de tres niveles."],
-];
+import { COPY } from "./fixtures/copy.mjs";
 
 test("camarotes hub links preserved organic product variants", async ({ page }) => {
   await page.goto("/camarotes", { waitUntil: "domcontentloaded" });
-  const section = page.locator("section", { has: page.getByRole("heading", { name: "Páginas específicas de camas y camarotes." }) });
+  const section = page.locator("section", { has: page.getByRole("heading", { name: COPY.internalLinks.camarotesHeading }) });
   await expect(section).toBeVisible();
-  for (const [href, label] of camarotesPreservedLinks) {
+  for (const [href, label] of COPY.internalLinks.camarotesPreservedLinks) {
     const link = section.getByRole("link", { name: new RegExp(label.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")) });
     await expect(link).toHaveAttribute("href", href);
   }
@@ -38,9 +13,9 @@ test("camarotes hub links preserved organic product variants", async ({ page }) 
 
 test("metal beds page links preserved bed variants", async ({ page }) => {
   await page.goto("/camas-metalicas", { waitUntil: "domcontentloaded" });
-  const section = page.locator("section", { has: page.getByRole("heading", { name: "Páginas específicas de camas metálicas." }) });
+  const section = page.locator("section", { has: page.getByRole("heading", { name: COPY.internalLinks.camasMetalicasHeading }) });
   await expect(section).toBeVisible();
-  for (const [href, label] of metalBedsPreservedLinks) {
+  for (const [href, label] of COPY.internalLinks.metalBedsPreservedLinks) {
     const link = section.getByRole("link", { name: new RegExp(label.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")) });
     await expect(link).toHaveAttribute("href", href);
   }
@@ -48,9 +23,9 @@ test("metal beds page links preserved bed variants", async ({ page }) => {
 
 test("enterprise page links preserved institutional product routes", async ({ page }) => {
   await page.goto("/empresas", { waitUntil: "domcontentloaded" });
-  const section = page.locator("section", { has: page.getByRole("heading", { name: "Páginas específicas para compras institucionales." }) });
+  const section = page.locator("section", { has: page.getByRole("heading", { name: COPY.internalLinks.empresasHeading }) });
   await expect(section).toBeVisible();
-  for (const [href, label] of b2bPreservedLinks) {
+  for (const [href, label] of COPY.internalLinks.b2bPreservedLinks) {
     const link = section.getByRole("link", { name: new RegExp(label.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")) });
     await expect(link).toHaveAttribute("href", href);
   }

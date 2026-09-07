@@ -34,6 +34,34 @@ export const COPY = {
     updatedGuideHeading: "Esta guía ya tiene una versión actualizada.",
     updatedGuideLink: "Ver guía actualizada",
   },
+  internalLinks: {
+    camarotesHeading: "Páginas específicas de camas y camarotes.",
+    camasMetalicasHeading: "Páginas específicas de camas metálicas.",
+    empresasHeading: "Páginas específicas para compras institucionales.",
+    camarotesPreservedLinks: [
+      ["/cama-alta", "Cama alta metálica."],
+      ["/camarote-1-5-plazas", "Camarote con cama ampliada."],
+      ["/camarote-2-plazas", "Camarote con cama inferior de dos plazas."],
+      ["/camarote-desmontable", "Camarote metálico desmontable."],
+      ["/camarote-doble", "Camarote con cama inferior ampliada."],
+      ["/camarote-nido", "Camarote nido metálico."],
+      ["/camarote-titanic", "Camarote Titanic."],
+      ["/camarote-triple", "Camarote metálico de tres niveles."],
+      ["/cama-loft-metalica", "Cama loft metálica."],
+    ],
+    metalBedsPreservedLinks: [
+      ["/cama-alta", "Cama alta metálica."],
+      ["/cama-dos-plazas-con-cajon", "Cama metálica con cajón inferior."],
+      ["/cama-institucional-metalica", "Cama metálica para compras institucionales."],
+      ["/cama-loft-con-escritorio", "Cama loft con escritorio."],
+      ["/cama-loft-metalica", "Cama loft metálica."],
+    ],
+    b2bPreservedLinks: [
+      ["/cama-institucional-metalica", "Cama metálica para compras institucionales."],
+      ["/camarote-desmontable", "Camarote metálico desmontable."],
+      ["/camarote-triple", "Camarote metálico de tres niveles."],
+    ],
+  },
   notFound: "No encontramos esta página.",
   seo: {
     structures: [
