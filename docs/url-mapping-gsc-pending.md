@@ -11,10 +11,10 @@ Fuente base: `docs/GSC_PENDING_URLS.csv`, 58 filas con estado `LIVE-OBSERVED GSC
 - URLs originalmente clasificadas como parciales/no claras: 43.
 - URLs sin candidato tecnico en el inventario actual: 0.
 - Decidibles ahora por criterio documentado: 32.
-- Requieren export GSC como bloqueo primario: 10.
+- Requieren export GSC como bloqueo primario: 9.
 - Bloqueadas por decision de cobertura: 2.
 - Bloqueadas por decision del dueno: 1.
-- Sin bloqueo adicional despues del criterio documentado: 30.
+- Sin bloqueo adicional despues del criterio documentado: 31.
 
 Linea critica: 0 de las 58 conserva su ruta. El cutover es una migracion completa de URLs, no un reemplazo de sitio. Sin redirects correctos, las 58 pierden historial de golpe.
 
@@ -154,7 +154,7 @@ Estas decisiones quedan documentadas, no ejecutadas. Ningun redirect se implemen
 | `/pintura-electrostatica-talagante` | CONSOLIDAR · 301 | `/pintura-electrostatica` | La pieza viaja al taller; comuna no cambia el servicio confirmado. | No | ninguno |
 | `/pintura-electrostatica-la-pintana` | CONSOLIDAR · 301 | `/pintura-electrostatica` | La pieza viaja al taller; comuna no cambia el servicio confirmado. | No | ninguno |
 | `/pintura-electrostatica-la-cisterna` | CONSOLIDAR · 301 | `/pintura-electrostatica` | La pieza viaja al taller; comuna no cambia el servicio confirmado. | No | ninguno |
-| `/pintura-electrostatica-zona-sur-santiago` | EVALUAR PRESERVAR | Por definir | Zona sur puede reflejar proximidad real al taller y una busqueda distinta a comuna aislada. | Si | dato_gsc |
+| `/pintura-electrostatica-zona-sur-santiago` | CONSOLIDAR · 301 | `/pintura-electrostatica` | "Zona sur de Santiago" es un descriptor difuso, no una comuna. El taller esta en San Bernardo, por lo que la seccion de cobertura de `/pintura-electrostatica` absorbe esa intencion con un dato concreto. | No | ninguno |
 | `/camarotes-faenas` | NO CONSOLIDAR sin datos | Por definir | Grupo B2B valioso; coincide con compra por volumen y posible especificacion propia. | Si | dato_gsc |
 | `/camarotes-salmoneras` | NO CONSOLIDAR sin datos | Por definir | Grupo B2B valioso; sector con contexto propio. | Si | dato_gsc |
 | `/camarotes-mineria` | NO CONSOLIDAR sin datos | Por definir | Grupo B2B valioso; no inferir requisitos de faena sin respaldo. | Si | dato_gsc |
@@ -178,12 +178,12 @@ Estas decisiones quedan documentadas, no ejecutadas. Ningun redirect se implemen
 
 ## Resumen de decision de la Lista C
 
-- Tipo de bloqueo `ninguno`: 30.
-- Tipo de bloqueo `dato_gsc`: 10 (6 sectoriales de camarotes, 3 tipologias de reja y `/pintura-electrostatica-zona-sur-santiago`).
+- Tipo de bloqueo `ninguno`: 31.
+- Tipo de bloqueo `dato_gsc`: 9 (6 sectoriales de camarotes y 3 tipologias de reja).
 - Tipo de bloqueo `decision_cobertura`: 2 (`/cercos-perimetrales-concepcion`, `/cercos-perimetrales-antofagasta`).
 - Tipo de bloqueo `decision_dueño`: 1 (`/camarotes-san-bernardo`).
 
-Nota de conteo: con la separacion por tipo de bloqueo, la discrepancia queda explicada. El conteo no cierra en 9 si `/pintura-electrostatica-zona-sur-santiago` se mantiene como bloqueo por dato GSC; cierra en 10. El numero 9 solo cuenta 6 sectoriales de camarotes + 3 tipologias de reja.
+Nota de conteo: la discrepancia queda resuelta por decision del 2026-09-07. `/pintura-electrostatica-zona-sur-santiago` se consolida en `/pintura-electrostatica`, por lo que sale de `dato_gsc` y pasa a `ninguno`.
 
 ## Verificaciones adicionales
 
