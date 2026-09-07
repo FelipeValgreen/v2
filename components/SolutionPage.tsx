@@ -16,6 +16,18 @@ import { XRayMetal } from "@/components/XRayMetal";
 import { SolutionLocalNav } from "@/components/SolutionLocalNav";
 import { SolutionStoryScene } from "@/components/SolutionStoryScene";
 
+const camarotesPreservedLinks = [
+  { href: "/cama-alta", label: "Cama alta metálica." },
+  { href: "/camarote-1-5-plazas", label: "Camarote con cama ampliada." },
+  { href: "/camarote-2-plazas", label: "Camarote con cama inferior de dos plazas." },
+  { href: "/camarote-desmontable", label: "Camarote metálico desmontable." },
+  { href: "/camarote-doble", label: "Camarote con cama inferior ampliada." },
+  { href: "/camarote-nido", label: "Camarote nido metálico." },
+  { href: "/camarote-titanic", label: "Camarote Titanic." },
+  { href: "/camarote-triple", label: "Camarote metálico de tres niveles." },
+  { href: "/cama-loft-metalica", label: "Cama loft metálica." },
+] as const;
+
 export function SolutionPage({ solution }: { solution: Solution }) {
   const releaseNotice = getSolutionReleaseNotice(solution.slug);
   const launchEnabled = isSolutionLaunchEnabled(solution.slug);
@@ -65,6 +77,7 @@ export function SolutionPage({ solution }: { solution: Solution }) {
 
     <SolutionStoryScene slug={solution.slug} />
     {solution.slug==="/camarotes" && getReferencePhotos(solution.slug).length>1?<section className="prd2-product-reference"><div className="container"><div className="prd2-section-head"><div><span className="prd2-kicker dark">REFERENCIAS DE PRODUCTO</span><h2>Configuraciones reales para partir la conversación.</h2></div><p>Las imágenes muestran referencias actuales de producto. La cotización confirma configuración, cantidad, medidas y modalidad de entrega aplicables al pedido.</p></div><ProductReferenceGallery slug={solution.slug}/></div></section>:null}
+    {solution.slug==="/camarotes"?<section className="v2-solution-section soft" aria-labelledby="camarotes-variantes-preservadas"><div className="container"><div className="section-head"><div><div className="v2-eyebrow">VARIANTES PRESERVADAS</div><h2 id="camarotes-variantes-preservadas">Páginas específicas de camas y camarotes.</h2></div></div><div className="v2-resource-grid">{camarotesPreservedLinks.map(item=><Link key={item.href} href={item.href}><span>{item.href}</span><h3>{item.label}</h3></Link>)}</div></div></section>:null}
 
     <section id="alcance" className="prd2-solution-content" data-reveal><div className="container"><div className="prd2-section-head"><div><span className="prd2-kicker dark">QUÉ PODEMOS EVALUAR</span><h2>Partimos por el requerimiento, no por una solución genérica.</h2></div><p>Cada trabajo se confirma después de revisar dimensiones, cantidad, uso y antecedentes disponibles.</p></div><div className="prd2-scope-grid">{solution.bullets.map((item,i)=><article key={item.title}><span>0{i+1}</span><h3>{item.title}</h3><p>{item.body}</p></article>)}</div></div></section>
     <SolutionFeatureBand slug={solution.slug} />
