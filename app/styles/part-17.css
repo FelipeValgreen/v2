@@ -7,3 +7,34 @@
  .whatsapp-float:focus-visible{outline:3px solid #F58220;outline-offset:3px}
 }
 @media(prefers-reduced-motion:reduce){.whatsapp-float{transition:none}.whatsapp-float:hover,.whatsapp-float:focus-visible{transform:none}}
+
+.product-visual-gallery{display:grid;gap:12px}
+.product-visual-gallery-main,.product-visual-gallery-strip figure{position:relative;margin:0;overflow:hidden;background:#111315}
+.product-visual-gallery-main{min-height:520px;border-radius:8px}
+.product-visual-gallery-main img,.product-visual-gallery-strip img{object-fit:cover}
+.product-visual-gallery-main figcaption{position:absolute;left:18px;right:18px;bottom:18px;display:grid;gap:5px;background:rgba(10,11,12,.78);border-left:2px solid #F58220;color:#fff;padding:13px 15px;backdrop-filter:blur(8px)}
+.product-visual-gallery-main figcaption span{font-size:12px;font-weight:900;line-height:1.2}
+.product-visual-gallery-main figcaption small{font-size:10px;line-height:1.45;color:#d7dadb}
+.product-visual-gallery-strip{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.product-visual-gallery-strip figure{min-height:155px;border-radius:7px}
+.product-visual-gallery-strip figcaption{position:absolute;left:10px;right:10px;bottom:10px;background:rgba(10,11,12,.72);color:#fff;padding:8px 9px;font-size:9px;font-weight:900;line-height:1.2;backdrop-filter:blur(8px)}
+.rinon-scope-section{background:#fff}
+.rinon-scope-grid{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid #d0d1ce}
+.rinon-scope-grid article{padding:28px 30px 28px 0;margin-right:30px;border-bottom:1px solid #d0d1ce}
+.rinon-scope-grid article:last-child{margin-right:0}
+.rinon-scope-grid span{display:block;margin-bottom:34px;color:#F58220;font-size:9px;letter-spacing:.15em;font-weight:900;text-transform:uppercase}
+.rinon-scope-grid h3{margin:0 0 12px;font-size:22px;line-height:1.12}
+.rinon-scope-grid p{margin:0;color:#62686B;font-size:13px;line-height:1.65}
+@media(max-width:1100px){
+ .product-visual-gallery-main{min-height:500px}
+ .product-visual-gallery-strip figure{min-height:180px}
+}
+@media(max-width:900px){.rinon-scope-grid{grid-template-columns:1fr}.rinon-scope-grid article{margin-right:0}}
+@media(max-width:640px){
+ .product-visual-gallery{gap:10px}
+ .rinon-commercial-hero .product-visual-gallery{order:-1}
+ .product-visual-gallery-main{min-height:390px;border-radius:6px}
+ .product-visual-gallery-main figcaption{left:12px;right:12px;bottom:64px;padding:11px 12px}
+ .product-visual-gallery-strip{grid-template-columns:1fr}
+ .product-visual-gallery-strip figure{min-height:245px}
+}

@@ -1,5 +1,6 @@
 import { test, expect } from "@playwright/test";
 import { gotoReady, route } from "./fixtures/routes.mjs";
+import { COPY } from "./fixtures/copy.mjs";
 
 const CATALOG_ROUTES = [
   { path: "/camarote-con-escritorio", minWidth: 1200 },
@@ -40,10 +41,17 @@ test("catalogue photography never claims a client, project or executed work", as
 
 test("user-supplied product photography replaces the fallback on camas balinesas", async ({ page }) => {
   await gotoReady(page, route("/camas-balinesas"));
-  const figure = page.locator('.evidence-photo[data-visual-provenance="user-drive-reference"]').first();
-  await expect(figure).toBeVisible();
-  await expect(figure.locator("figcaption")).toContainText("REFERENCIA DE PRODUCTO · ARCHIVO");
-  await expect(figure.locator("figcaption")).toContainText("No se atribuye a cliente, obra ni instalación específica.");
+  await expect(page.locator("main h1")).toContainText(COPY.commercial.balineseBedTitle);
+  const gallery = page.locator(".product-visual-gallery");
+  await expect(gallery).toBeVisible();
+  const figures = gallery.locator('[data-visual-provenance="user-drive-reference"]');
+  await expect(figures).toHaveCount(3);
+
+  const figure = gallery.locator(".product-visual-gallery-main").first();
+  await expect(figure.locator("figcaption")).toContainText(COPY.commercial.balineseBedCaption);
+  await expect(figure.locator("figcaption")).toContainText(COPY.commercial.balineseBedCaptionNote);
+  await expect(figure.locator("figcaption")).not.toContainText("Referencia de producto");
+  await expect(figure.locator("figcaption")).not.toContainText("archivo");
 
   const image = figure.locator("img");
   await expect(image).toHaveJSProperty("complete", true);
@@ -53,11 +61,18 @@ test("user-supplied product photography replaces the fallback on camas balinesas
     const img = node.querySelector("img");
     return { natural: img.naturalWidth, rendered: node.getBoundingClientRect().width, src: img.currentSrc };
   });
-  expect(metrics.natural).toBeGreaterThanOrEqual(1800);
+  expect(metrics.natural).toBeGreaterThanOrEqual(2200);
   expect(metrics.rendered, "/camas-balinesas upscale").toBeLessThanOrEqual(metrics.natural + 2);
-  expect(metrics.src).toContain("/visuals/archive/cama-balinesa-product-reference.webp");
+  expect(metrics.src).toContain(COPY.assets.balineseBedHero);
 
   const text = await page.locator("main").innerText();
   expect(text.toLowerCase()).not.toContain("evidencia rinon verificada");
   expect(text.toLowerCase()).not.toContain("obra ejecutada");
+  expect(text.toLowerCase()).not.toContain("fotografía aportada por el dueño");
+  expect(text).toContain("Lo que fabricamos y lo que se define aparte.");
+  expect(text).toContain("Textiles y colchonería");
+  expect(text).toContain("Una foto del celular basta");
+  expect(text).not.toContain("Inclúyelo en el requerimiento si ya está definido.");
+  const schemas = await page.locator('script[type="application/ld+json"]').allTextContents();
+  expect(schemas.join("\n")).toContain(COPY.assets.balineseBedHero);
 });

@@ -2,7 +2,13 @@ export const COPY = {
   assets: {
     brandLogo: "/brand/rinon-lockup-horizontal-inverse.svg",
     archiveCamarote: "/visuals/archive/camarote-product-reference.webp",
+    balineseBedHero: "/visuals/archive/cama-balinesa-product-reference.webp",
     homeHero: "/visuals/home-hero-conceptual-welding.webp",
+  },
+  commercial: {
+    balineseBedTitle: "Una cama balinesa metálica fabricada para tu terraza.",
+    balineseBedCaption: "Cama balinesa metálica para exterior",
+    balineseBedCaptionNote: "Medidas, terminación, cubierta y textiles se definen según el espacio.",
   },
   visuals: {
     archiveCaption: "REFERENCIA DE PRODUCTO · ARCHIVO",
