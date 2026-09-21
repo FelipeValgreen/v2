@@ -16,12 +16,18 @@ type VerifiedRinonVisual = VisualBase & {
   verificationRef: string;
 };
 
+type OwnerPhotoVisual = VisualBase & {
+  provenance: "owner-photo";
+  /** Owner confirmation tying the image to a RINON-made product. */
+  verificationRef: string;
+};
+
 type ReferenceVisual = VisualBase & {
   provenance: "current-site-approved" | "user-drive-reference" | "sister-brand-product" | "conceptual";
   verificationRef?: never;
 };
 
-export type VisualAsset = VerifiedRinonVisual | ReferenceVisual;
+export type VisualAsset = VerifiedRinonVisual | OwnerPhotoVisual | ReferenceVisual;
 
 /**
  * Production cutover is blocked while these release-level visual requirements remain.
@@ -39,6 +45,8 @@ const referenceBase = "/visuals/reference-current";
  * Visual provenance is intentionally conservative:
  * - verified-rinon: only when RINON ownership/project attribution is independently verified;
  *   TypeScript requires an explicit verificationRef before that provenance can be used.
+ * - owner-photo: product photography made by the owner and confirmed as a RINON product;
+ *   it does not identify a client, project or installation site.
  * - sister-brand-product: catalogue photography of the same physical product, published by
  *   Buenos Pal Catre (buenospalcatre.cl), the owner's sister brand and the same company.
  *   It documents the product, never a client, project or installation site. Only unbranded
@@ -70,10 +78,11 @@ const archiveReferenceAssets: Record<string, VisualAsset[]> = {
       src: "/visuals/archive/cama-balinesa-product-reference.webp",
       alt: "Cama balinesa con estructura metálica negra, cortinas claras y respaldo inclinado en exterior",
       kind: "photo",
-      provenance: "user-drive-reference",
+      provenance: "owner-photo",
       label: "Cama balinesa metálica para exterior",
       note: "Medidas, terminación, cubierta y textiles se definen según el espacio.",
       sourceRef: "User-supplied attachment · IMG_5388.HEIC · RINON-VIS-P1-BALINESE-BED-ARCHIVE",
+      verificationRef: "Owner confirmation · 2026-09-21 · own iPhone photo of RINON-made product",
       sourceWidth: 2200,
       sourceHeight: 1650,
     },
@@ -81,9 +90,10 @@ const archiveReferenceAssets: Record<string, VisualAsset[]> = {
       src: "/visuals/archive/cama-balinesa-angle-reference.webp",
       alt: "Vista lateral de cama balinesa con estructura metálica negra y cortinas claras en jardín",
       kind: "photo",
-      provenance: "user-drive-reference",
+      provenance: "owner-photo",
       label: "Vista de estructura y sombra",
       sourceRef: "User-supplied attachment · IMG_5387.HEIC · RINON-VIS-P1-BALINESE-BED-ANGLE",
+      verificationRef: "Owner confirmation · 2026-09-21 · own iPhone photo of RINON-made product",
       sourceWidth: 2200,
       sourceHeight: 1650,
     },
@@ -91,9 +101,10 @@ const archiveReferenceAssets: Record<string, VisualAsset[]> = {
       src: "/visuals/archive/cama-balinesa-front-reference.webp",
       alt: "Vista frontal de cama balinesa metálica negra con textiles claros en exterior",
       kind: "photo",
-      provenance: "user-drive-reference",
+      provenance: "owner-photo",
       label: "Proporción completa en exterior",
       sourceRef: "User-supplied attachment · IMG_5384.HEIC · RINON-VIS-P1-BALINESE-BED-FRONT",
+      verificationRef: "Owner confirmation · 2026-09-21 · own iPhone photo of RINON-made product",
       sourceWidth: 1800,
       sourceHeight: 2400,
     },
@@ -249,6 +260,7 @@ export function hasPhotographicEvidence(slug: string): boolean {
   return getVisuals(slug).some(
     (asset) =>
       asset.provenance === "verified-rinon" ||
+      asset.provenance === "owner-photo" ||
       asset.provenance === "user-drive-reference" ||
       asset.provenance === "sister-brand-product",
   );

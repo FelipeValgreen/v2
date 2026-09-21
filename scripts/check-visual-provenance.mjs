@@ -31,7 +31,7 @@ pass(`visual registry exposes ${assetBlocks.length} auditable assets`);
 
 for(const [index,block] of assetBlocks.entries()){
  const src=block.match(/src:\s*([`\"])(.*?)\1/s)?.[2] ?? `asset-${index+1}`;
- if(!/provenance:\s*"(?:verified-rinon|current-site-approved|user-drive-reference|sister-brand-product|conceptual)"/.test(block)) fail(`${src} declares an allowed provenance`);
+ if(!/provenance:\s*"(?:verified-rinon|owner-photo|current-site-approved|user-drive-reference|sister-brand-product|conceptual)"/.test(block)) fail(`${src} declares an allowed provenance`);
  if(/provenance:\s*"sister-brand-product"/.test(block)){
   if(!/buenospalcatre\.cl/.test(block)) fail(`${src} sister-brand asset must name its catalogue source`);
   if(!/no identifica cliente/.test(block)) fail(`${src} sister-brand asset must state it does not identify a client or project`);
@@ -41,9 +41,9 @@ for(const [index,block] of assetBlocks.entries()){
  else pass(`${src} declares sourceRef`);
 
  const provenance=block.match(/provenance:\s*"([^\"]+)"/)?.[1];
- if(provenance==="verified-rinon"){
-  if(!/verificationRef:\s*"[^\"]+"/.test(block)) fail(`${src} verified-rinon requires verificationRef`);
-  else pass(`${src} verified-rinon has verificationRef`);
+ if(provenance==="verified-rinon" || provenance==="owner-photo"){
+  if(!/verificationRef:\s*"[^\"]+"/.test(block)) fail(`${src} ${provenance} requires verificationRef`);
+  else pass(`${src} ${provenance} has verificationRef`);
  }
  if(provenance==="current-site-approved" || provenance==="user-drive-reference"){
   if(/verificationRef\s*:/.test(block)) fail(`${src} reference imagery cannot declare verificationRef`);
@@ -58,6 +58,8 @@ for(const [index,block] of assetBlocks.entries()){
 
 if(!source.includes('verificationRef: string')) fail("verified-rinon type requires verificationRef");
 else pass("verified-rinon type requires verificationRef");
+if(!source.includes('provenance: "owner-photo"')) fail("owner-photo type requires explicit provenance");
+else pass("owner-photo provenance is explicitly typed");
 if(!source.includes('sourceRef: string')) fail("all visual assets require sourceRef");
 else pass("all visual assets require sourceRef");
 if(!fs.existsSync(structuresBriefPath)) fail("structures conceptual replacement brief exists");

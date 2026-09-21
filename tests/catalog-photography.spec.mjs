@@ -44,7 +44,7 @@ test("user-supplied product photography replaces the fallback on camas balinesas
   await expect(page.locator("main h1")).toContainText(COPY.commercial.balineseBedTitle);
   const gallery = page.locator(".product-visual-gallery");
   await expect(gallery).toBeVisible();
-  const figures = gallery.locator('[data-visual-provenance="user-drive-reference"]');
+  const figures = gallery.locator('[data-visual-provenance="owner-photo"]');
   await expect(figures).toHaveCount(3);
 
   const figure = gallery.locator(".product-visual-gallery-main").first();
