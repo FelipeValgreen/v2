@@ -1,6 +1,14 @@
 import type { NextConfig } from "next";
+import { legacyRedirects } from "./lib/legacy-redirects";
 
 const productionRelease = process.env.RINON_INDEXABLE === "true";
+/**
+ * Legacy rinon.cl URL redirects (lib/legacy-redirects.ts) are evaluated at build time and stay
+ * fail-closed: nothing is emitted unless RINON_ENABLE_MIGRATION_REDIRECTS=true. The 58 live-observed
+ * URLs that are still GSC-pending additionally require RINON_REDIRECT_GSC_PENDING=true.
+ */
+const migrationRedirectsEnabled = process.env.RINON_ENABLE_MIGRATION_REDIRECTS === "true";
+const gscPendingRedirectsEnabled = process.env.RINON_REDIRECT_GSC_PENDING === "true";
 
 const contentSecurityPolicy = [
   "default-src 'self'",
@@ -30,6 +38,12 @@ const securityHeaders = [
 const nextConfig: NextConfig = {
   poweredByHeader: false,
   reactStrictMode: true,
+  async redirects() {
+    if (!migrationRedirectsEnabled) return [];
+    return legacyRedirects
+      .filter((entry) => entry.tier === "family" || gscPendingRedirectsEnabled)
+      .map((entry) => ({ source: entry.source, destination: entry.destination, statusCode: 301 as const }));
+  },
   async headers() {
     const noStore = [{ key: "Cache-Control", value: "no-store, max-age=0" }];
     return [
