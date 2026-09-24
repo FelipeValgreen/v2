@@ -10,3 +10,9 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
+
+# Generated locally: TypeScript incremental cache and visuals reconstructed by scripts/reconstruct-visual-assets.mjs (prebuild)
+tsconfig.tsbuildinfo
+/public/visuals/home-hero-conceptual-welding.webp
+/public/visuals/product-theatre/
+/public/visuals/archive/
