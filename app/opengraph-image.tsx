@@ -18,7 +18,7 @@ export default function OpenGraphImage() {
       </div>
       <div style={{ display: "flex", flexDirection: "column", maxWidth: 900, position: "relative" }}>
         <div style={{ color: "#F58220", fontSize: 22, letterSpacing: 5, fontWeight: 700, marginBottom: 24 }}>RINON · SOLUCIONES METÁLICAS</div>
-        <div style={{ fontSize: 74, lineHeight: .95, fontWeight: 800, letterSpacing: -3, maxWidth: 900 }}>Lo necesitas en metal.<br/>Lo fabricamos.</div>
+        <div style={{ display: "flex", flexDirection: "column", fontSize: 74, lineHeight: .95, fontWeight: 800, letterSpacing: -3, maxWidth: 900 }}><div>Lo necesitas en metal.</div><div>Lo fabricamos.</div></div>
         <div style={{ fontSize: 25, color: "#CCCDD2", marginTop: 32 }}>Fabricación metálica · San Bernardo · Santiago</div>
       </div>
       <div style={{ width: 18, height: 130, background: "#F58220", position: "absolute", left: 0, bottom: 72 }} />
