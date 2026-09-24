@@ -1,0 +1,309 @@
+/* ==========================================================================
+   legibility.css — capa de legibilidad para rinon-v2
+   Generada a partir de una auditoría medida (axe-core color-contrast + censo de
+   tamaños computados) sobre 6 rutas × 2 viewports. Se importa DESPUÉS de globals.css.
+   Reglas:
+   - Ningún texto visible bajo 12px. Párrafos, enlaces, botones y celdas ≥ 14px. <small> ≥ 13px.
+   - Contraste WCAG AA: 4.5:1 en texto normal, 3:1 en texto grande.
+   - El naranja de marca (#f58220) se conserva en fondos oscuros y como relleno de botones.
+     Como TEXTO sobre fondo claro no alcanza 2.6:1, por eso los rótulos usan #9b4410
+     (misma familia, ya presente en el CSS) vía --rn-accent-text.
+   - Grises de apoyo unificados: #575d61 sobre claro, #b5bbbe sobre oscuro, vía --rn-muted-text.
+   ========================================================================== */
+
+/* 1. Tokens de texto por contexto (heredan hacia abajo) */
+:root { --rn-accent-text: #9b4410; --rn-muted-text: #575d61; }
+/* Contenedores con fondo oscuro (derivados de las reglas background del propio CSS) */
+.process div,
+.quote-form,
+footer,
+.upload-note,
+.evidence-guide,
+.commercial-dock,
+.v2-capabilities,
+.v2-evidence-copy,
+.v2-final-cta,
+.v2-solution-hero,
+.v2-solution-section.dark,
+.v2-quote-shell>aside,
+.v2-product-gallery-guide,
+.v2-article-checklist,
+.v2-scope-fit-grid .define,
+.prd2-solution-hero,
+.prd2-solution-media,
+.prd2-solution-evidence,
+.s6-feature-tech.dark,
+.s6-footer,
+.s7-hero,
+.s7-chapter-dark,
+.s7-chapter-graphite,
+.s7-chapter-media,
+.s7-process,
+.s7-custom,
+.s7-cta.dark,
+.v5-requirement-flow,
+.theme-geometry .prd2-solution-media,
+.theme-transform .prd2-solution-media,
+.xray-metal,
+.xray-stage,
+.prd2-mobile-nav .mobile-nav-panel,
+.prd2-header,
+.v5-editorial-page .v2-solution-hero,
+.v5-editorial-page .v2-tech-stage,
+.v5-editorial-page .v2-final-cta,
+.v5-editorial-page .v2-capabilities,
+.v5-editorial-page .upload-note,
+.solution-story,
+.solution-story-visual,
+.story-node,
+.story-geometry .solution-story-visual,
+.resource-related,
+.prd2-mega-menu,
+.mobile-nav-panel,
+.rinon-map-panel,
+.mobile-nav-whatsapp,
+.rinon-custom-hero,
+.rinon-finder-hero,
+.rinon-enterprise-hero,.rinon-trust-hero,.rinon-contact-hero,.rinon-commercial-hero,
+.rinon-proof-panel,
+.rinon-contact-choice,
+.rinon-quote-hero,
+.rinon-quote-form-shell,
+.rinon-quote-flow .quote-progress span.active,
+.rinon-quote-flow .quote-context,
+.quote-upload-shell,
+.s7-hero.s7-hero-contained,
+.mobile-nav-top {
+  --rn-accent-text: #f58220; --rn-muted-text: #b5bbbe;
+}
+/* Contenedores grafito / oscuro medio: el naranja pleno queda en ~4:1, se usa el naranja suave */
+.process,
+.prd2-service-grid,
+.quote-progress,
+.mobile-nav-actions,
+.rinon-quote-flow .quote-progress {
+  --rn-accent-text: #fad3af; --rn-muted-text: #c3c8cb;
+}
+
+/* 2. Color: rótulos y textos de apoyo detectados bajo AA */
+.prd2-category-nav > .container > span { color: var(--rn-muted-text); }
+.prd2-category-nav a em { color: var(--rn-accent-text); }
+.v2-eyebrow { color: var(--rn-accent-text); }
+.v2-feature-band-grid article > span { color: #7a8286; } /* numeración decorativa 30px: #cccdd2 sobre blanco era 1,58:1 */
+.prd2-kicker.dark { color: var(--rn-muted-text); }
+.prd2-section-head > div:last-child p, .prd2-section-head > p { color: var(--rn-muted-text); }
+.prd2-application-grid span { color: var(--rn-muted-text); }
+.prd2-application-grid small { color: var(--rn-muted-text); }
+.solution-local-nav-inner > span { color: var(--rn-muted-text); }
+.rinon-proof-panel > small { color: var(--rn-muted-text); }
+.v2-crossnav a small { color: var(--rn-muted-text); }
+.v5-editorial-page .v2-eyebrow { color: var(--rn-accent-text); }
+.v5-editorial-page .card-grid article > span { color: var(--rn-accent-text); }
+.v5-editorial-page .v2-kickers span { color: var(--rn-muted-text); }
+.v5-editorial-page .section-head > p { color: var(--rn-muted-text); }
+.v5-editorial-page .card-grid p { color: var(--rn-muted-text); }
+.v5-editorial-page .v2-sector-grid article > span { color: var(--rn-accent-text); }
+.v5-editorial-page .v2-sector-grid small { color: var(--rn-muted-text); }
+.v2-capability-list span { color: var(--rn-muted-text); }
+.v2-step-grid span { color: var(--rn-accent-text); }
+.v2-resource-grid span { color: var(--rn-accent-text); }
+.v2-resource-grid p { color: var(--rn-muted-text); }
+.rinon-entry-head h2 { color: var(--ink); } /* título blanco heredado sobre fondo #f7f7f5 (1,07:1) — revisar intención de diseño */
+
+/* 3. Tamaño: reglas con font-size bajo el mínimo (valor original → mínimo) */
+.commercial-dock > a { font-size: 14px; } /* 10px */
+.evidence-photo figcaption span { font-size: 12px; } /* 10px */
+.prd2-application-grid small { font-size: 13px; } /* 9px */
+.prd2-btn { font-size: 14px; } /* 13px */
+.prd2-category-nav > .container > span { font-size: 12px; } /* 9px */
+.prd2-category-nav a b { font-size: 12px; } /* 11px */
+.prd2-category-nav a em { font-size: 12px; } /* 9px */
+.prd2-desktop-nav > a, .prd2-desktop-nav > button { font-size: 14px; } /* 12px */
+.prd2-faq-grid p { font-size: 14px; } /* 12px */
+.prd2-header-cta { font-size: 14px; } /* 11px */
+.prd2-kicker { font-size: 12px; } /* 10px */
+.prd2-mobile-nav .mobile-nav-toggle { font-size: 12px; } /* 10px */
+.prd2-related a { font-size: 14px; } /* 10px */
+.prd2-related b { font-size: 12px; } /* 10px */
+.prd2-scope-grid p { font-size: 14px; } /* 12px */
+.prd2-solution-media-caption b { font-size: 12px; } /* 10px */
+.prd2-solution-media-caption span { font-size: 12px; } /* 8px */
+.resource-answer li { font-size: 14px; } /* 10px */
+.resource-answer span { font-size: 12px; } /* 9px */
+.resource-related-head span { font-size: 12px; } /* 9px */
+.resource-related-links em { font-size: 12px; } /* 9px */
+.resource-related-links small { font-size: 13px; } /* 8px */
+.rinon-entry-grid > a b { font-size: 12px; } /* 10px */
+.rinon-entry-grid > a p { font-size: 14px; } /* 12px */
+.rinon-entry-grid > a span { font-size: 12px; } /* 9px */
+.rinon-proof-panel > div > b { font-size: 12px; } /* 9px */
+.rinon-proof-panel > small { font-size: 13px; } /* 9px */
+.rinon-proof-panel > span { font-size: 12px; } /* 9px */
+.rinon-proof-panel p { font-size: 14px !important; } /* 10px, el original lleva !important */
+.s6-footer-bottom { font-size: 14px !important; } /* 9px, el original lleva !important */
+.s6-footer-brand p { font-size: 14px; } /* 11px */
+.s6-footer-column > strong { font-size: 12px; } /* 9px */
+.s6-footer-column a { font-size: 14px; } /* 11px */
+.s6-footer-column span, .s6-footer-column p { font-size: 12px; } /* 11px */
+.s6-footer-quote { font-size: 14px; } /* 10px */
+.s7-chapter-copy a { font-size: 14px; } /* 12px */
+.s7-chapter-copy small { font-size: 13px; } /* 9px */
+.s7-chapter-media .evidence-photo.is-theatre figcaption span { font-size: 12px; } /* 6px */
+.s7-cta { font-size: 14px; } /* 12px */
+.s7-enterprise-copy a { font-size: 14px; } /* 12px */
+.s7-hero.s7-hero-contained .s7-concept-note { font-size: 12px; } /* 7px */
+.s7-hero.s7-hero-contained .s7-hero-note span { font-size: 12px !important; } /* 8px, el original lleva !important */
+.s7-kicker { font-size: 12px; } /* 10px */
+.s7-more > span { font-size: 12px; } /* 10px */
+.s7-more a { font-size: 14px; } /* 11px */
+.s7-process-list p { font-size: 14px; } /* 12px */
+.s7-text-link { font-size: 14px; } /* 12px */
+.solution-local-links a, .solution-local-nav-inner > a { font-size: 14px; } /* 10px */
+.solution-local-nav-inner > span { font-size: 12px; } /* 9px */
+.solution-meta-line span { font-size: 12px; } /* 9px */
+.solution-story-copy > span { font-size: 12px; } /* 9px */
+.solution-story-copy a { font-size: 14px; } /* 11px */
+.solution-story-copy p { font-size: 14px; } /* 13px */
+.solution-story-copy small { font-size: 13px; } /* 8px */
+.v2-article-body > section > span { font-size: 12px; } /* 9px */
+.v2-article-checklist ol { font-size: 14px; } /* 12px */
+.v2-btn { font-size: 14px; } /* 12px */
+.v2-capability-list em { font-size: 12px; } /* 9px */
+.v2-capability-list span { font-size: 12px; } /* 10px */
+.v2-crossnav > .container > span { font-size: 12px; } /* 9px */
+.v2-crossnav a small { font-size: 13px; } /* 9px */
+.v2-eyebrow { font-size: 12px; } /* 10px */
+.v2-feature-band-grid p { font-size: 14px; } /* 11px */
+.v2-resource-grid b { font-size: 12px; } /* 11px */
+.v2-resource-grid p { font-size: 14px; } /* 12px */
+.v2-resource-grid span { font-size: 12px; } /* 9px */
+.v2-scope-fit-grid article small { font-size: 13px; } /* 9px */
+.v2-sector-grid article > span { font-size: 12px; } /* 10px */
+.v2-tech-card small { font-size: 13px; } /* 10px */
+.v2-tech-code { font-size: 12px; } /* 9px */
+.v5-editorial-page .card-grid p { font-size: 14px; } /* 12px */
+.v5-editorial-page .faq-grid p { font-size: 14px; } /* 12px */
+.v5-editorial-page .section-head > p { font-size: 14px; } /* 13px */
+.v5-editorial-page .v2-eyebrow { font-size: 12px; } /* 9px */
+.v5-editorial-page .v2-final-cta p { font-size: 14px; } /* 12px */
+.v5-editorial-page .v2-kickers span { font-size: 12px; } /* 8px */
+.v5-editorial-page .v2-sector-grid p { font-size: 14px; } /* 12px */
+.v5-editorial-page .v2-sector-grid small { font-size: 13px; } /* 8px */
+.v5-editorial-page .v2-step-grid p { font-size: 14px; } /* 12px */
+.v5-editorial-page .v2-step-grid span { font-size: 12px; } /* 9px */
+.v5-flow-list p { font-size: 14px; } /* 11px */
+.xray-badge b { font-size: 12px; } /* 8px */
+.xray-badge span { font-size: 12px; } /* 9px */
+.xray-copy > p { font-size: 14px; } /* 13px */
+.xray-legend span { font-size: 12px; } /* 10px */
+@media (max-width: 560px) {
+  .solution-local-links a { font-size: 14px; } /* 9px */
+}
+@media (max-width: 900px) {
+  .solution-local-nav-inner > a { font-size: 14px; } /* 9px */
+}
+
+/* 4. Guardas de layout: al subir tamaños, evitar que columnas de grid/flex crezcan por su min-content */
+.prd2-solution-copy, .prd2-solution-hero-grid > * { min-width: 0; }
+.solution-meta-line { flex-wrap: wrap; } /* con 3 rótulos a 12px ya no cabe en una línea a 320px */
+.solution-meta-line span { white-space: normal; }
+@media (max-width: 640px) {
+  /* "Explora esta categoría": fila flex con nowrap que ya iba a 306/320px; con el rótulo a 12px se sale. Se permite el salto. */
+  .prd2-category-nav > .container { flex-wrap: wrap; row-gap: 10px; }
+  .prd2-category-nav > .container > span { white-space: normal; }
+}
+
+/* 5. Hallazgos de esta sesión: rutas y estados de cliente no cubiertos por la auditoría previa
+   (/nosotros, menú móvil, mega-menú, formulario de /cotizar, capítulo claro de la home). */
+/* /nosotros */
+.rinon-about-process li > span { font-size: 12px; } /* 10px */
+.rinon-about-process p { font-size: 14px; color: var(--rn-muted-text); } /* 12px · #6d7274 sobre #eeede9 = 4,15:1 */
+.rinon-map-actions a { font-size: 14px; } /* 11px */
+.rinon-map-note { font-size: 14px !important; } /* 12px, el original lleva !important */
+/* Botón outline (texto blanco, pensado para héroes oscuros) usado dentro de secciones claras:
+   en /nosotros y en las landings comerciales preservadas quedaba blanco sobre #f7f7f5 (1,07:1). */
+.v2-solution-section:not(.dark) .v2-btn.outline { color: var(--ink); border-color: #6b6f71; }
+/* Botones de relleno naranja: el texto blanco sobre #f58220 da 2,6:1. El resto de botones primarios
+   del sitio (.button.primary, .s7-cta, .v5-editorial-page .v2-btn.orange) ya usan tinta sobre naranja. */
+.v2-btn.orange { color: #161616; }
+.prd2-btn.primary { color: #111315; }
+/* / · capítulo claro "Cierres y protecciones" */
+.s7-chapter-light .s7-chapter-copy small { color: var(--rn-accent-text); } /* #f58220 sobre #eeede8 = 1,76:1 */
+.s7-chapter-light .s7-index { color: rgba(155, 68, 16, .82); } /* numeración decorativa 54–74px: naranja al 82% sobre claro = 1,58:1 */
+/* /cotizar · guía lateral */
+.rinon-quote-guide > p { font-size: 14px; } /* 13px */
+.rinon-quote-guide li { font-size: 14px; } /* 11px */
+.rinon-quote-guide small { font-size: 13px; } /* 9px heredado */
+/* /cotizar · formulario (render en cliente) */
+.rinon-quote-flow .quote-progress span { font-size: 12px; color: var(--rn-muted-text); } /* 10px · #7f878b sobre #202326 = 4,3:1 */
+.rinon-quote-flow .quote-progress span b { font-size: 12px; } /* 9px */
+.rinon-quote-flow .quote-progress span i { font-size: 12px; } /* 8px */
+.v5-editorial-page .quote-form label { font-size: 13px; } /* 10px */
+.v5-editorial-page .quote-form input, .v5-editorial-page .quote-form select, .v5-editorial-page .quote-form textarea { font-size: 14px; } /* 13px */
+.quote-form small { font-size: 13px; } /* 10px heredado */
+.quote-step-actions > span { font-size: 12px; color: var(--rn-muted-text); } /* 9px · #70787c sobre #17191a = 3,9:1 */
+.quote-step-actions > .button { font-size: 14px; } /* 11px */
+/* Cabecera, mega-menú y menú móvil (estados de cliente) */
+.prd2-header-cta { color: #111315; } /* blanco sobre #f58220 = 2,6:1; misma solución que .mobile-nav-quote (tinta sobre naranja) */
+.prd2-mega-all { font-size: 14px; } /* 10px · es un enlace */
+.mobile-nav-groups b { font-size: 12px; } /* 9px */
+.mobile-nav-groups a { font-size: 14px; } /* 12px */
+
+/* 6. Segunda pasada medida sobre el build (menú móvil abierto, mega-menú abierto, pasos 1–3 del
+   formulario, /soluciones, /contacto, /fabricacion-metalica, /preguntas-frecuentes, grids prd2). */
+/* Menú móvil abierto */
+.mobile-nav-primary > a span { font-size: 12px; color: var(--rn-muted-text); } /* 9px · #737b7f sobre #111315 */
+.mobile-nav-actions .mobile-nav-whatsapp, .mobile-nav-actions .mobile-nav-quote { font-size: 14px; } /* 11–12px, son enlaces */
+/* Mega-menú de escritorio */
+.prd2-mega-group > span { font-size: 12px; } /* 9px */
+.prd2-mega-group > a small { font-size: 13px; } /* 10px */
+.prd2-service-grid > a small { font-size: 13px; } /* 10px */
+/* /cotizar · guía lateral (aside oscuro #191b1c) */
+.v5-editorial-page .v2-quote-shell aside p, .v5-editorial-page .v2-quote-shell aside li { font-size: 14px; color: var(--rn-muted-text); } /* 12px · #666d71 sobre #191b1c = 3,3:1 */
+/* /cotizar · pasos del formulario */
+.rinon-quote-flow .quote-step-panel legend > span { font-size: 12px; } /* 10px */
+.rinon-quote-flow .quote-step-panel legend > small { font-size: 13px; } /* 10px */
+.rinon-quote-flow .quote-context b { font-size: 12px; } /* 9–10px */
+.quote-upload-shell b { font-size: 12px; } /* 11px */
+.quote-upload-shell span { font-size: 12px; color: var(--rn-muted-text); } /* 10px */
+.rinon-quote-flow .quote-file-control small { font-size: 13px; } /* 7px */
+.quote-step-actions .quote-back { font-size: 14px; } /* 10px · es un botón */
+.v5-editorial-page .rinon-quote-flow .consent { font-size: 14px; color: var(--rn-muted-text); } /* 10px · #6d7376 sobre #17191a = 3,7:1 */
+.v5-editorial-page .rinon-quote-flow .consent a { color: #fff; } /* #161616 sobre #17191a = 1,02:1: el enlace a la política era invisible */
+.v5-editorial-page .rinon-quote-flow .quote-alt > span { font-size: 14px; color: var(--rn-muted-text); } /* 10px · #7f878b */
+.v5-editorial-page .rinon-quote-flow .quote-alt a { font-size: 14px; color: #fff; } /* 10px · .v5 lo pintaba #161616 sobre fondo oscuro */
+/* Grids prd2 (camarotes, cierres, pintura): numeración a 17px en #a9aeb0 sobre blanco (2,2:1) y a 15–18px en #596165 sobre #111315 (2,9:1) */
+.prd2-scope-grid span { color: var(--rn-muted-text); }
+.prd2-quote-inputs span { color: var(--rn-muted-text); } /* #cccdd2 sobre blanco = 1,6:1 */
+/* /fabricacion-metalica · "Puedes partir con" */
+.rinon-custom-start > span { font-size: 12px; } /* 9px */
+.rinon-custom-start > div > b { font-size: 12px; } /* 10px */
+/* /contacto */
+.rinon-contact-choice > span { font-size: 12px; } /* 9px */
+.rinon-contact-choice > a b { font-size: 12px; } /* 9px */
+.rinon-contact-choice > a small { font-size: 13px; } /* 10px */
+.rinon-contact-direct span { font-size: 12px; color: var(--rn-muted-text); } /* 9px · #777f83 sobre #f7f7f5 = 3,8:1 */
+.rinon-contact-direct a { font-size: 14px; } /* 11px */
+.rinon-contact-direct p { font-size: 14px; } /* 13px */
+/* /soluciones · buscador de productos */
+.rinon-finder-family > header > span { font-size: 12px; } /* 9px */
+.rinon-finder-family p { font-size: 14px; } /* 12px */
+.rinon-finder-family > div > a small { font-size: 13px; color: var(--rn-muted-text); } /* 13,3px · #73797c sobre #f7f7f5 = 4,1:1 */
+/* /preguntas-frecuentes · tarjeta técnica con fondo naranja */
+.v2-tech-card { color: #111315; } /* blanco sobre #f58220 = 2,6:1 */
+.v2-tech-card small { color: #3d2410; } /* #ffe8dc sobre #f58220 = 2,2:1 */
+.v5-editorial-page .v2-tech-card { color: #fff; } /* variante v5: fondo oscuro, se conserva */
+.v5-editorial-page .v2-tech-card small { color: #ffe8dc; }
+/* Desborde horizontal a 1280px en /camarotes, /cierres-perimetrales y /pintura-electrostatica:
+   part-08 vuelve a poner .prd2-scope-grid en 4 columnas, pero part-05 dejaba cada article como grid
+   interno de 3 columnas (80px + mín. 210px + 1.3fr) cuyo min-content (~480px) no cabe en un cuarto
+   del contenedor. Sobre 900px el article vuelve a ser una tarjeta apilada; bajo 900px se conserva
+   el grid interno de 2 columnas (55px 1fr) que ya no desborda. */
+@media (min-width: 901px) {
+  .prd2-scope-grid article { display: block; }
+}
+/* Tercera pasada */
+.prd2-mobile-nav .mobile-nav-panel nav a span { font-size: 12px; } /* 9px · numeración 01/02/03 del menú móvil */
+.prd2-solution-content .prd2-solution-split > div > p { color: var(--rn-muted-text); } /* #b8bec1 (pensado para la sección oscura) sobre blanco = 1,9:1 */
+.prd2-solution-evidence li span { color: #b5bbbe; } /* 15px · #596165 sobre #111315 = 2,9:1 */
+.prd2-final .prd2-kicker { color: var(--rn-accent-text); } /* cierre "cotizar" de las fichas prd2: #f58220 sobre #e9e7e1 = 2,1:1 */
