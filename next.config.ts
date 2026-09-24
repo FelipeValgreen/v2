@@ -17,11 +17,11 @@ const contentSecurityPolicy = [
   "frame-ancestors 'none'",
   "frame-src https://www.google.com https://maps.google.com",
   "form-action 'self'",
-  "img-src 'self' data: blob: https://www.google-analytics.com https://*.clarity.ms https://*.google.com https://*.gstatic.com",
+  "img-src 'self' data: blob: https://*.google-analytics.com https://www.googletagmanager.com https://*.clarity.ms https://*.google.com https://*.gstatic.com",
   "font-src 'self' data:",
   "style-src 'self' 'unsafe-inline'",
   "script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.clarity.ms https://*.clarity.ms",
-  "connect-src 'self' https://www.google-analytics.com https://region1.google-analytics.com https://www.googletagmanager.com https://*.clarity.ms https://c.bing.com",
+  "connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com https://www.googletagmanager.com https://*.clarity.ms https://c.bing.com",
   "upgrade-insecure-requests",
 ].join("; ");
 
