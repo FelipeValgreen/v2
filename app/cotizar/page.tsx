@@ -40,7 +40,7 @@ export default function Page(){
      <h2>Con poco podemos empezar bien.</h2>
      <p>El formulario cambia según lo que selecciones. No te pediremos datos de cierres si estás cotizando una cama, ni datos de cama si necesitas una estructura.</p>
      <ul><li>Elige qué necesitas.</li><li>Agrega contexto útil.</li><li>Déjanos un canal de contacto.</li></ul>
-     <small>En staging validamos el flujo sin guardar ni enviar tus datos.</small>
+     {leadWriteEnabled?null:<small>En staging validamos el flujo sin guardar ni enviar tus datos.</small>}
     </aside>
     <div className="rinon-quote-form-shell"><Suspense fallback={<p>Cargando formulario…</p>}><QuoteForm leadWriteEnabled={leadWriteEnabled} powderCoatingEnabled={powderCoatingEnabled}/></Suspense></div>
    </div>
