@@ -10,7 +10,7 @@ Este documento complementa `docs/RELEASE_CUTOVER_RUNBOOK.md` (gates de release y
 | Tema | Estado en el código | Qué depende de configuración externa |
 | --- | --- | --- |
 | Indexación | `RINON_INDEXABLE=true` activa `index, follow`, `robots.txt` con `Allow: /` + `Sitemap:` y desmonta `StagingTracking`. Con cualquier otro valor todo queda `noindex, nofollow` y `Disallow: /`. | Definir la variable sólo en el entorno **Production** de `rinon-v2`. |
-| Redirects 301 del sitio viejo | `lib/legacy-redirects.ts` (398 URLs). Se emiten desde `next.config.ts` sólo si `RINON_ENABLE_MIGRATION_REDIRECTS=true` en el momento del build. Las 58 URLs en cuarentena GSC requieren además `RINON_REDIRECT_GSC_PENDING=true`. | Decisión de Felipe sobre las 58 URLs GSC-pending (ver §2). |
+| Redirects 301 del sitio viejo | `lib/legacy-redirects.ts` (398 URLs: las 391 de la lista de Felipe + 7 del inventario del repo viejo; detalle en `docs/redirects-sitio-viejo.md`). En builds **no productivos** (preview de Vercel, `next build` local) se emiten todos, por eso el preview ya responde 301. En un build de **producción** (`VERCEL_ENV=production` o `RINON_INDEXABLE=true`) siguen fail-closed: sólo con `RINON_ENABLE_MIGRATION_REDIRECTS=true`; las 58 URLs en cuarentena GSC requieren además `RINON_REDIRECT_GSC_PENDING=true`. | Decisión de Felipe sobre las 58 URLs GSC-pending (ver §2). |
 | Redirects del blog viejo | 6 redirects aprobados en `lib/blog-migration.ts`, activos sólo con `RINON_ENABLE_BLOG_REDIRECTS=true`. El resto de `/blog/*` sirve una página puente `noindex` con enlace a la solución relacionada. | — |
 | Región | `vercel.json` → `"regions": ["gru1"]` (São Paulo). | Verificar que el plan de Vercel del team permita fijar región (en Hobby sólo se admite una región; en Pro varias). |
 | Analítica | GTM y Clarity sólo se cargan con `RINON_PRODUCTION_TRACKING_ENABLED=true`, tras consentimiento de cookies, y con ids válidos en `NEXT_PUBLIC_GTM_ID` / `NEXT_PUBLIC_CLARITY_ID`. La CSP ya admite `googletagmanager.com`, `*.google-analytics.com`, `*.analytics.google.com`, `*.clarity.ms` y `c.bing.com`. | Ids reales de GTM/GA4/Clarity (no existen en el repo; ver `docs/needs-data.md`). |
@@ -22,8 +22,9 @@ Este documento complementa `docs/RELEASE_CUTOVER_RUNBOOK.md` (gates de release y
 
 1. Abrir el deployment de preview que Vercel genera para `claude/preparar-rinon-cl` (proyecto `rinon-v2`).
 2. Confirmar que en el preview **sigue** todo cerrado: `curl -I <preview>/` → `x-robots-tag`/meta `noindex, nofollow`; `/robots.txt` → `Disallow: /`; el formulario de `/cotizar` muestra el aviso de staging.
-3. Revisar en 320/375/1280 px las rutas del reporte de legibilidad: `/`, `/camarotes`, `/rejas-metalicas`, `/cierres-perimetrales`, `/empresas`, `/cotizar`, `/nosotros`, `/recursos/como-cotizar-rejas-metalicas`.
-4. Hacer merge a `main` sólo después de la revisión (esta rama no se mergea sola).
+3. Confirmar en el preview que las URLs del sitio viejo redirigen (`curl -sI <preview>/rejas-metalicas-macul` → 301 `location: /rejas-metalicas`; `/camarotes-metalicos` → `/camarotes`; `/cercos-perimetrales-maipu` → `/cierres-perimetrales`) y que `/no-existe` sigue en 404.
+4. Revisar en 320/375/1280 px las rutas del reporte de legibilidad: `/`, `/camarotes`, `/rejas-metalicas`, `/cierres-perimetrales`, `/empresas`, `/cotizar`, `/nosotros`, `/recursos/como-cotizar-rejas-metalicas`.
+5. Hacer merge a `main` sólo después de la revisión (esta rama no se mergea sola).
 
 ## 2. Definir las variables de entorno de producción en `rinon-v2`
 
@@ -98,7 +99,7 @@ curl -sI https://rinon.cl/camarotes-maipu | grep -iE "^(HTTP|location)"   # 301 
 curl -sI https://rinon.cl/no-existe | head -1      # 404
 ```
 
-Muestra de 40 redirects a verificar (301 en un solo salto, destino 200): ver `docs/AI_HANDOFF_CLAUDE.md` → "Redirects verificados en build local". Repetir el mismo listado contra `https://rinon.cl`.
+Muestra de 40 redirects 301: repetir contra `https://rinon.cl` la tabla de `docs/redirects-sitio-viejo.md` §5 (`BASE=https://rinon.cl bash docs/redirects-sample-check.sh`); cada URL debe responder 301 en un solo salto y su destino 200. Verificar también que `/camarotes`, `/rejas-metalicas`, `/cierres-perimetrales`, `/pintura-electrostatica`, `/portones-metalicos`, `/blog` y `/recursos` sigan en 200 sin redirect.
 
 Luego:
 1. Search Console: agregar/validar la propiedad `https://rinon.cl` (ya hay `google-site-verification` en `app/layout.tsx`), enviar `https://rinon.cl/sitemap.xml`, revisar "Páginas" a las 48–72 h.
