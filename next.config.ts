@@ -3,12 +3,17 @@ import { legacyRedirects } from "./lib/legacy-redirects";
 
 const productionRelease = process.env.RINON_INDEXABLE === "true";
 /**
- * Legacy rinon.cl URL redirects (lib/legacy-redirects.ts) are evaluated at build time and stay
- * fail-closed: nothing is emitted unless RINON_ENABLE_MIGRATION_REDIRECTS=true. The 58 live-observed
- * URLs that are still GSC-pending additionally require RINON_REDIRECT_GSC_PENDING=true.
+ * Legacy rinon.cl URL redirects (lib/legacy-redirects.ts) are evaluated at build time.
+ * - Non-production builds (local `next build`, Vercel Preview) emit the whole map, so the branch
+ *   preview answers the old URLs with a one-hop 301 and can be verified before cutover.
+ * - A production build (VERCEL_ENV=production, or RINON_INDEXABLE=true) stays fail-closed per
+ *   docs/AI_DECISION_LOG.md D-001: nothing is emitted unless RINON_ENABLE_MIGRATION_REDIRECTS=true,
+ *   and the 58 live-observed GSC-pending URLs additionally require RINON_REDIRECT_GSC_PENDING=true.
+ * Destinations are always relative paths, so the same map works on any host.
  */
-const migrationRedirectsEnabled = process.env.RINON_ENABLE_MIGRATION_REDIRECTS === "true";
-const gscPendingRedirectsEnabled = process.env.RINON_REDIRECT_GSC_PENDING === "true";
+const productionBuild = process.env.VERCEL_ENV === "production" || productionRelease;
+const migrationRedirectsEnabled = !productionBuild || process.env.RINON_ENABLE_MIGRATION_REDIRECTS === "true";
+const gscPendingRedirectsEnabled = !productionBuild || process.env.RINON_REDIRECT_GSC_PENDING === "true";
 
 const contentSecurityPolicy = [
   "default-src 'self'",

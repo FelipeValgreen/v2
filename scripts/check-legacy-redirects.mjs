@@ -24,7 +24,9 @@ const pending=entries.filter(e=>e.tier==="gsc-pending");
 check(pending.length===observed.size&&pending.every(e=>observed.has(e.source)),`gsc-pending tier matches the live-observed quarantine in lib/migration.ts (${observed.size})`);
 check(entries.filter(e=>e.tier==="family").every(e=>!observed.has(e.source)),"no live-observed URL is redirected through the family tier");
 const config=readFileSync("next.config.ts","utf8");
-check(config.includes('process.env.RINON_ENABLE_MIGRATION_REDIRECTS === "true"')&&config.includes("if (!migrationRedirectsEnabled) return []"),"next.config redirects are fail-closed behind RINON_ENABLE_MIGRATION_REDIRECTS");
-check(config.includes('process.env.RINON_REDIRECT_GSC_PENDING === "true"'),"gsc-pending redirects require the explicit RINON_REDIRECT_GSC_PENDING flag");
+check(config.includes('const productionBuild = process.env.VERCEL_ENV === "production" || productionRelease'),"next.config identifies production builds (VERCEL_ENV=production or RINON_INDEXABLE=true)");
+check(config.includes('const migrationRedirectsEnabled = !productionBuild || process.env.RINON_ENABLE_MIGRATION_REDIRECTS === "true"')&&config.includes("if (!migrationRedirectsEnabled) return []"),"production builds emit legacy redirects only with RINON_ENABLE_MIGRATION_REDIRECTS=true (non-production builds emit the whole map)");
+check(config.includes('const gscPendingRedirectsEnabled = !productionBuild || process.env.RINON_REDIRECT_GSC_PENDING === "true"'),"production builds emit gsc-pending redirects only with RINON_REDIRECT_GSC_PENDING=true");
+check(config.includes("statusCode: 301"),"legacy redirects are emitted as 301");
 if(failures.length){console.error(`\nRINON LEGACY REDIRECT CONTRACT FAILED (${failures.length} issue${failures.length===1?"":"s"}).`);process.exit(1)}
 console.log(`\nRINON LEGACY REDIRECT CONTRACT PASSED · ${entries.length} entries (${entries.length-pending.length} family / ${pending.length} gsc-pending).`);

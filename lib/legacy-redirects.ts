@@ -7,12 +7,21 @@
  * in RINON 2.0 (durable owners, preserved commercial landings, /blog/[slug] compatibility
  * pages) are intentionally NOT listed here.
  *
+ * Reconciled on 2026-09-24 against Felipe's cutover list (old sitemap × RINON 2.0 sitemap: 420 old
+ * URLs, 29 already resolve in RINON 2.0, 391 need a redirect). All 391 are here; 7 extra sources come
+ * from the old repository's route inventory (routes the old sitemap never published) and are kept so
+ * that they never 404. See docs/redirects-sitio-viejo.md for the per-destination breakdown.
+ *
+ * Activation (next.config.ts): every non-production build (local `next build`, Vercel Preview) emits
+ * the whole map, so the branch preview can be verified against the old URLs. A production build
+ * (VERCEL_ENV=production or RINON_INDEXABLE=true) stays fail-closed (docs/AI_DECISION_LOG.md D-001):
+ *
  * Tiers:
- * - "family": low-risk alias/geo/sector modifier → category owner. Activated by
- *   RINON_ENABLE_MIGRATION_REDIRECTS=true at build time (see next.config.ts).
+ * - "family": low-risk alias/geo/sector modifier → category owner. In production it requires
+ *   RINON_ENABLE_MIGRATION_REDIRECTS=true at build time.
  * - "gsc-pending": live-observed URL quarantined in lib/migration.ts (docs/GSC_PENDING_URLS.csv).
- *   Only activated when RINON_REDIRECT_GSC_PENDING=true is ALSO set, so that the Search Console
- *   reconciliation decision stays explicit. Without that flag those URLs return 404 in RINON 2.0.
+ *   In production it ALSO requires RINON_REDIRECT_GSC_PENDING=true, so that the Search Console
+ *   reconciliation decision stays explicit. Without that flag those URLs return 404 at cutover.
  *
  * Every destination must be a 200 route in this app and no destination may itself be a source.
  * scripts/check-legacy-redirects.mjs enforces both.
@@ -100,7 +109,7 @@ export const legacyRedirects: readonly LegacyRedirect[] = [
   { source: "/camarotes-con-escritorio-precio-fabrica", destination: "/camarote-con-escritorio", tier: "family" },
   { source: "/fabricante-camarotes-con-escritorio", destination: "/camarote-con-escritorio", tier: "family" },
   { source: "/litera-con-escritorio", destination: "/camarote-con-escritorio", tier: "family" },
-  // → /camarotes (97)
+  // → /camarotes (96)
   { source: "/camarote-de-acero", destination: "/camarotes", tier: "family" },
   { source: "/camarote-faenero", destination: "/camarotes", tier: "family" },
   { source: "/camarote-militar", destination: "/camarotes", tier: "family" },
@@ -192,7 +201,6 @@ export const legacyRedirects: readonly LegacyRedirect[] = [
   { source: "/camarotes-vina-del-mar", destination: "/camarotes", tier: "family" },
   { source: "/camarotes-vitacura", destination: "/camarotes", tier: "family" },
   { source: "/fabricante-camarotes-chile", destination: "/camarotes", tier: "gsc-pending" },
-  { source: "/instalacion-camarotes", destination: "/camarotes", tier: "family" },
   { source: "/litera-metalica", destination: "/camarotes", tier: "gsc-pending" },
   { source: "/literas", destination: "/camarotes", tier: "gsc-pending" },
   { source: "/literas-militares", destination: "/camarotes", tier: "family" },
@@ -291,6 +299,9 @@ export const legacyRedirects: readonly LegacyRedirect[] = [
   { source: "/fabricante-estructuras-metalicas-chile", destination: "/estructuras-metalicas", tier: "family" },
   // → /fabricacion-metalica (1)
   { source: "/metalurgica-rinon", destination: "/fabricacion-metalica", tier: "family" },
+  // → /instalacion (2)
+  { source: "/instalacion-camarotes", destination: "/instalacion", tier: "family" },
+  { source: "/instalacion-de-rejas", destination: "/instalacion", tier: "family" },
   // → /mallas-separadoras (2)
   { source: "/mallas-separadoras-bodegas", destination: "/mallas-separadoras", tier: "family" },
   { source: "/mallas-separadoras-industriales", destination: "/mallas-separadoras", tier: "gsc-pending" },
@@ -356,9 +367,8 @@ export const legacyRedirects: readonly LegacyRedirect[] = [
   { source: "/portones-valparaiso", destination: "/portones-metalicos", tier: "family" },
   { source: "/portones-vehiculares", destination: "/portones-metalicos", tier: "family" },
   { source: "/puertas-peatonales", destination: "/portones-metalicos", tier: "family" },
-  // → /rejas-metalicas (72)
+  // → /rejas-metalicas (71)
   { source: "/fabricante-rejas-metalicas-chile", destination: "/rejas-metalicas", tier: "family" },
-  { source: "/instalacion-de-rejas", destination: "/rejas-metalicas", tier: "family" },
   { source: "/reja-metalica-santiago", destination: "/rejas-metalicas", tier: "gsc-pending" },
   { source: "/reja-para-jardin", destination: "/rejas-metalicas", tier: "family" },
   { source: "/reja-tubular", destination: "/rejas-metalicas", tier: "family" },
