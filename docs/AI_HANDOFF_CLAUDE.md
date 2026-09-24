@@ -6,15 +6,17 @@ Claude: replace the template below after each meaningful audit or implementation
 
 ## CURRENT STATE
 - Branch: `claude/preparar-rinon-cl` (from `main` @ `17d4cc5`).
-- Commit: see `git log claude/preparar-rinon-cl` (batch of small commits: legibility layer, OG image fix, legacy redirect map, Vercel region, CSP, quote copy, docs).
-- Deployment/preview if applicable: Vercel generates a preview for the branch in project `rinon-v2`; the URL is not reachable from this container (egress blocked) so it must be taken from the Vercel dashboard. Production not touched.
-- Batch scope: (A) measured legibility layer `app/legibility.css`; (B) technical readiness for serving on `rinon.cl` (indexation gate, redirects, region, analytics CSP, quote backend, contact constants, sitemap/robots, schema, quality); (C) `docs/cutover-rinon-cl.md`, `docs/needs-data.md`.
+- Commit: see `git log claude/preparar-rinon-cl` (batch of small commits: legibility layer, OG image fix, legacy redirect map, Vercel region, CSP, quote copy, docs). Batch 2 (2026-09-24): `a13a0b7` legacy 301 map emitted in non-production builds, `53e7dca` redirect docs, plus the test/handoff commit that follows.
+- Deployment/preview if applicable: `https://rinon-v2-5e8p7hab0-filipovalverde-5673s-projects.vercel.app` (Vercel project `rinon-v2`, commit `53e7dca`, READY; branch alias `rinon-v2-git-claude-prepar-a77a60-filipovalverde-5673s-projects.vercel.app`). Production not touched.
+- Batch scope: (A) measured legibility layer `app/legibility.css`; (B) technical readiness for serving on `rinon.cl` (indexation gate, redirects, region, analytics CSP, quote backend, contact constants, sitemap/robots, schema, quality); (C) `docs/cutover-rinon-cl.md`, `docs/needs-data.md`; (D) **batch 2**: legacy rinon.cl 301 redirects live on the branch preview (Felipe reported `/rejas-metalicas-macul`, `/cercos-perimetrales-*`, `/camarotes-metalicos` → 404 on the previous preview).
 
 ## FINDINGS
 ### P0
 - `/opengraph-image` crashed at runtime on every request (Satori: "Expected <div> to have explicit display:flex … if it has more than one child node" — the headline div had text + `<br/>` + text). Every page advertised an OG image that returned an empty 500. Fixed (`app/opengraph-image.tsx`).
 - Legibility baseline measured on the served build (Chromium, reduced-motion, after scrolling): on the 8 core routes 58–95 visible texts per route were under 12px and axe `color-contrast` reported up to 45 violations per route (`/empresas`). Several were real invisibility bugs, not just small type: white `.v2-btn.outline` on light sections (`/nosotros`, preserved commercial landings) = 1.07:1; privacy-policy link in the quote consent `#161616` on `#17191a` = 1.02:1; `.prd2-solution-split p` `#b8bec1` on white = 1.9:1.
 - Horizontal overflow at 1280px on `/camarotes`, `/cierres-perimetrales`, `/pintura-electrostatica`: `part-08.css` re-declares `.prd2-scope-grid` as 4 columns while `part-05.css` still makes each `article` an inner 3-column grid with ≈480px min-content. Fixed with one media-scoped rule in the legibility layer (article → block ≥ 901px).
+
+- **Batch 2 root cause of the preview 404s:** the 398-entry map already existed but `next.config.ts` only emitted it with `RINON_ENABLE_MIGRATION_REDIRECTS=true` at build time, and the Vercel Preview environment does not carry that flag. Not a missing sitemap. Fixed by emitting the map in every non-production build while keeping the production gate (see CHANGES).
 
 ### P1
 - 9 Playwright tests fail **identically on `main`** in this container (baseline run on the same commit without my changes): `navigation-context` (aria-current), `quote-keyboard` (strict-mode `getByLabel('Uso')`), `render.spec` ×5 (header logo `naturalWidth` never > 100, strict-mode duplicates), `seo-cro` ×2 (innerText expectations). Not introduced by this batch; likely test drift and/or the Playwright 1.63 ↔ preinstalled Chromium 1194 mismatch. Needs a separate pass.
@@ -36,6 +38,12 @@ Claude: replace the template below after each meaningful audit or implementation
 - `vercel.json`: `"regions": ["gru1"]`.
 - `app/cotizar/page.tsx`: the "En staging validamos el flujo…" note renders only while `isLeadWriteConfigured()` is false.
 - `docs/cutover-rinon-cl.md`, `docs/needs-data.md` (new).
+- **Batch 2 (2026-09-24):**
+  - `next.config.ts`: `productionBuild = VERCEL_ENV === "production" || RINON_INDEXABLE === "true"`. Non-production builds (local, Vercel Preview) emit the whole 398-entry map as 301; production builds keep D-001 fail-closed (`RINON_ENABLE_MIGRATION_REDIRECTS` for the 340 family entries, plus `RINON_REDIRECT_GSC_PENDING` for the 58 GSC-pending entries). Destinations stay relative.
+  - `lib/legacy-redirects.ts`: reconciled with Felipe's cutover list (420 old URLs, 29 already exist, 391 to redirect): all 391 present, 7 extra sources from the old repo inventory kept. `/instalacion-camarotes` and `/instalacion-de-rejas` → `/instalacion` (as listed). 6 con-escritorio variants keep `/camarote-con-escritorio` and `/camarote-dos-plazas-abajo` keeps `/camarote-2-plazas` (more specific than the listed `/camarotes`; one-line change each if Felipe prefers the list).
+  - `scripts/check-legacy-redirects.mjs`: asserts the new gate shape and `statusCode: 301`.
+  - `tests/seo-cro.spec.mjs`: the test "pre-cutover migration aliases remain disabled in staging" asserted 404 for 3 URLs that are in the map; replaced by "legacy rinon.cl aliases redirect once (301) to their intent owner and unmapped aliases stay 404": exact 301 + `location` (`maxRedirects: 0`) for 7 aliases across families, one-hop 200 landing, and 404 + noindex for 2 unmapped aliases (`/cercos-metalicos-santiago`, `/rejas-metalicas-comuna-inexistente`). Stronger signal than the previous 404 assertion; production fail-closed is covered by `qa:redirects` + preflight.
+  - `.env.preview.example` comment; `docs/redirects-sitio-viejo.md` (new: coverage, per-family/per-destination counts, decisions, gate matrix, test evidence, 40-URL sample), `docs/redirects-sample-check.sh` (new), `docs/cutover-rinon-cl.md` (redirect row, preview check step, post-cutover "muestra de 40 redirects 301").
 
 ## VALIDATION ACTUALLY RUN
 - `npm run typecheck` ✓, `npm run qa:static` ✓. `npm run lint` exits 2 on `main` and on this branch: the repo has no `eslint.config.js` (ESLint 9 flat config) — pre-existing, not fixed here (adding a config is a separate decision). (incl. new `qa:redirects`), `npm run build` ✓ (SAFE PRE-CUTOVER preflight), `npm run qa:served` ✓ (28 routes, 26 assets).
@@ -43,6 +51,8 @@ Claude: replace the template below after each meaningful audit or implementation
 - Legibility audit (3 widths × 8 core routes + 5 client states + 12 extra sitemap routes, reduced-motion, after scroll): 0 visible texts < 12px, 0 p/a/button/li < 14px, 0 `small` < 13px, 0 axe `color-contrast` violations, 0 horizontal scroll. Before/after per route in the REPORT section below (baseline = `main` @ `17d4cc5` built and measured with the same script).
 - Redirects: separate build with both flags on, served locally: 398/398 sources → single-hop 301 → destination 200; 138 RINON 2.0 routes still 200; unknown URLs 404; query string preserved; trailing-slash variant goes through Next's 308 normaliser first (two hops, only for URLs the old sitemap never published). With flags off, legacy URLs return 404 (fail-closed confirmed on the final build).
 - Served metadata over the 57-URL sitemap + 8 extra routes: canonical `https://rinon.cl<path>` on every page, unique titles/descriptions, OG image 200 (`image/png`, ~34 KB) after the fix, robots meta `noindex, nofollow` and `robots.txt` `Disallow: /` while `RINON_INDEXABLE` is unset.
+- **Batch 2:** `npm run typecheck` ✓; `npm run build` ✓ (all qa:* gates + SAFE PRE-CUTOVER preflight + next build; `.next/routes-manifest.json` = 398 non-internal redirects, statusCode 301); served build on :3210: **398/398** legacy URLs → 301 one hop → destination 200, 20 v2 routes 200 without redirect, `/no-existe` 404, query string preserved; `npm run qa:served` ✓ (28 routes, 26 assets); real `next.config.ts` loaded with Next's config loader, one process per scenario: local/preview 398, `VERCEL_ENV=production` 0, `RINON_INDEXABLE=true` 0, production+`RINON_ENABLE_MIGRATION_REDIRECTS` 340, production+both flags 398. Playwright (preinstalled Chromium via a local wrapper config, not committed): 41 passed / 10 failed before the test rewrite = the same 9 baseline failures + the staging-404 test that the new contract invalidates; after the rewrite that test passes (run in isolation). `npm run lint` still exits 2 (no ESLint 9 flat config in the repo, pre-existing).
+- **Batch 2, remote (Vercel MCP fetch, follows redirects, on preview `rinon-v2-5e8p7hab0…`):** `/rejas-metalicas-macul` → served `/rejas-metalicas` (200), `/camarotes-metalicos` → `/camarotes`, `/cercos-perimetrales-maipu` → `/cierres-perimetrales`, `/pintura-electrostatica-colina` (gsc-pending tier) → `/pintura-electrostatica`, `/instalacion-camarotes` → `/instalacion`, `/camarote-con-escritorio-gamer?utm_source=test` → `/camarote-con-escritorio`; `/ruta-inexistente-qa` → 404 via `/[legacy]`, noindex. The 301 status itself is not visible through that tool (it follows the redirect); the one-hop 301 was asserted on the local build and by the Playwright test.
 - NOT run / not verifiable here: Vercel preview rendering (egress to `*.vercel.app` and `rinon.cl` blocked), `dig` on `rinon.cl`, the old site's live `sitemap.xml` (used the old repo's generator instead), any Supabase write, GA4/Clarity (no ids).
 
 ## OPEN RISKS
@@ -50,6 +60,8 @@ Claude: replace the template below after each meaningful audit or implementation
 - `/blog/*` (76 slugs) stays as noindex compatibility pages; only 6 approved redirects (`lib/blog-migration.ts`) activate with `RINON_ENABLE_BLOG_REDIRECTS=true`. The task's "blog/* → /recursos" was not applied wholesale because 19 slugs are flagged high-risk / merge-candidate in `lib/legacy-blog.ts`.
 - Old-site URLs that exist only as redirects in the old `next.config` (6) are included in the map so no chain is created.
 - Playwright suite drift (P1) hides regressions; it should be repaired before relying on `check:release`.
+- Batch 2: preview and production now differ in redirect behaviour by design (preview = whole map, production = flag-gated). At cutover the env vars in `docs/cutover-rinon-cl.md` §2 must be set or the old URLs 404 in production; the AUTHORIZED preflight already requires `RINON_ENABLE_MIGRATION_REDIRECTS=true`, `RINON_REDIRECT_GSC_PENDING` remains Felipe's decision (CHALLENGE below). If Felipe prefers the redirects unconditional in production too, it is a one-line change in `next.config.ts` plus D-001 reconciliation.
+- Batch 2: 7 destinations differ from Felipe's list (kept more specific owners); listed in `docs/redirects-sitio-viejo.md` §2 for confirmation.
 
 ## CHALLENGE
 
@@ -79,7 +91,7 @@ Changing: a URL with independent query equity gets merged into a hub (recoverabl
 - Confirm the design intent for "Elige cómo empezar." (ink vs. over-photo).
 
 ## NEXT
-- Felipe: review the Vercel preview of `claude/preparar-rinon-cl` at 320/375/1280, then merge to `main` if approved.
+- Felipe: on the new preview, spot-check `curl -sI <preview>/rejas-metalicas-macul` (301 → `/rejas-metalicas`) and the 40-URL sample in `docs/redirects-sitio-viejo.md`; confirm the 7 destination decisions; then review at 320/375/1280 and merge to `main` if approved.
 - Follow `docs/cutover-rinon-cl.md` (env vars → domain + TXT with Enrique → DNS check → promote → post-cutover checks).
 - Fill `docs/needs-data.md` (GTM/Clarity ids, GSC export, DNS values, Supabase confirmation).
 

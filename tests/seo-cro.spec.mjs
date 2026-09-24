@@ -22,9 +22,14 @@ const dedicatedCommercialRoutes=[
  "/mallas-3d","/mallas-separadoras","/fabricacion-metalica",
 ];
 
-const preCutoverRedirectAliases=[
- "/cercos-metalicos-santiago","/portones-industriales","/mallas-separadoras-industriales","/soldadura-metalica-santiago",
-];
+// Legacy rinon.cl aliases: lib/legacy-redirects.ts is emitted in every non-production build (301 one hop to the
+// intent owner); the production gate is enforced by scripts/check-legacy-redirects.mjs and preflight-production.mjs.
+const legacyRedirectAliases={
+ "/portones-industriales":"/portones-metalicos","/mallas-separadoras-industriales":"/mallas-separadoras","/soldadura-metalica-santiago":"/soldadura-mig",
+ "/rejas-metalicas-macul":"/rejas-metalicas","/cercos-perimetrales-maipu":"/cierres-perimetrales","/camarotes-metalicos":"/camarotes","/instalacion-camarotes":"/instalacion",
+};
+// Prefix-family aliases outside the explicit map stay 404 until proxy.ts is enabled at authorized cutover.
+const unmappedLegacyAliases=["/cercos-metalicos-santiago","/rejas-metalicas-comuna-inexistente"];
 
 async function assertSeoShell(page,route){
  const response=await page.goto(route,{waitUntil:"networkidle"});
@@ -146,10 +151,19 @@ test("rejas and portones preserve a dual conversion choice at the decision point
  }
 });
 
-test("pre-cutover migration aliases remain disabled in staging",async({page})=>{
- for(const route of preCutoverRedirectAliases){
+test("legacy rinon.cl aliases redirect once (301) to their intent owner and unmapped aliases stay 404",async({page})=>{
+ for(const [route,owner] of Object.entries(legacyRedirectAliases)){
+  const hop=await page.request.get(route,{maxRedirects:0});
+  expect(hop.status(),`${route} must answer a permanent redirect`).toBe(301);
+  const location=hop.headers()["location"]??"";
+  expect(new URL(location,hop.url()).pathname,`${route} location`).toBe(owner);
+  const landing=await page.goto(route,{waitUntil:"networkidle"});
+  expect(landing?.status(),`${route} → ${owner} must resolve in one hop to a 200 page`).toBe(200);
+  expect(new URL(page.url()).pathname,`${route} final path`).toBe(owner);
+ }
+ for(const route of unmappedLegacyAliases){
   const response=await page.goto(route,{waitUntil:"networkidle"});
-  expect(response?.status(),`${route} must not redirect before authorized cutover`).toBe(404);
+  expect(response?.status(),`${route} must stay 404 (no blanket redirect)`).toBe(404);
   const robots=await page.locator('meta[name="robots"]').first().getAttribute("content");
   expect(robots?.toLowerCase(),`${route} 404 robots`).toContain("noindex");
  }
